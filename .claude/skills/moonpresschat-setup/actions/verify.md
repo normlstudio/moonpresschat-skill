@@ -68,8 +68,8 @@ separately recorded approval (L04):
 2. `call <origin> POST /setup/go-live --body <file>` — the helper
    auto-generates a fresh idempotency key and prints it.
 3. The server re-runs verification and refuses with
-   `409 quipbot_setup_verification_failed` while any blocking check fails, or
-   `409 quipbot_setup_artifact_mismatch` when the ids do not match the last
+   `409 moonpresschat_setup_verification_failed` while any blocking check fails, or
+   `409 moonpresschat_setup_artifact_mismatch` when the ids do not match the last
    apply. It changes only the visibility flag.
 4. **A successful go-live revokes the setup connection** and reports
    `connection_revoked` in the response — do not run `disconnect` after it,

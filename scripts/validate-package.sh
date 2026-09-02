@@ -20,7 +20,7 @@ for path in "${required[@]}"; do
 done
 
 grep -q '^name: moonpresschat-setup$' "$skill_dir/SKILL.md"
-grep -q '^  version: "0.4.0"$' "$skill_dir/SKILL.md"
+grep -q '^  version: "0.5.0"$' "$skill_dir/SKILL.md"
 
 node --check "$skill_dir/helper/moonpresschat-setup-helper.mjs"
 
@@ -33,6 +33,14 @@ fi
 if grep -RInE 'normlstudio/quip-skill|npx skills( |@latest add )[^`\n]*quip-setup|https?://quip\.bot' \
   "$repo_root/README.md" "$skill_dir" --exclude='changelog.md' --exclude='readme.html'; then
   echo 'active legacy public identity found' >&2
+  exit 1
+fi
+
+# Pre-1.0.0 plugin contract identifiers (namespace URLs, error codes, header)
+# must not survive outside the changelog history.
+if grep -RInE 'wp-json/quipbot|rest_route=/quipbot|quipbot_setup_|X-Quip-Setup' \
+  "$repo_root/README.md" "$skill_dir" --exclude='changelog.md' --exclude='readme.html'; then
+  echo 'pre-1.0.0 plugin contract identifier found' >&2
   exit 1
 fi
 

@@ -37,13 +37,13 @@ the server, never from local hashing.
 ### Interview stage (capability-gated)
 
 Run this first when the compatibility payload advertises the `interview`
-capability (plugin 4.8.0+) and a preset or site analysis exists. Interview
+capability (MoonPress Chat 1.0.0+) and a preset or site analysis exists. Interview
 questions and the owner's answers are business context, not secrets — they may
 flow through chat by design.
 
 1. `call <origin> GET /setup/interview` — returns `set_id`, the ranked
    `questions`, stored `answers`, `orphaned` answer ids, and `progress`. A
-   `409 quipbot_setup_interview_no_source` means nothing to ask about yet:
+   `409 moonpresschat_setup_interview_no_source` means nothing to ask about yet:
    apply a preset or run the site analysis first.
 2. Ask the owner the open questions in chat, in short batches, following the
    recording rules of `actions/questions.md`. Do not invent answers; an
@@ -51,7 +51,7 @@ flow through chat by design.
 3. Write the answers to a file and
    `call <origin> PUT /setup/interview/answers --body <file>` with
    `{ "set_id": "<from step 1>", "answers": { "<question id>": <value or null> } }`.
-   On `409 quipbot_setup_interview_stale`, re-fetch `GET /setup/interview` and
+   On `409 moonpresschat_setup_interview_stale`, re-fetch `GET /setup/interview` and
    re-answer against the new `set_id`.
 4. `call <origin> GET /setup/interview/preview` — returns the assembled
    prompt, its `parts`, the `selection`, `warnings`, and `envelope`: a ready
@@ -78,8 +78,8 @@ knowledge, the analysis draft, or the preset marker.
    node helper/moonpresschat-setup-helper.mjs call https://example.com POST /setup/validate --body moonpresschat-setup/configuration-envelope.json
    ```
 
-   Stop on `valid: false`, `quipbot_setup_unknown_field`, or
-   `quipbot_setup_unsupported_schema` — fix the plan, never mutate-and-retry.
+   Stop on `valid: false`, `moonpresschat_setup_unknown_field`, or
+   `moonpresschat_setup_unsupported_schema` — fix the plan, never mutate-and-retry.
    Record the returned `configuration_sha256`, `warnings`, and `summary`.
 3. Show the owner the validate summary and warnings next to the plan and ask
    for explicit approval of exactly this configuration.

@@ -71,11 +71,12 @@ Application Password, or secret URL in the command or conversation.
 6. It records passed, failed, and blocked checks in `verification.md`, then asks
    separately before the public widget goes live.
 
-> **Public alpha:** version 0.4.0 ships both paths. The API path is the
-> default — MoonPress Chat's stable setup API plus the bundled macOS credential
-> helper — and the human-guided wp-admin path remains the documented fallback
-> for multisite, older plugins, or platforms without a supported credential
-> backend.
+> **Public alpha:** version 0.5.0 ships both paths. The API path is the
+> default — MoonPress Chat's stable setup API (`moonpresschat/v1/setup`,
+> MoonPress Chat 1.0.0 or newer) plus the bundled macOS credential helper —
+> and the human-guided wp-admin path remains the documented fallback for
+> multisite, plugins older than 1.0.0, or platforms without a supported
+> credential backend.
 
 ---
 
@@ -96,7 +97,7 @@ The workflow has six visible stages:
    handoff, lead, appearance, language, and launch settings.
 6. **Verify** — checks authority, data, behavior, privacy, and launch gates.
 
-Version 0.4.0 runs all six stages through the shipped setup API by default
+Version 0.5.0 runs all six stages through the shipped setup API by default
 and through the human-operated wp-admin path as the fallback. It never
 pretends that an unavailable connection or capability exists: the path is
 chosen by the public compatibility gate, and every gap is recorded with its
@@ -167,8 +168,10 @@ misrepresents it as independently public-verified.
 The cold-start preflight works whether MoonPress Chat is already active or absent. The
 human reports the plugin, WordPress, and PHP versions from wp-admin. This guide
 verifies the guided screen guidance against MoonPress Chat 3.11.0 and the API
-contract against 4.8.0 (base setup API since 4.3.0), with WordPress 6.2 and
-PHP 7.4 as runtime floors.
+contract against MoonPress Chat 1.0.0 — the API path requires 1.0.0 or newer
+(the plugin restarted its numbering with the rename; 4.8.0 and older still
+speak the old REST namespace, answer 404 on the compatibility endpoint, and
+use the guided path) — with WordPress 6.2 and PHP 7.4 as runtime floors.
 
 If the plugin is absent, the human installs only from a verified official
 WordPress directory result, official MoonPress Chat product download, or the owner's
@@ -213,7 +216,7 @@ provider-key route is unreachable from the generic bridge. The provider key is
 typed by the human on the helper's own terminal prompt with echo off.
 
 The fallback connection is `guided-manual`, recorded with an explicit reason
-(multisite, a plugin that predates the setup API, an owner who declines the
+(multisite, a plugin older than MoonPress Chat 1.0.0, an owner who declines the
 helper, or a platform without a supported credential backend — the helper is
 macOS-only in this release; Windows and Linux exit
 `credential-backend-unsupported`). The human uses their existing authenticated
@@ -234,7 +237,7 @@ access, or a credential pasted into chat.
 
 On the API path, the skill builds one non-secret configuration envelope from
 the approved plan and drives it through the published contract
-(`quipbot/v1/setup`, API version 1.0, verified against MoonPress Chat 4.8.0):
+(`moonpresschat/v1/setup`, API version 1.0, verified against MoonPress Chat 1.0.0):
 
 1. `POST /setup/validate` — side-effect free; returns the server's
    configuration fingerprint, warnings, and a summary;
@@ -244,7 +247,7 @@ the approved plan and drives it through the published contract
    affected options first and visibility never changes;
 4. optional `POST /setup/rollback` restores that snapshot (never a provider
    secret);
-5. when the plugin advertises the `interview` capability (4.8.0+), the skill
+5. when the plugin advertises the `interview` capability (1.0.0+), the skill
    fetches the onboarding interview questions, asks the owner in chat, submits
    the answers, previews the assembled prompt, and folds the preview's
    envelope into the same validate → approve → apply pipeline.
@@ -327,6 +330,9 @@ appearance) remain human-observed on both paths.
   approved human entry surface instead.
 - **The credential backend is unsupported (Windows/Linux):** the helper exits
   `credential-backend-unsupported`; use the guided path with that reason.
+- **The compatibility endpoint answers 404:** the plugin is absent, inactive,
+  or older than MoonPress Chat 1.0.0 (still on the old REST namespace); use
+  the guided path with `reason: plugin-predates-api`.
 - **The compatibility gate does not pass** (multisite, missing capability,
   wrong schema version, origin mismatch): make no WordPress write through the
   API; use the guided path and record the reason.
@@ -339,4 +345,4 @@ appearance) remain human-observed on both paths.
 
 ---
 
-_Covers SKILL.md v0.4.0 | Last changelog entry: v0.4.0 | Generated: 2026-09-01._
+_Covers SKILL.md v0.5.0 | Last changelog entry: v0.5.0 | Generated: 2026-09-02._

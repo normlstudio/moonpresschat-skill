@@ -1,6 +1,6 @@
 {
   "skill": "moonpresschat-setup",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "repo": "moonpresschat-skill",
   "audience": "WordPress site owners and developers",
   "actsOn": "MoonPress Chat setup",
@@ -50,10 +50,10 @@
   "installNote": "Requires Node.js 22.20 or newer. Replace codex with claude-code or gemini-cli for that runtime.",
   "callout": {
     "label": "Public alpha",
-    "text": "Version 0.4.0 ships both paths. **The API path is the default** — MoonPress Chat's stable setup API plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, older plugins, or unsupported credential backends."
+    "text": "Version 0.5.0 ships both paths. **The API path is the default** — MoonPress Chat's stable setup API (MoonPress Chat 1.0.0 or newer) plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, plugins older than 1.0.0, or unsupported credential backends."
   },
   "capabilities": {
-    "label": "What works in 0.4.0",
+    "label": "What works in 0.5.0",
     "items": [
       {
         "name": "Cold-start preflight",
@@ -103,7 +103,7 @@
     "label": "Safety boundaries",
     "items": [
       "No WordPress passwords, Application Passwords, provider keys, or tokens in chat — the helper holds the temporary credential in the macOS Keychain.",
-      "No browser automation, SSH, XML-RPC, direct database writes, or internal admin routes; API calls stay inside quipbot/v1/setup.",
+      "No browser automation, SSH, XML-RPC, direct database writes, or internal admin routes; API calls stay inside moonpresschat/v1/setup.",
       "No arbitrary plugin package, no production change without backup and explicit approval, and go-live is a separate approval that revokes the connection."
     ]
   },
@@ -138,7 +138,7 @@
       }
     ]
   },
-  "covers": "0.4.0",
-  "generated": "2026-09-01",
+  "covers": "0.5.0",
+  "generated": "2026-09-02",
   "hasHumanMd": true
 }

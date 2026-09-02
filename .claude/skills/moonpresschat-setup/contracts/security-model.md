@@ -50,7 +50,7 @@ stream, share, or screenshot the authenticated session.
 ## WordPress boundary
 
 - Core Application Password consent, not the normal password.
-- The setup credential is confined by the plugin to `quipbot/v1/setup` and
+- The setup credential is confined by the plugin to `moonpresschat/v1/setup` and
   every operation requires `manage_options`; its lifetime is enforced
   server-side (30-minute idle, two-hour hard maximum, revoked on go-live).
 - HTTPS only outside loopback development.
