@@ -3,7 +3,7 @@
 This is the **fallback path**. The default is the API path through the shipped
 setup API and credential helper (`actions/connect.md`); use this guided
 sequence when the compatibility gate does not pass or the owner declines the
-helper — multisite, a plugin older than MoonPress Chat 1.0.0 (its
+helper — multisite, a plugin older than MoonPress Chat 5.0.0 (its
 compatibility endpoint answers 404), or a platform without a supported
 credential backend. The human remains in control of the authenticated
 WordPress browser. The agent prepares the plan, explains each step, and
@@ -11,7 +11,7 @@ records non-secret confirmations.
 
 This sequence navigates by menu label, so it reads the same on every
 supported release. For recognizing a URL the human reads back: MoonPress
-Chat 1.0.0 renamed its admin page slugs to `admin.php?page=moonpresschat-*`
+Chat 5.0.0 renamed its admin page slugs to `admin.php?page=moonpresschat-*`
 (`moonpresschat-start`, `moonpresschat-analyze`, `moonpresschat-kb`,
 `moonpresschat-settings`) and its DOM ids/classes to `moonpresschat-*`. Never
 ask the human to read out or paste anything from the page beyond such

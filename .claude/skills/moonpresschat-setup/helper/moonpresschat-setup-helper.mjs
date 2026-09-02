@@ -4,8 +4,8 @@
  *
  * This single-file script is the only component that ever touches the
  * WordPress Application Password minted for the MoonPress Chat setup API
- * (namespace moonpresschat/v1/setup, API version 1.0; MoonPress Chat 1.0.0 or
- * newer — older plugins register only the pre-1.0.0 namespace, answer 404 on
+ * (namespace moonpresschat/v1/setup, API version 1.0; MoonPress Chat 5.0.0 or
+ * newer — older plugins register only the pre-5.0.0 namespace, answer 404 on
  * compatibility, and route to the skill's guided path). The agent composes
  * non-secret JSON and calls this helper; the helper authenticates.
  *
@@ -42,7 +42,7 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync, unlinkSync, existsSync, chmodSync } from 'node:fs';
 
 const API_VERSION = '1.0';
-const REST_NAMESPACE = 'moonpresschat/v1'; // MoonPress Chat 1.0.0+; 4.8.0 and older speak a different namespace
+const REST_NAMESPACE = 'moonpresschat/v1'; // MoonPress Chat 5.0.0+; 4.8.0 and older speak a different namespace
 const IDEMPOTENCY_HEADER = 'X-MoonPressChat-Setup-Idempotency-Key';
 const REQUIRED_CAPABILITIES = [
 	'status', 'validate', 'apply', 'verify', 'rollback',

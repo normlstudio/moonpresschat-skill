@@ -34,23 +34,25 @@ It reports `plugin_slug` (`moonpresschat`), `plugin_version`,
 path per `actions/connect.md`. Ask the human only for what the payload cannot
 answer: whether **MoonPress Chat** appears under **Plugins → Installed
 Plugins** and which version, when the endpoint is unreachable (absent,
-inactive, or older than 1.0.0 — those releases register only the pre-1.0.0
+inactive, or older than 5.0.0 — those releases register only the pre-5.0.0
 namespace `quipbot/v1`, so the URLs above answer 404), and the WordPress and
 PHP versions from **Tools → Site Health → Info**.
 
 Version 0.5.0 of this skill verifies the guided screen guidance against
-MoonPress Chat 3.11.0 and the API contract against MoonPress Chat 1.0.0; the
-API path requires 1.0.0 or newer. The plugin restarted its numbering with the
-rename, so a reported `3.x`/`4.x` version is a pre-rename release, not a newer
-one. The documented runtime floor is WordPress 6.2 and PHP 7.4.
+MoonPress Chat 3.11.0 and the API contract against MoonPress Chat 5.0.0; the
+API path requires 5.0.0 or newer. MoonPress Chat 5.0.0 renamed the plugin and
+every internal identifier; 4.8.0 and older (released as QuipBot) register only
+the old `quipbot/v1` namespace, so against them the compatibility URL answers
+404 and the skill takes the guided path. The documented runtime floor is
+WordPress 6.2 and PHP 7.4.
 
-- MoonPress Chat 1.0.0 or newer with a passing compatibility gate: API path.
-- MoonPress Chat 1.0.0 or newer without a passing gate (multisite, missing
+- MoonPress Chat 5.0.0 or newer with a passing compatibility gate: API path.
+- MoonPress Chat 5.0.0 or newer without a passing gate (multisite, missing
   capability, origin mismatch, declined helper, unsupported backend): guided
   path (`connection: guided-manual` with its `reason`), not a blocker.
-- A pre-rename release from 3.11.0 through 4.8.0 (compatibility URL answers
-  404): guided path with `reason: plugin-predates-api`, not a blocker.
-- A pre-rename release older than 3.11.0: `compatibility: blocked-plugin-upgrade`.
+- A release from 3.11.0 through 4.8.0 (compatibility URL answers 404): guided
+  path with `reason: plugin-predates-api`, not a blocker.
+- A release older than 3.11.0: `compatibility: blocked-plugin-upgrade`.
 - WordPress older than 6.2 or PHP older than 7.4:
   `compatibility: blocked-runtime`.
 - On the guided path, a MoonPress Chat whose labels materially differ from the field
@@ -92,7 +94,7 @@ artifact_folder: /absolute/non-secret/path/moonpresschat-setup
 environment: staging | production | unresolved
 canonical_origin: https://example.com
 installation: active | inactive | absent | blocked-official-package | unresolved
-plugin_version: 1.0.0 | unknown
+plugin_version: 5.0.0 | unknown
 connection: api | guided-manual | unresolved
 wordpress_version: value | unknown
 php_version: value | unknown

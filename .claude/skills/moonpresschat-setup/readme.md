@@ -73,9 +73,9 @@ Application Password, or secret URL in the command or conversation.
 
 > **Public alpha:** version 0.5.0 ships both paths. The API path is the
 > default — MoonPress Chat's stable setup API (`moonpresschat/v1/setup`,
-> MoonPress Chat 1.0.0 or newer) plus the bundled macOS credential helper —
+> MoonPress Chat 5.0.0 or newer) plus the bundled macOS credential helper —
 > and the human-guided wp-admin path remains the documented fallback for
-> multisite, plugins older than 1.0.0, or platforms without a supported
+> multisite, plugins older than 5.0.0, or platforms without a supported
 > credential backend.
 
 ---
@@ -168,10 +168,11 @@ misrepresents it as independently public-verified.
 The cold-start preflight works whether MoonPress Chat is already active or absent. The
 human reports the plugin, WordPress, and PHP versions from wp-admin. This guide
 verifies the guided screen guidance against MoonPress Chat 3.11.0 and the API
-contract against MoonPress Chat 1.0.0 — the API path requires 1.0.0 or newer
-(the plugin restarted its numbering with the rename; 4.8.0 and older still
-speak the old REST namespace, answer 404 on the compatibility endpoint, and
-use the guided path) — with WordPress 6.2 and PHP 7.4 as runtime floors.
+contract against MoonPress Chat 5.0.0 — the API path requires 5.0.0 or newer
+(MoonPress Chat 5.0.0 renamed the plugin and every internal identifier; 4.8.0
+and older, released as QuipBot, register only the old `quipbot/v1` namespace,
+answer 404 on the compatibility endpoint, and use the guided path) — with
+WordPress 6.2 and PHP 7.4 as runtime floors.
 
 If the plugin is absent, the human installs only from a verified official
 WordPress directory result, official MoonPress Chat product download, or the owner's
@@ -216,7 +217,7 @@ provider-key route is unreachable from the generic bridge. The provider key is
 typed by the human on the helper's own terminal prompt with echo off.
 
 The fallback connection is `guided-manual`, recorded with an explicit reason
-(multisite, a plugin older than MoonPress Chat 1.0.0, an owner who declines the
+(multisite, a plugin older than MoonPress Chat 5.0.0, an owner who declines the
 helper, or a platform without a supported credential backend — the helper is
 macOS-only in this release; Windows and Linux exit
 `credential-backend-unsupported`). The human uses their existing authenticated
@@ -237,7 +238,7 @@ access, or a credential pasted into chat.
 
 On the API path, the skill builds one non-secret configuration envelope from
 the approved plan and drives it through the published contract
-(`moonpresschat/v1/setup`, API version 1.0, verified against MoonPress Chat 1.0.0):
+(`moonpresschat/v1/setup`, API version 1.0, verified against MoonPress Chat 5.0.0):
 
 1. `POST /setup/validate` — side-effect free; returns the server's
    configuration fingerprint, warnings, and a summary;
@@ -247,7 +248,7 @@ the approved plan and drives it through the published contract
    affected options first and visibility never changes;
 4. optional `POST /setup/rollback` restores that snapshot (never a provider
    secret);
-5. when the plugin advertises the `interview` capability (1.0.0+), the skill
+5. when the plugin advertises the `interview` capability (5.0.0+), the skill
    fetches the onboarding interview questions, asks the owner in chat, submits
    the answers, previews the assembled prompt, and folds the preview's
    envelope into the same validate → approve → apply pipeline.
@@ -331,7 +332,7 @@ appearance) remain human-observed on both paths.
 - **The credential backend is unsupported (Windows/Linux):** the helper exits
   `credential-backend-unsupported`; use the guided path with that reason.
 - **The compatibility endpoint answers 404:** the plugin is absent, inactive,
-  or older than MoonPress Chat 1.0.0 (still on the old REST namespace); use
+  or older than MoonPress Chat 5.0.0 (still on the old REST namespace); use
   the guided path with `reason: plugin-predates-api`.
 - **The compatibility gate does not pass** (multisite, missing capability,
   wrong schema version, origin mismatch): make no WordPress write through the

@@ -39,10 +39,10 @@ production change explicit and reviewable.
 ## Current release state
 
 Version 0.5.0 is a public alpha with two complete setup paths. It speaks
-the MoonPress Chat 1.0.0 contract; see the compatibility note below.
+the MoonPress Chat 5.0.0 contract; see the compatibility note below.
 
 - The **API path is the default**: MoonPress Chat ships its stable public setup API
-  (`moonpresschat/v1/setup`, API version 1.0, MoonPress Chat 1.0.0+), and this skill ships
+  (`moonpresschat/v1/setup`, API version 1.0, MoonPress Chat 5.0.0+), and this skill ships
   the local credential helper (`helper/moonpresschat-setup-helper.mjs`) that holds the
   temporary WordPress Application Password in the macOS Keychain. The agent
   composes non-secret JSON envelopes and reads non-secret responses; it never
@@ -52,15 +52,16 @@ the MoonPress Chat 1.0.0 contract; see the compatibility note below.
   required capability list. See `contracts/current-api-contract.md`.
 - The **guided wp-admin path remains fully supported** as the fallback: for
   multisite (the API refuses it by design), a plugin older than MoonPress
-  Chat 1.0.0 (its compatibility endpoint answers 404 — see below), an owner
+  Chat 5.0.0 (its compatibility endpoint answers 404 — see below), an owner
   who declines the helper, or a platform without a supported credential
   backend (the helper is macOS-only in this release).
-- **Compatibility floor: MoonPress Chat 1.0.0 or newer.** The plugin
-  restarted its version numbering with the new name and renamed every
-  internal identifier; 4.8.0 was the last release under the old name and
-  still speaks only the old REST namespace. Skill 0.4.0 pairs with plugin
-  <= 4.8.0, skill 0.5.0 pairs with plugin >= 1.0.0; any other pairing simply
-  fails the compatibility gate and takes the guided path.
+- **Compatibility floor: MoonPress Chat 5.0.0 or newer.** MoonPress Chat
+  5.0.0 renamed the plugin and every internal identifier; 4.8.0 and older
+  (released as QuipBot) register only the old `quipbot/v1` namespace, so
+  against them the compatibility URL answers 404 and the skill takes the
+  guided path. Skill 0.4.0 pairs with plugin <= 4.8.0, skill 0.5.0 pairs
+  with plugin >= 5.0.0; any other pairing simply fails the compatibility gate
+  and takes the guided path.
 - The plugin's internal `moonpresschat/v1/admin` routes are still not a public
   contract; the setup credential cannot reach them, and the skill never calls
   them.
@@ -176,8 +177,8 @@ and whether MoonPress Chat is installed and active. When the site is reachable, 
 public `GET /setup/compatibility` endpoint answers the plugin version,
 availability, and capability questions without asking the human. The guided
 path's screen-by-screen guidance is verified against MoonPress Chat 3.11.0; the API
-path's contract is verified against MoonPress Chat 1.0.0 and requires 1.0.0 or
-newer. Against an older plugin (4.8.0 and earlier, still on the pre-1.0.0
+path's contract is verified against MoonPress Chat 5.0.0 and requires 5.0.0 or
+newer. Against an older plugin (4.8.0 and earlier, still on the pre-5.0.0
 namespace) `GET .../moonpresschat/v1/setup/compatibility` answers 404, and the
 skill takes the guided path with `reason: plugin-predates-api` — exactly as it
 does whenever the API is unavailable. Stop on an incompatible WordPress/PHP
@@ -323,6 +324,6 @@ or `not-applicable` for every check.
 - `contracts/installation-and-rollback.md` — cold-start, compatibility, backup,
   and recovery gates.
 - `contracts/configuration-fields.md` — field-level map (guided labels 3.11.0;
-  envelope mapping 1.0.0).
+  envelope mapping 5.0.0).
 - `helper/moonpresschat-setup-helper.mjs` — the local credential helper.
 - `qa/verification-checklist.md` — release gate for a configured installation.

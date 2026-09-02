@@ -3,16 +3,17 @@
 ## Shipped public setup surface
 
 MoonPress Chat ships a stable public setup API. This document is the client-side
-record of that surface as verified against MoonPress Chat 1.0.0 — the first
+record of that surface as verified against MoonPress Chat 5.0.0 — the first
 release under the MoonPress Chat name and the floor for this skill's API path.
-The plugin restarted its version numbering with the rename: 4.8.0 was the last
-release under the old name, and it registers only the pre-1.0.0 namespace
-`quipbot/v1`, which this skill no longer speaks.
+MoonPress Chat 5.0.0 renamed the plugin and every internal identifier; 4.8.0
+and older (released as QuipBot) register only the old `quipbot/v1` namespace,
+which this skill no longer speaks, so against them the compatibility URL
+answers 404 and the skill takes the guided path.
 
 - Namespace: `moonpresschat/v1/setup` — pretty permalinks
   `<origin>/wp-json/moonpresschat/v1/setup/...`, fallback
   `<origin>/?rest_route=/moonpresschat/v1/setup/...`. On a plugin older than
-  1.0.0 the compatibility route answers 404 and the skill takes the guided
+  5.0.0 the compatibility route answers 404 and the skill takes the guided
   path (`reason: plugin-predates-api`). No other namespace is part of any
   contract.
 - API version: `1.0` (also the only entry in `schema_versions`); the envelope
@@ -38,8 +39,8 @@ contract. The setup credential cannot reach them: authentication fails with
 | Field | Value / meaning |
 |---|---|
 | `plugin` | Display label, `"MoonPress Chat"`. Presentation only — never key identity on it |
-| `plugin_slug` | Stable machine id, `"moonpresschat"` (new in 1.0.0). Use this wherever the plugin's identity matters |
-| `plugin_version` | Installed plugin version, `1.0.0` or newer on the API path |
+| `plugin_slug` | Stable machine id, `"moonpresschat"` (new in 5.0.0). Use this wherever the plugin's identity matters |
+| `plugin_version` | Installed plugin version, `5.0.0` or newer on the API path |
 | `api_version` | `"1.0"` — unchanged by the rename |
 | `schema_versions` | Supported envelope schema versions; must contain `"1.0"` |
 | `available` / `unavailable_reason` | `false` plus a human-readable reason on multisite or any other refusal |
@@ -82,20 +83,20 @@ or infer entitlement from anything this API returns.
 
 The compatibility payload advertises capabilities; gate on the list, never on
 a plugin version string. Every capability below is advertised by MoonPress
-Chat 1.0.0, the floor for this skill (the base set and the interview routes
+Chat 5.0.0, the floor for this skill (the base set and the interview routes
 predate the rename, but only under the old namespace).
 
 | Capability | Meaning | Under `moonpresschat/v1` since |
 |---|---|---|
-| `status` | `GET /setup/status` | 1.0.0 |
-| `validate` | `POST /setup/validate` | 1.0.0 |
-| `apply` | `POST /setup/apply` | 1.0.0 |
-| `verify` | `POST /setup/verify` | 1.0.0 |
-| `rollback` | `POST /setup/rollback` | 1.0.0 |
-| `go_live` | `POST /setup/go-live` | 1.0.0 |
-| `provider_write` | `PUT /setup/provider` + `POST /setup/provider/test` | 1.0.0 |
-| `self_revoke` | `DELETE /setup/connection` | 1.0.0 |
-| `interview` | The four `/setup/interview*` routes | 1.0.0 |
+| `status` | `GET /setup/status` | 5.0.0 |
+| `validate` | `POST /setup/validate` | 5.0.0 |
+| `apply` | `POST /setup/apply` | 5.0.0 |
+| `verify` | `POST /setup/verify` | 5.0.0 |
+| `rollback` | `POST /setup/rollback` | 5.0.0 |
+| `go_live` | `POST /setup/go-live` | 5.0.0 |
+| `provider_write` | `PUT /setup/provider` + `POST /setup/provider/test` | 5.0.0 |
+| `self_revoke` | `DELETE /setup/connection` | 5.0.0 |
+| `interview` | The four `/setup/interview*` routes | 5.0.0 |
 
 ## The API-path gate
 
@@ -110,7 +111,7 @@ Use the API path only when the public compatibility payload reports all of:
 
 Anything less routes to the guided path with a recorded `reason`. The helper
 enforces this gate itself during `connect`. A 404 from both compatibility
-URLs is the pre-1.0.0 signature (or an absent/inactive plugin): guided path,
+URLs is the pre-5.0.0 signature (or an absent/inactive plugin): guided path,
 `reason: plugin-predates-api`.
 
 ## Connection lifetime and revocation

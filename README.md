@@ -5,9 +5,9 @@
 WordPress password or AI-provider key to the agent.
 
 The skill uses MoonPress Chat's public setup API (`moonpresschat/v1/setup`,
-MoonPress Chat 1.0.0 or newer) and a bundled macOS Keychain helper by default.
+MoonPress Chat 5.0.0 or newer) and a bundled macOS Keychain helper by default.
 A human-operated wp-admin path remains available for multisite, plugins older
-than 1.0.0, unsupported credential backends, or owners who prefer manual
+than 5.0.0, unsupported credential backends, or owners who prefer manual
 control.
 
 ## Install
@@ -61,7 +61,7 @@ Read the [human guide](.claude/skills/moonpresschat-setup/readme.md),
 - The free core and AI-provider usage are separate: the site owner pays the
   selected provider directly.
 
-Version 0.5.0 is a public alpha built for MoonPress Chat 1.0.0 or newer (skill
+Version 0.5.0 is a public alpha built for MoonPress Chat 5.0.0 or newer (skill
 0.4.0 pairs with plugin 4.8.0 and older, which speak a different REST
 namespace; mismatched pairs fall back to the guided path). The helper
 currently stores credentials only in macOS Keychain; Windows and Linux use the

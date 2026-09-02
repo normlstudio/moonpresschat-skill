@@ -5,8 +5,8 @@
 Fetch the public `GET /setup/compatibility` endpoint (no authentication; try
 `<origin>/wp-json/moonpresschat/v1/setup/compatibility`, then
 `<origin>/?rest_route=/moonpresschat/v1/setup/compatibility`). A 404 from both
-means the plugin is absent, inactive, or older than MoonPress Chat 1.0.0 (still
-on the pre-1.0.0 namespace): guided path, `reason: plugin-predates-api`. Use
+means the plugin is absent, inactive, or older than MoonPress Chat 5.0.0 (still
+on the pre-5.0.0 namespace): guided path, `reason: plugin-predates-api`. Use
 the API path only when **all** of the following hold — the helper re-checks
 the same gate itself:
 

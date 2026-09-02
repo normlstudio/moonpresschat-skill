@@ -36,11 +36,11 @@ if grep -RInE 'normlstudio/quip-skill|npx skills( |@latest add )[^`\n]*quip-setu
   exit 1
 fi
 
-# Pre-1.0.0 plugin contract identifiers (namespace URLs, error codes, header)
+# Pre-5.0.0 plugin contract identifiers (namespace URLs, error codes, header)
 # must not survive outside the changelog history.
 if grep -RInE 'wp-json/quipbot|rest_route=/quipbot|quipbot_setup_|X-Quip-Setup' \
   "$repo_root/README.md" "$skill_dir" --exclude='changelog.md' --exclude='readme.html'; then
-  echo 'pre-1.0.0 plugin contract identifier found' >&2
+  echo 'pre-5.0.0 plugin contract identifier found' >&2
   exit 1
 fi
 

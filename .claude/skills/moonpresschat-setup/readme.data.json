@@ -50,7 +50,7 @@
   "installNote": "Requires Node.js 22.20 or newer. Replace codex with claude-code or gemini-cli for that runtime.",
   "callout": {
     "label": "Public alpha",
-    "text": "Version 0.5.0 ships both paths. **The API path is the default** — MoonPress Chat's stable setup API (MoonPress Chat 1.0.0 or newer) plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, plugins older than 1.0.0, or unsupported credential backends."
+    "text": "Version 0.5.0 ships both paths. **The API path is the default** — MoonPress Chat's stable setup API (MoonPress Chat 5.0.0 or newer) plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, plugins older than 5.0.0, or unsupported credential backends."
   },
   "capabilities": {
     "label": "What works in 0.5.0",

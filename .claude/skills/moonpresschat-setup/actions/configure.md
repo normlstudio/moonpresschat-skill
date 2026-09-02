@@ -37,7 +37,7 @@ the server, never from local hashing.
 ### Interview stage (capability-gated)
 
 Run this first when the compatibility payload advertises the `interview`
-capability (MoonPress Chat 1.0.0+) and a preset or site analysis exists. Interview
+capability (MoonPress Chat 5.0.0+) and a preset or site analysis exists. Interview
 questions and the owner's answers are business context, not secrets — they may
 flow through chat by design.
 
