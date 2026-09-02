@@ -1,4 +1,4 @@
-# Quip Bot owner answers
+# MoonPress Chat owner answers
 
 ## Setup authority
 

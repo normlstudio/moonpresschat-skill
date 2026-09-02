@@ -2,11 +2,11 @@
 
 ## Prepare the reviewed plan
 
-Create `quip-setup/configuration-plan.md` from the research and owner answers.
+Create `moonpresschat-setup/configuration-plan.md` from the research and owner answers.
 For every field, record:
 
 - proposed value or action;
-- source: public URL, owner answer, or Quip Bot default;
+- source: public URL, owner answer, or MoonPress Chat default;
 - approval state;
 - target environment;
 - whether it contains personal or regulated information;
@@ -69,13 +69,13 @@ knowledge, the analysis draft, or the preset marker.
 
 1. Build the configuration envelope from the **approved plan** using the
    envelope mapping in `contracts/configuration-fields.md`. Save it as
-   `quip-setup/configuration-envelope.json` (non-secret; `schema_version`
+   `moonpresschat-setup/configuration-envelope.json` (non-secret; `schema_version`
    `"1.0"`; omit sections the plan does not change; never include `live`, a
    key, or any field the mapping does not name).
 2. Validate — side-effect free:
 
    ```bash
-   node helper/quip-setup-helper.mjs call https://example.com POST /setup/validate --body quip-setup/configuration-envelope.json
+   node helper/moonpresschat-setup-helper.mjs call https://example.com POST /setup/validate --body moonpresschat-setup/configuration-envelope.json
    ```
 
    Stop on `valid: false`, `quipbot_setup_unknown_field`, or
@@ -92,7 +92,7 @@ knowledge, the analysis draft, or the preset marker.
    and apply:
 
    ```bash
-   node helper/quip-setup-helper.mjs call https://example.com POST /setup/apply --body quip-setup/configuration-envelope.json
+   node helper/moonpresschat-setup-helper.mjs call https://example.com POST /setup/apply --body moonpresschat-setup/configuration-envelope.json
    ```
 
    The helper auto-generates the idempotency key and prints it in the result
@@ -109,14 +109,14 @@ The envelope's `provider` section selects provider and model; the **key** is
 separate. The human runs, in their own terminal:
 
 ```bash
-node helper/quip-setup-helper.mjs provider https://example.com <provider-id> <model>
+node helper/moonpresschat-setup-helper.mjs provider https://example.com <provider-id> <model>
 ```
 
 The helper prompts for the key on its own TTY with echo off and prints only
 `{provider, model, configured}`. Then test the stored key:
 
 ```bash
-node helper/quip-setup-helper.mjs call https://example.com POST /setup/provider/test
+node helper/moonpresschat-setup-helper.mjs call https://example.com POST /setup/provider/test
 ```
 
 Record only the non-secret result. A failed test is not persisted; re-running

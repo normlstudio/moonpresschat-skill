@@ -1,6 +1,6 @@
-# quip-setup
+# moonpresschat-setup
 
-> Safely install, research, plan, connect, configure, and verify Quip Bot on
+> Safely install, research, plan, connect, configure, and verify MoonPress Chat on
 > WordPress without exposing site passwords or AI-provider keys to the agent.
 
 ## The problem
@@ -11,7 +11,7 @@ launch decision.
 
 Ordinary chat-based setup also creates a security trap: people paste WordPress
 passwords, Application Passwords, provider keys, or reset links into the AI
-conversation. `quip-setup` separates human authorization from agent work and
+conversation. `moonpresschat-setup` separates human authorization from agent work and
 stores only non-secret setup artifacts.
 
 ## Install
@@ -19,7 +19,7 @@ stores only non-secret setup artifacts.
 Install the public skill for your local agent:
 
 ```bash
-npx skills add Norml-Studio/quip-skill -g
+npx skills add Norml-Studio/moonpresschat-skill -g
 ```
 
 The current open `skills` installer requires Node.js 22.20 or newer. If it
@@ -30,7 +30,7 @@ The installer supports Codex, Claude Code, Cursor, and other agents in the open
 skills ecosystem. Then start a new agent turn with:
 
 ```text
-Use quip-setup to set up Quip Bot on https://example.com
+Use moonpresschat-setup to set up MoonPress Chat on https://example.com
 ```
 
 Use only the public site URL. Never place a WordPress password, provider key,
@@ -40,30 +40,30 @@ Application Password, or secret URL in the command or conversation.
 
 | When you want to… | Say something like… |
 |---|---|
-| Start a complete setup | *"Set up Quip Bot on my WordPress site."* |
-| Research before configuring | *"Research my site before configuring Quip Bot."* |
-| Plan the bot's knowledge | *"Help me plan the Quip Bot knowledge base."* |
-| Prepare the safe connection | *"Connect this WordPress site to the Quip Bot setup flow."* |
-| Review launch readiness | *"Review whether Quip Bot is ready to go live."* |
-| Continue existing work | *"Resume my Quip Bot setup."* |
+| Start a complete setup | *"Set up MoonPress Chat on my WordPress site."* |
+| Research before configuring | *"Research my site before configuring MoonPress Chat."* |
+| Plan the bot's knowledge | *"Help me plan the MoonPress Chat knowledge base."* |
+| Prepare the safe connection | *"Connect this WordPress site to the MoonPress Chat setup flow."* |
+| Review launch readiness | *"Review whether MoonPress Chat is ready to go live."* |
+| Continue existing work | *"Resume my MoonPress Chat setup."* |
 
 ## A typical run
 
 1. It confirms authority, environment, official installation, compatibility,
-   backup/reset, rollback, and public visibility in `quip-setup/preflight.md`.
+   backup/reset, rollback, and public visibility in `moonpresschat-setup/preflight.md`.
 2. The skill reads public pages and writes cited findings to
-   `quip-setup/research.md`.
+   `moonpresschat-setup/research.md`.
 3. It asks only for owner decisions the site cannot answer and records them in
-   `quip-setup/owner-answers.md`.
-4. It creates a field-by-field plan in `quip-setup/configuration-plan.md`.
+   `moonpresschat-setup/owner-answers.md`.
+4. It creates a field-by-field plan in `moonpresschat-setup/configuration-plan.md`.
 5. After approval, it validates and applies the configuration through the
-   published Quip Bot setup API — or guides the human through wp-admin on the
+   published MoonPress Chat setup API — or guides the human through wp-admin on the
    fallback path — while staying outside the authenticated browser.
 6. It records passed, failed, and blocked checks in `verification.md`, then asks
    separately before the public widget goes live.
 
-> **Public alpha:** version 0.3.0 ships both paths. The API path is the
-> default — Quip Bot's stable setup API plus the bundled macOS credential
+> **Public alpha:** version 0.3.1 ships both paths. The API path is the
+> default — MoonPress Chat's stable setup API plus the bundled macOS credential
 > helper — and the human-guided wp-admin path remains the documented fallback
 > for multisite, older plugins, or platforms without a supported credential
 > backend.
@@ -87,7 +87,7 @@ The workflow has six visible stages:
    handoff, lead, appearance, language, and launch settings.
 6. **Verify** — checks authority, data, behavior, privacy, and launch gates.
 
-Version 0.3.0 runs all six stages through the shipped setup API by default
+Version 0.3.1 runs all six stages through the shipped setup API by default
 and through the human-operated wp-admin path as the fallback. It never
 pretends that an unavailable connection or capability exists: the path is
 chosen by the public compatibility gate, and every gap is recorded with its
@@ -120,7 +120,7 @@ and prior setup artifacts.
 The skill creates or reuses this folder:
 
 ```text
-quip-setup/
+moonpresschat-setup/
 ├── preflight.md
 ├── research.md
 ├── owner-answers.md
@@ -136,7 +136,7 @@ quip-setup/
 - `verification.md` exposes each pass, failure, and blocker.
 
 None of these files may contain a password, Application Password, provider key,
-quip.bot token, license key, payment key, reset link, cookie, or secret-bearing URL.
+moonpresschat.com token, license key, payment key, reset link, cookie, or secret-bearing URL.
 
 ### Research behavior
 
@@ -155,21 +155,21 @@ misrepresents it as independently public-verified.
 
 ### Installation and recovery
 
-The cold-start preflight works whether Quip Bot is already active or absent. The
+The cold-start preflight works whether MoonPress Chat is already active or absent. The
 human reports the plugin, WordPress, and PHP versions from wp-admin. This guide
-verifies the guided screen guidance against Quip Bot 3.11.0 and the API
+verifies the guided screen guidance against MoonPress Chat 3.11.0 and the API
 contract against 4.8.0 (base setup API since 4.3.0), with WordPress 6.2 and
 PHP 7.4 as runtime floors.
 
 If the plugin is absent, the human installs only from a verified official
-WordPress directory result, official Quip Bot product download, or the owner's
-existing Quip Bot/Norml delivery channel. The skill never invents a package URL
+WordPress directory result, official MoonPress Chat product download, or the owner's
+existing MoonPress Chat/Norml delivery channel. The skill never invents a package URL
 or substitutes an unofficial mirror. No verified package means the honest
 result is `installation: blocked-official-package`.
 
 Staging is preferred when available. Production changes require a
 human-confirmed restorable backup. The recorded immediate-disable path is to
-turn visibility off; if wp-admin's Quip Bot UI is unavailable, the human may
+turn visibility off; if wp-admin's MoonPress Chat UI is unavailable, the human may
 deactivate the plugin. Failed public behavior is disabled before troubleshooting.
 
 ### Owner-question behavior
@@ -191,7 +191,7 @@ answer.
 ### Connection model
 
 The default connection is `api`. The bundled helper
-(`helper/quip-setup-helper.mjs`, single-file Node.js >= 22.20, zero
+(`helper/moonpresschat-setup-helper.mjs`, single-file Node.js >= 22.20, zero
 dependencies) opens WordPress core's Application Password consent screen in
 the system browser; the owner signs in and approves, and the helper stores the
 generated credential directly in the macOS Keychain before printing a redacted
@@ -209,7 +209,7 @@ helper, or a platform without a supported credential backend — the helper is
 macOS-only in this release; Windows and Linux exit
 `credential-backend-unsupported`). The human uses their existing authenticated
 wp-admin session while the agent stays outside the browser, enters the
-provider key in Quip Bot's write-only field, and reports only non-secret state.
+provider key in MoonPress Chat's write-only field, and reports only non-secret state.
 
 ```yaml
 connection: api | guided-manual
@@ -225,7 +225,7 @@ access, or a credential pasted into chat.
 
 On the API path, the skill builds one non-secret configuration envelope from
 the approved plan and drives it through the published contract
-(`quipbot/v1/setup`, API version 1.0, verified against Quip Bot 4.8.0):
+(`quipbot/v1/setup`, API version 1.0, verified against MoonPress Chat 4.8.0):
 
 1. `POST /setup/validate` — side-effect free; returns the server's
    configuration fingerprint, warnings, and a summary;
@@ -247,19 +247,19 @@ still not a public contract, and the setup credential cannot reach them.
 On the guided path, the skill directs the human through **Settings → AI
 providers**, **Setup**, **Knowledge base**, **Templates**, and the operational
 Settings sections. The human keeps visibility off until verification passes.
-The Quip Bot 3.11.0 field map requires a separate plan row for every control,
+The MoonPress Chat 3.11.0 field map requires a separate plan row for every control,
 including current state, source, approval, environment, data classification,
 verification, and rollback.
 
-### Provider keys and quip.bot accounts
+### Provider keys and moonpresschat.com accounts
 
 The human enters the provider key through the helper's `provider` subcommand
-(a terminal prompt with echo off, API path) or in Quip Bot's write-only
+(a terminal prompt with echo off, API path) or in MoonPress Chat's write-only
 WordPress settings (guided path). Automation may inspect provider, model,
 `has_key`, and test status, but never the key.
 
-The free Quip Bot core does not require a quip.bot account or paid license. A future
-Quip Bot device-authorization flow belongs only to a premium entitlement or managed
+The free MoonPress Chat core does not require a moonpresschat.com account or paid license. A future
+MoonPress Chat device-authorization flow belongs only to a premium entitlement or managed
 service that genuinely needs an account.
 
 ### Language and paid-feature boundary
@@ -297,9 +297,9 @@ appearance) remain human-observed on both paths.
 - `contracts/admin-guided-path.md` — current human-operated wp-admin sequence.
 - `contracts/installation-and-rollback.md` — official package, version,
   environment, backup, and recovery contract.
-- `contracts/configuration-fields.md` — field-level Quip Bot 3.11.0 map.
+- `contracts/configuration-fields.md` — field-level MoonPress Chat 3.11.0 map.
 - `contracts/current-api-contract.md` — the shipped setup API surface.
-- `helper/quip-setup-helper.mjs` — the local credential helper (macOS Keychain).
+- `helper/moonpresschat-setup-helper.mjs` — the local credential helper (macOS Keychain).
 - `templates/` — the setup artifact formats.
 - `qa/verification-checklist.md` — plan and runtime release gate.
 
@@ -307,7 +307,7 @@ appearance) remain human-observed on both paths.
 
 - **Site redirects to an unexpected host:** stop and ask the user to confirm the
   canonical site; never authorize the redirect target automatically.
-- **Quip Bot is absent:** install only from a verified official distribution; if
+- **MoonPress Chat is absent:** install only from a verified official distribution; if
   none is available, record `blocked-official-package`.
 - **Version/runtime is below the documented floor:** stop before configuration
   and record the exact compatibility blocker.
@@ -330,4 +330,4 @@ appearance) remain human-observed on both paths.
 
 ---
 
-_Covers SKILL.md v0.3.0 | Last changelog entry: v0.3.0 | Generated: 2026-09-01._
+_Covers SKILL.md v0.3.1 | Last changelog entry: v0.3.1 | Generated: 2026-09-01._

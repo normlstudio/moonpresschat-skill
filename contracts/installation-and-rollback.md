@@ -6,12 +6,12 @@ applied configuration (see "Automated rollback" below).
 
 ## Verified distribution only
 
-An acceptable Quip Bot package comes from one of these surfaces:
+An acceptable MoonPress Chat package comes from one of these surfaces:
 
 1. The WordPress **Plugins → Add New** directory result whose slug, publisher,
-   and details identify the official Quip Bot release.
-2. A download surface on the official Quip Bot product domain.
-3. A release ZIP supplied directly through the owner's existing Quip Bot/Norml
+   and details identify the official MoonPress Chat release.
+2. A download surface on the official MoonPress Chat product domain.
+3. A release ZIP supplied directly through the owner's existing MoonPress Chat/Norml
    delivery channel.
 
 The agent must verify the hostname and product identity from public information
@@ -34,17 +34,17 @@ to improvise.
 2. Human opens **Plugins → Add New**.
 3. Human either installs the verified directory listing or uses **Upload
    Plugin** with the verified ZIP.
-4. Human activates **Quip Bot**.
-5. Human reports the installed version and whether **Quip Bot → Setup** opens.
+4. Human activates **MoonPress Chat**.
+5. Human reports the installed version and whether **MoonPress Chat → Setup** opens.
 6. Human confirms public visibility is off.
 
-The guided screen-by-screen guidance is verified against Quip Bot 3.11.0; the
-API path's contract is verified against Quip Bot 4.8.0 (base setup API since
+The guided screen-by-screen guidance is verified against MoonPress Chat 3.11.0; the
+API path's contract is verified against MoonPress Chat 4.8.0 (base setup API since
 4.3.0). WordPress 6.2+ and PHP 7.4+ are the runtime floors. Treat these as
 compatibility floors, not a claim that every unrelated plugin/theme
 combination is compatible.
 
-If Quip Bot is already installed but inactive, begin at activation step 4 after
+If MoonPress Chat is already installed but inactive, begin at activation step 4 after
 confirming that the installed copy came from the owner's trusted installation.
 
 ## Environment decision
@@ -69,11 +69,11 @@ When the last configuration write was `POST /setup/apply`, the matching
 automated rollback is:
 
 ```bash
-node helper/quip-setup-helper.mjs call https://example.com POST /setup/rollback --body rollback.json
+node helper/moonpresschat-setup-helper.mjs call https://example.com POST /setup/rollback --body rollback.json
 ```
 
 with `rollback.json` containing `{"rollback_id": "<the id the apply response
-returned>"}`. It restores exactly the Quip Bot options the apply snapshotted
+returned>"}`. It restores exactly the MoonPress Chat options the apply snapshotted
 and consumes the snapshot on success; `quipbot_setup_no_snapshot` means there
 is nothing left to restore.
 
@@ -97,7 +97,7 @@ output:
 3. Restore the recorded pre-change non-secret values — on the API path via
    `POST /setup/rollback` (above), on the guided path by hand — or restore the
    confirmed backup/reset checkpoint.
-4. If Quip Bot admin cannot be used, the human deactivates Quip Bot from Installed
+4. If MoonPress Chat admin cannot be used, the human deactivates MoonPress Chat from Installed
    Plugins, then confirms the widget is absent.
 5. Record the failed check and rollback evidence. Do not retry go-live without
    a new verification pass and new approval.

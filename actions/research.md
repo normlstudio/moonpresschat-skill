@@ -3,7 +3,7 @@
 ## Goal
 
 Understand the public business context before asking questions or proposing a
-Quip Bot configuration.
+MoonPress Chat configuration.
 
 ## Procedure
 
@@ -15,7 +15,7 @@ Quip Bot configuration.
    FAQ, policy, and support pages.
 5. Record claims with their exact source URLs.
 6. Separate published facts from inferences and unknowns.
-7. Write `quip-setup/research.md` using `templates/research.md`.
+7. Write `moonpresschat-setup/research.md` using `templates/research.md`.
 
 ## Boundaries
 

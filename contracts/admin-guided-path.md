@@ -1,4 +1,4 @@
-# Guided Quip Bot admin path
+# Guided MoonPress Chat admin path
 
 This is the **fallback path**. The default is the API path through the shipped
 setup API and credential helper (`actions/connect.md`); use this guided
@@ -16,14 +16,14 @@ step, and records non-secret confirmations.
    `contracts/installation-and-rollback.md`.
 3. Complete `research.md`, `owner-answers.md`, and the field-level rows in
    `configuration-plan.md`.
-4. Keep Quip Bot in preview mode until verification passes.
+4. Keep MoonPress Chat in preview mode until verification passes.
 5. Ask for explicit approval of the plan before the human changes WordPress.
 
 ## Human-operated sequence
 
 ### 1. Connect the AI provider
 
-Open **Quip Bot → Settings → AI providers**.
+Open **MoonPress Chat → Settings → AI providers**.
 
 - Choose Anthropic, OpenAI, Gemini, or OpenRouter.
 - Choose a listed model or enter a provider-supported custom model ID.
@@ -32,12 +32,12 @@ Open **Quip Bot → Settings → AI providers**.
 - Record only provider, model, and whether the test passed. Never ask for the
   key, its prefix/suffix, an authenticated screenshot, or a copied response.
 
-The site owner pays the provider directly. Quip Bot core is free forever. A
-future Quip Bot Pro license does not include provider inference.
+The site owner pays the provider directly. MoonPress Chat core is free forever. A
+future MoonPress Chat Pro license does not include provider inference.
 
 ### 2. Give the assistant starting knowledge
 
-Open **Quip Bot → Setup**.
+Open **MoonPress Chat → Setup**.
 
 - For a no-cost starting point, apply the closest industry preset and review
   every generated topic afterward.
@@ -48,17 +48,17 @@ Open **Quip Bot → Setup**.
 
 ### 3. Review knowledge and behavior
 
-Open **Quip Bot → Knowledge base**.
+Open **MoonPress Chat → Knowledge base**.
 
 - Compare business facts and Q&A entries with `research.md` and owner answers.
 - Keep hard rules and prohibited claims explicit.
 - Remove unsupported facts and add missing escalation boundaries.
 
-Open **Quip Bot → Templates** and review visitor-facing prompts and fallbacks.
+Open **MoonPress Chat → Templates** and review visitor-facing prompts and fallbacks.
 
 ### 4. Review operations and privacy
 
-Open **Quip Bot → Settings** and review these sections:
+Open **MoonPress Chat → Settings** and review these sections:
 
 - **Legal texts** — consent and short disclosure.
 - **Contacts** — lead destination and contact routes.
@@ -82,7 +82,7 @@ plugin's preview link to run the verification checklist.
 After every readiness-blocking check except L04 passes, ask separately:
 
 > The reviewed setup passes the guided verification. Do you approve making
-> Quip Bot live for visitors on this site now?
+> MoonPress Chat live for visitors on this site now?
 
 Record the explicit yes as L04 passed. Only then should the human enable
 visibility and save. Verify one public conversation without putting visitor

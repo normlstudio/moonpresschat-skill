@@ -1,4 +1,4 @@
 interface:
-  display_name: "Quip Bot Setup"
-  short_description: "Safely configure and verify Quip Bot on WordPress"
-  default_prompt: "Use $quip-setup to safely set up Quip Bot on my WordPress site."
+  display_name: "MoonPress Chat Setup"
+  short_description: "Safely configure and verify MoonPress Chat on WordPress"
+  default_prompt: "Use $moonpresschat-setup to safely set up MoonPress Chat on my WordPress site."

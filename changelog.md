@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.3.1 — 2026-09-01
+
+- Forked the public setup workflow from Quip into the independent MoonPress Chat
+  product identity: `moonpresschat-setup`, `Norml-Studio/moonpresschat-skill`,
+  `moonpresschat.com`, and `helper/moonpresschat-setup-helper.mjs`.
+- Isolated the helper's macOS Keychain service and non-secret local connection
+  directory under the MoonPress Chat slug so the two products cannot share
+  credentials or setup state accidentally.
+- Preserved the inherited `quipbot/v1/setup` REST namespace as a compatibility
+  contract; changing it requires a coordinated plugin and client migration.
+- Kept the pre-fork changelog below verbatim as source-history evidence.
+
 ## 0.3.0 — 2026-09-01
 
 - Made the shipped Quip Bot setup API (`quipbot/v1/setup`, API version 1.0)

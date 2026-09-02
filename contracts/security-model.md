@@ -5,11 +5,11 @@
 | Data | Human entry point | Agent may observe |
 |---|---|---|
 | WordPress account password | WordPress login page | No |
-| WordPress Application Password | Local callback helper (`helper/quip-setup-helper.mjs`, shipped) | Status only |
-| AI-provider key | Helper `provider` subcommand (TTY, echo off) or write-only Quip Bot settings UI | `has_key` and test status |
-| quip.bot account credential | quip.bot login/consent page | Authorization status only |
-| quip.bot scoped token | OS credential helper | Scope and expiry only |
-| License key | Quip Bot entitlement flow | Masked status only |
+| WordPress Application Password | Local callback helper (`helper/moonpresschat-setup-helper.mjs`, shipped) | Status only |
+| AI-provider key | Helper `provider` subcommand (TTY, echo off) or write-only MoonPress Chat settings UI | `has_key` and test status |
+| moonpresschat.com account credential | moonpresschat.com login/consent page | Authorization status only |
+| moonpresschat.com scoped token | OS credential helper | Scope and expiry only |
+| License key | MoonPress Chat entitlement flow | Masked status only |
 
 On the API path, the helper is the only component that bridges non-secret,
 agent-authored configuration and authenticated HTTP: paths resolve against the
@@ -23,11 +23,11 @@ either path the human may report non-secret state such as
 
 | Platform | State | Backend |
 |---|---|---|
-| macOS | Shipped (helper) | Keychain generic password item `quip-setup:<origin-slug>`, written by `security add-generic-password -U`, read by `find-generic-password -w`, removed on disconnect |
+| macOS | Shipped (helper) | Keychain generic password item `moonpresschat-setup:<origin-slug>`, written by `security add-generic-password -U`, read by `find-generic-password -w`, removed on disconnect |
 | Windows | Unsupported — helper exits `credential-backend-unsupported`; route to the guided path | Credential Manager has no built-in secret-retrieval CLI; a researched backend lands in a later version |
 | Linux | Unsupported until a documented OS-native backend is approved; guided path | — |
 
-- Non-secret connection record: `~/.quip-setup/<origin-slug>.json` (origin,
+- Non-secret connection record: `~/.moonpresschat-setup/<origin-slug>.json` (origin,
   `rest_url`, `user_login`, connected-at, connection policy) — never a
   credential.
 - Project artifacts: non-secret configuration and evidence only.

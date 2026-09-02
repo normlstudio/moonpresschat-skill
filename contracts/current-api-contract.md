@@ -1,9 +1,9 @@
-# Current Quip Bot API contract
+# Current MoonPress Chat API contract
 
 ## Shipped public setup surface
 
-Quip Bot ships a stable public setup API. This document is the client-side
-record of that surface as verified against Quip Bot 4.8.0; the base API shipped
+MoonPress Chat ships a stable public setup API. This document is the client-side
+record of that surface as verified against MoonPress Chat 4.8.0; the base API shipped
 in 4.3.0.
 
 - Namespace: `quipbot/v1/setup` (the pre-4.x internal `iqb/v1` namespace no
@@ -15,7 +15,7 @@ in 4.3.0.
   (`PUT /setup/provider`); 64 KiB for interview answers.
 - Authentication: a temporary WordPress Application Password minted through
   core's consent screen for the stable application identity
-  `Quip Bot setup` / app id `c8d4bd65-7694-4c34-b8cd-4d54b44b389e`, sent as
+  `MoonPress Chat setup` / app id `c8d4bd65-7694-4c34-b8cd-4d54b44b389e`, sent as
   HTTPS Basic Auth. The plugin confines that credential to this namespace and
   every operation additionally requires `manage_options`.
 
@@ -28,7 +28,7 @@ contract. The setup credential cannot reach them: authentication fails with
 | Method | Path | Authentication | Purpose |
 |---|---|---|---|
 | GET | `/setup/compatibility` | Public | Negotiate availability, versions, capabilities; build the authorization URL |
-| GET | `/setup/status` | Setup credential | Redacted current Quip Bot state and readiness |
+| GET | `/setup/status` | Setup credential | Redacted current MoonPress Chat state and readiness |
 | POST | `/setup/validate` | Setup credential | Validate/normalize a configuration envelope without writing; returns `configuration_sha256` |
 | POST | `/setup/apply` | Setup credential | Apply an explicitly approved envelope; snapshots first; visibility unchanged |
 | POST | `/setup/verify` | Setup credential | Deterministic non-secret readiness checks |
@@ -178,7 +178,7 @@ envelope shape:
 ### Rollback
 
 `POST /setup/rollback` with `{"rollback_id": "<the id apply returned>"}`
-restores only the exact Quip Bot options in the snapshot and consumes it on
+restores only the exact MoonPress Chat options in the snapshot and consumes it on
 success (`quipbot_setup_no_snapshot` when there is nothing to restore or the
 id does not match). **The provider secret is never snapshotted and never
 restored** — rollback restores the provider *selection* only. It also never

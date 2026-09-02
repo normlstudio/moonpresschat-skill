@@ -1,11 +1,11 @@
 {
-  "skill": "quip-setup",
-  "version": "0.3.0",
-  "repo": "quip-skill",
+  "skill": "moonpresschat-setup",
+  "version": "0.3.1",
+  "repo": "moonpresschat-skill",
   "audience": "WordPress site owners and developers",
-  "actsOn": "Quip Bot setup",
+  "actsOn": "MoonPress Chat setup",
   "badge": "public alpha",
-  "pitch": "Safely install, research, plan, connect, configure, and verify Quip Bot without exposing credentials to the agent.",
+  "pitch": "Safely install, research, plan, connect, configure, and verify MoonPress Chat without exposing credentials to the agent.",
   "pitchMark": "without exposing credentials",
   "problem": [
     "A useful chatbot needs grounded business knowledge, approved wording, consent, escalation rules, and a testable launch decision.",
@@ -39,21 +39,21 @@
     }
   ],
   "commands": [
-    "Set up Quip Bot on my WordPress site",
-    "Research my site before configuring Quip Bot",
-    "Help me plan the Quip Bot knowledge base",
-    "Connect this WordPress site to the Quip Bot setup flow",
-    "Review whether Quip Bot is ready to go live",
-    "Resume my Quip Bot setup"
+    "Set up MoonPress Chat on my WordPress site",
+    "Research my site before configuring MoonPress Chat",
+    "Help me plan the MoonPress Chat knowledge base",
+    "Connect this WordPress site to the MoonPress Chat setup flow",
+    "Review whether MoonPress Chat is ready to go live",
+    "Resume my MoonPress Chat setup"
   ],
-  "install": "npx skills add Norml-Studio/quip-skill -g",
+  "install": "npx skills add Norml-Studio/moonpresschat-skill -g",
   "installNote": "Requires Node.js 22.20 or newer.",
   "callout": {
     "label": "Public alpha",
-    "text": "Version 0.3.0 ships both paths. **The API path is the default** — Quip Bot's stable setup API plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, older plugins, or unsupported credential backends."
+    "text": "Version 0.3.1 ships both paths. **The API path is the default** — MoonPress Chat's stable setup API plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, older plugins, or unsupported credential backends."
   },
   "capabilities": {
-    "label": "What works in 0.3.0",
+    "label": "What works in 0.3.1",
     "items": [
       {
         "name": "Cold-start preflight",
@@ -89,7 +89,7 @@
         "name": "Guided WordPress setup",
         "tag": "ready",
         "ok": true,
-        "desc": "Fallback path: walks the human through Quip Bot admin without observing the authenticated browser."
+        "desc": "Fallback path: walks the human through MoonPress Chat admin without observing the authenticated browser."
       },
       {
         "name": "Windows/Linux credential backend",
@@ -107,7 +107,7 @@
       "No arbitrary plugin package, no production change without backup and explicit approval, and go-live is a separate approval that revokes the connection."
     ]
   },
-  "covers": "0.3.0",
+  "covers": "0.3.1",
   "generated": "2026-09-01",
   "hasHumanMd": true
 }

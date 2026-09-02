@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /*
- * quip-setup-helper.mjs — the local credential helper for the quip-setup skill.
+ * moonpresschat-setup-helper.mjs — the local credential helper for the moonpresschat-setup skill.
  *
  * This single-file script is the only component that ever touches the
- * WordPress Application Password minted for the Quip Bot setup API
+ * WordPress Application Password minted for the MoonPress Chat setup API
  * (namespace quipbot/v1/setup, API version 1.0). The agent composes
  * non-secret JSON and calls this helper; the helper authenticates.
  *
@@ -20,11 +20,11 @@
  *      the secret channel is the `provider` subcommand only.
  *
  * Usage:
- *   node quip-setup-helper.mjs connect <origin>
- *   node quip-setup-helper.mjs status <origin>
- *   node quip-setup-helper.mjs call <origin> <METHOD> </setup/...> [--body <file>] [--idempotency-key <key>]
- *   node quip-setup-helper.mjs provider <origin> <provider-id> <model>
- *   node quip-setup-helper.mjs disconnect <origin>
+ *   node moonpresschat-setup-helper.mjs connect <origin>
+ *   node moonpresschat-setup-helper.mjs status <origin>
+ *   node moonpresschat-setup-helper.mjs call <origin> <METHOD> </setup/...> [--body <file>] [--idempotency-key <key>]
+ *   node moonpresschat-setup-helper.mjs provider <origin> <provider-id> <model>
+ *   node moonpresschat-setup-helper.mjs disconnect <origin>
  *
  * Exit codes: 0 = success (HTTP 2xx), 1 = HTTP or contract failure,
  * 2 = usage or platform error (including credential-backend-unsupported).
@@ -80,7 +80,7 @@ function printResult( value ) {
  * ------------------------------------------------------------------------ */
 
 if ( process.platform !== 'darwin' ) {
-	fail( 2, 'credential-backend-unsupported: this helper stores credentials only in the macOS Keychain; use the quip-setup guided path on this platform.' );
+	fail( 2, 'credential-backend-unsupported: this helper stores credentials only in the macOS Keychain; use the moonpresschat-setup guided path on this platform.' );
 }
 
 /* --------------------------------------------------------------------------
@@ -127,7 +127,7 @@ function originSlug( normalized ) {
  * ------------------------------------------------------------------------ */
 
 function keychainService( slug ) {
-	return `quip-setup:${slug}`;
+	return `moonpresschat-setup:${slug}`;
 }
 
 function securityEscape( value ) {
@@ -166,15 +166,15 @@ function keychainDelete( service ) {
 }
 
 /* --------------------------------------------------------------------------
- * Non-secret connection record: ~/.quip-setup/<origin-slug>.json
+ * Non-secret connection record: ~/.moonpresschat-setup/<origin-slug>.json
  * ------------------------------------------------------------------------ */
 
 function recordDir() {
 	const home = process.env.HOME;
 	if ( ! home ) {
-		fail( 2, 'HOME is not set; cannot locate ~/.quip-setup.' );
+		fail( 2, 'HOME is not set; cannot locate ~/.moonpresschat-setup.' );
 	}
-	return `${home}/.quip-setup`;
+	return `${home}/.moonpresschat-setup`;
 }
 
 function recordPath( slug ) {
@@ -381,7 +381,7 @@ async function cmdConnect( origin ) {
 	const successPath = `/${token}/success`;
 	const rejectPath = `/${token}/reject`;
 
-	const closeTabPage = '<!doctype html><meta charset="utf-8"><title>Quip Bot setup</title>' +
+	const closeTabPage = '<!doctype html><meta charset="utf-8"><title>MoonPress Chat setup</title>' +
 		'<script>try{history.replaceState(null,"",location.pathname)}catch(e){}</script>' +
 		'<p style="font:16px/1.5 system-ui;margin:3em auto;max-width:32em;text-align:center">' +
 		'Done. You can close this tab and return to the terminal.</p>';
@@ -457,11 +457,11 @@ async function cmdConnect( origin ) {
 			const rejectUrl = `http://127.0.0.1:${port}${rejectPath}?state=${state}`;
 			const authUrl = payload.authorization_url +
 				( payload.authorization_url.includes( '?' ) ? '&' : '?' ) +
-				`app_name=${encodeURIComponent( payload.application.name || 'Quip Bot setup' )}` +
+				`app_name=${encodeURIComponent( payload.application.name || 'MoonPress Chat setup' )}` +
 				`&app_id=${encodeURIComponent( payload.application.id )}` +
 				`&success_url=${encodeURIComponent( successUrl )}` +
 				`&reject_url=${encodeURIComponent( rejectUrl )}`;
-			note( 'Opening the WordPress authorization page in your browser. Sign in and approve "Quip Bot setup".' );
+			note( 'Opening the WordPress authorization page in your browser. Sign in and approve "MoonPress Chat setup".' );
 			note( `If the browser did not open, visit:\n${authUrl}` );
 			spawnSync( 'open', [ authUrl ], { stdio: 'ignore' } );
 		} );
@@ -619,11 +619,11 @@ async function cmdDisconnect( origin ) {
  * ------------------------------------------------------------------------ */
 
 const USAGE = `Usage:
-  quip-setup-helper.mjs connect <origin>
-  quip-setup-helper.mjs status <origin>
-  quip-setup-helper.mjs call <origin> <METHOD> </setup/...> [--body <file>] [--idempotency-key <key>]
-  quip-setup-helper.mjs provider <origin> <provider-id> <model>
-  quip-setup-helper.mjs disconnect <origin>`;
+  moonpresschat-setup-helper.mjs connect <origin>
+  moonpresschat-setup-helper.mjs status <origin>
+  moonpresschat-setup-helper.mjs call <origin> <METHOD> </setup/...> [--body <file>] [--idempotency-key <key>]
+  moonpresschat-setup-helper.mjs provider <origin> <provider-id> <model>
+  moonpresschat-setup-helper.mjs disconnect <origin>`;
 
 async function main() {
 	const argv = process.argv.slice( 2 );

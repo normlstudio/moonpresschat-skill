@@ -31,7 +31,7 @@ reason: multisite | plugin-predates-api | owner-declined-helper | credential-bac
    their own browser:
 
    ```bash
-   node helper/quip-setup-helper.mjs connect https://example.com
+   node helper/moonpresschat-setup-helper.mjs connect https://example.com
    ```
 
 3. The helper fetches compatibility, applies the gate above, then starts a
@@ -39,7 +39,7 @@ reason: multisite | plugin-predates-api | owner-declined-helper | credential-bac
    `state`) and opens WordPress core's Application Password authorization
    screen in the system browser. Nobody — helper or agent — reads or drives
    that browser.
-4. The human signs in and approves or rejects the **Quip Bot setup**
+4. The human signs in and approves or rejects the **MoonPress Chat setup**
    application request.
 5. On approval, the helper validates the exact `state`, accepts one terminal
    callback only, stores the generated credential in the macOS Keychain
@@ -47,7 +47,7 @@ reason: multisite | plugin-predates-api | owner-declined-helper | credential-bac
    the query from browser history, and closes the listener. On rejection, a
    wrong state, or a second callback it exits non-zero and stores nothing.
 6. The helper writes the non-secret connection record to
-   `~/.quip-setup/<origin-slug>.json` (origin, `rest_url`, `user_login`,
+   `~/.moonpresschat-setup/<origin-slug>.json` (origin, `rest_url`, `user_login`,
    `connected_at`, connection policy) and smoke-tests `GET /setup/status`.
 7. Record only the redacted summary the helper prints: connection status,
    origin, user login, connected-at, policy, smoke result. Never the
@@ -76,7 +76,7 @@ was revoked; re-read compatibility and run `connect` again.
 - When stopping early without going live, run:
 
   ```bash
-  node helper/quip-setup-helper.mjs disconnect https://example.com
+  node helper/moonpresschat-setup-helper.mjs disconnect https://example.com
   ```
 
   It calls `DELETE /setup/connection`, then deletes the Keychain item
@@ -100,9 +100,9 @@ Do not fall back to a normal WordPress password, a credential pasted into the
 terminal or chat, browser automation, SSH, or database access — the missing
 API path blocks only direct agent writes, not the setup itself.
 
-## Future Quip Bot authorization
+## Future MoonPress Chat authorization
 
-The free core requires no quip.bot account. A future device-authorization flow may
+The free core requires no moonpresschat.com account. A future device-authorization flow may
 be added only for paid entitlements or managed services. It must use a browser
 consent step and return a scoped token to the OS credential store without
 exposing it to the agent. No such flow — and no `/license/*` operation — exists

@@ -1,4 +1,4 @@
-# Quip Bot setup research
+# MoonPress Chat setup research
 
 ## Site
 

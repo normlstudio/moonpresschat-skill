@@ -10,7 +10,7 @@
 5. Confirm the free-core language scope is represented accurately.
 6. Confirm no write happened outside the approved path (API apply with
    recorded approval, or human-applied guided steps) and none was simulated.
-7. Write `quip-setup/verification.md` from the QA checklist.
+7. Write `moonpresschat-setup/verification.md` from the QA checklist.
 
 Verification has two pre-launch gates:
 
@@ -27,7 +27,7 @@ when the corresponding feature or promise is enabled.
 `POST /setup/verify` drives the automated checklist rows:
 
 ```bash
-node helper/quip-setup-helper.mjs call https://example.com POST /setup/verify
+node helper/moonpresschat-setup-helper.mjs call https://example.com POST /setup/verify
 ```
 
 It returns `ready`, `live`, `last_apply`, and stable checks — each `pass`,

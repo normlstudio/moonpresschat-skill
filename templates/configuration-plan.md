@@ -1,4 +1,4 @@
-# Quip Bot configuration plan
+# MoonPress Chat configuration plan
 
 ## Status
 
@@ -45,13 +45,13 @@ row.
 
 ## Provider-key action
 
-The human enters the key directly in the write-only Quip Bot settings UI. The
+The human enters the key directly in the write-only MoonPress Chat settings UI. The
 agent may later confirm only provider, model, `has_key`, and test status.
 
 ## Guided apply sequence
 
 1. Approve this non-secret plan.
-2. Human connects and tests the provider in Quip Bot Settings.
+2. Human connects and tests the provider in MoonPress Chat Settings.
 3. Human applies a reviewed preset or site-analysis draft.
 4. Human reviews Knowledge base, Templates, legal text, contacts, notifications,
    retention, appearance, and language.

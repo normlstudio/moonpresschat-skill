@@ -1,4 +1,4 @@
-# Quip Bot setup verification checklist
+# MoonPress Chat setup verification checklist
 
 Use `pass`, `fail`, `blocked`, or `not-applicable` for each item. For each row,
 record `status`, `evidence`, `tested_by`, and `tested_at`. A blocking row may be
@@ -53,7 +53,7 @@ anonymous observation, never another API call.
 |---|---|---|---|
 | A01 | blocking | Site ownership/management authority confirmed | Named owner/approver confirmation |
 | A02 | blocking | Canonical HTTPS origin and target environment confirmed | Origin + staging/production |
-| A03 | blocking | Quip Bot active and compatible | Plugin/WP/PHP versions + Setup opens |
+| A03 | blocking | MoonPress Chat active and compatible | Plugin/WP/PHP versions + Setup opens |
 | A04 | blocking | Backup/reset and rollback paths confirmed | Human confirmation + operator/timestamp |
 | A05 | blocking | Public visibility is off during setup | Human confirmation or anonymous observation |
 | A06 | blocking | Guided wp-admin remained human-operated; no authenticated screenshot or secret shared | Artifact/transcript review |

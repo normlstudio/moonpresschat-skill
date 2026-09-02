@@ -1,4 +1,4 @@
-# Action: preflight and install Quip Bot
+# Action: preflight and install MoonPress Chat
 
 Complete this gate before public research or any WordPress configuration.
 
@@ -9,7 +9,7 @@ Ask for and record these four items first:
 1. The canonical public WordPress URL.
 2. An explicit statement that the user owns the site or is authorized to manage
    it and approve the intended changes.
-3. A writable local working directory. Create or reuse `quip-setup/` there.
+3. A writable local working directory. Create or reuse `moonpresschat-setup/` there.
 4. Whether the target is staging or production. If both exist, configure and
    verify staging first.
 
@@ -31,21 +31,21 @@ GET <origin>/?rest_route=/quipbot/v1/setup/compatibility   # pretty-permalink fa
 It reports `plugin_version`, `available`/`unavailable_reason`,
 `schema_versions`, `capabilities`, `site_url`, and the connection policy —
 record them and decide the path per `actions/connect.md`. Ask the human only
-for what the payload cannot answer: whether **Quip Bot** appears under
+for what the payload cannot answer: whether **MoonPress Chat** appears under
 **Plugins → Installed Plugins** when the endpoint is unreachable (absent,
 inactive, or a pre-API version answer 404), and the WordPress and PHP versions
 from **Tools → Site Health → Info**.
 
 Version 0.3.0 of this skill verifies the guided screen guidance against
-Quip Bot 3.11.0 and the API contract against 4.8.0 (base setup API since
+MoonPress Chat 3.11.0 and the API contract against 4.8.0 (base setup API since
 4.3.0). The documented runtime floor is WordPress 6.2 and PHP 7.4.
 
-- Quip Bot older than 3.11.0: `compatibility: blocked-plugin-upgrade`.
-- Quip Bot 3.11.0 or newer without a passing compatibility gate: guided path
+- MoonPress Chat older than 3.11.0: `compatibility: blocked-plugin-upgrade`.
+- MoonPress Chat 3.11.0 or newer without a passing compatibility gate: guided path
   (`connection: guided-manual` with its `reason`), not a blocker.
 - WordPress older than 6.2 or PHP older than 7.4:
   `compatibility: blocked-runtime`.
-- On the guided path, a Quip Bot whose labels materially differ from the field
+- On the guided path, a MoonPress Chat whose labels materially differ from the field
   map: stop the affected section and record
   `compatibility: blocked-guide-drift`.
 
@@ -53,15 +53,15 @@ Never request an authenticated screenshot.
 
 ## Human installation path
 
-If Quip Bot is absent, follow `contracts/installation-and-rollback.md`. The
+If MoonPress Chat is absent, follow `contracts/installation-and-rollback.md`. The
 human installs and activates the plugin from a verified official distribution.
 The agent does not upload the ZIP, operate wp-admin, or invent a download URL.
 
-If Quip Bot is installed but inactive, the human activates the already-verified
+If MoonPress Chat is installed but inactive, the human activates the already-verified
 installation from **Installed Plugins**. Record `installation: inactive` until
 activation succeeds; do not continue to research/configuration while inactive.
 
-After activation, the human confirms that the **Quip Bot** menu and **Setup** page
+After activation, the human confirms that the **MoonPress Chat** menu and **Setup** page
 open. Record status, not authenticated page contents.
 
 ## Change-safety checkpoint
@@ -72,15 +72,15 @@ open. Record status, not authenticated page contents.
   credential.
 - Record the immediate-disable action: turn
   **Settings → Visibility → Make the bot live for visitors** off. If the admin
-  UI itself is unavailable, the human may deactivate Quip Bot from Installed
+  UI itself is unavailable, the human may deactivate MoonPress Chat from Installed
   Plugins.
 
-Write `quip-setup/preflight.md` from `templates/preflight.md`, using these
+Write `moonpresschat-setup/preflight.md` from `templates/preflight.md`, using these
 status values:
 
 ```yaml
 authority: confirmed | unresolved | blocked
-artifact_folder: /absolute/non-secret/path/quip-setup
+artifact_folder: /absolute/non-secret/path/moonpresschat-setup
 environment: staging | production | unresolved
 canonical_origin: https://example.com
 installation: active | inactive | absent | blocked-official-package | unresolved
