@@ -1,6 +1,6 @@
 {
   "skill": "moonpresschat-setup",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "repo": "moonpresschat-skill",
   "audience": "WordPress site owners and developers",
   "actsOn": "MoonPress Chat setup",
@@ -46,14 +46,14 @@
     "Review whether MoonPress Chat is ready to go live",
     "Resume my MoonPress Chat setup"
   ],
-  "install": "npx skills add Norml-Studio/moonpresschat-skill -g",
+  "install": "npx skills add normlstudio/moonpresschat-skill -g",
   "installNote": "Requires Node.js 22.20 or newer.",
   "callout": {
     "label": "Public alpha",
-    "text": "Version 0.3.1 ships both paths. **The API path is the default** — MoonPress Chat's stable setup API plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, older plugins, or unsupported credential backends."
+    "text": "Version 0.3.2 ships both paths. **The API path is the default** — MoonPress Chat's stable setup API plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, older plugins, or unsupported credential backends."
   },
   "capabilities": {
-    "label": "What works in 0.3.1",
+    "label": "What works in 0.3.2",
     "items": [
       {
         "name": "Cold-start preflight",
@@ -107,7 +107,7 @@
       "No arbitrary plugin package, no production change without backup and explicit approval, and go-live is a separate approval that revokes the connection."
     ]
   },
-  "covers": "0.3.1",
+  "covers": "0.3.2",
   "generated": "2026-09-01",
   "hasHumanMd": true
 }

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.2 — 2026-09-01
+
+- Corrected the public GitHub owner slug to the verified `normlstudio/moonpresschat-skill` repository so the install command resolves for the newly published skill.
+
 ## 0.3.1 — 2026-09-01
 
 - Forked the public setup workflow from Quip into the independent MoonPress Chat

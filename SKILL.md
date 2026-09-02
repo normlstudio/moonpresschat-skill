@@ -9,7 +9,7 @@ description: >
   MoonPress Chat without exposing WordPress passwords or AI-provider keys to the
   agent.
 metadata:
-  version: "0.3.1"
+  version: "0.3.2"
   author: "Norml Studio"
 ---
 
@@ -38,7 +38,7 @@ production change explicit and reviewable.
 
 ## Current release state
 
-Version 0.3.1 is a public alpha with two complete setup paths.
+Version 0.3.2 is a public alpha with two complete setup paths.
 
 - The **API path is the default**: MoonPress Chat ships its stable public setup API
   (`quipbot/v1/setup`, API version 1.0, plugin 4.3.0+), and this skill ships
@@ -107,7 +107,7 @@ The plugin's Setup page may link to this public repository. If the skill is not
 installed, ask the human to run this in their own terminal:
 
 ```bash
-npx skills add Norml-Studio/moonpresschat-skill -g
+npx skills add normlstudio/moonpresschat-skill -g
 ```
 
 The current open `skills` installer requires Node.js 22.20 or newer. If the
