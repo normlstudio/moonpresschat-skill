@@ -9,7 +9,7 @@ description: >
   MoonPress Chat without exposing WordPress passwords or AI-provider keys to the
   agent.
 metadata:
-  version: "0.3.2"
+  version: "0.4.0"
   author: "Norml Studio"
 ---
 
@@ -38,7 +38,7 @@ production change explicit and reviewable.
 
 ## Current release state
 
-Version 0.3.2 is a public alpha with two complete setup paths.
+Version 0.4.0 is a public alpha with two complete setup paths.
 
 - The **API path is the default**: MoonPress Chat ships its stable public setup API
   (`quipbot/v1/setup`, API version 1.0, plugin 4.3.0+), and this skill ships
@@ -106,9 +106,16 @@ key into these files.
 The plugin's Setup page may link to this public repository. If the skill is not
 installed, ask the human to run this in their own terminal:
 
+Install only this skill for the agent the human uses:
+
 ```bash
-npx skills add normlstudio/moonpresschat-skill -g
+npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a claude-code
+npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a codex
+npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a gemini-cli
 ```
+
+Run one command, not all three. Replace the final agent id only when the open
+`skills` CLI names a different supported runtime.
 
 The current open `skills` installer requires Node.js 22.20 or newer. If the
 command reports an engine-version error, stop and ask the human to update Node

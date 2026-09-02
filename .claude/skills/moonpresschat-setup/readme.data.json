@@ -1,6 +1,6 @@
 {
   "skill": "moonpresschat-setup",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "repo": "moonpresschat-skill",
   "audience": "WordPress site owners and developers",
   "actsOn": "MoonPress Chat setup",
@@ -46,14 +46,14 @@
     "Review whether MoonPress Chat is ready to go live",
     "Resume my MoonPress Chat setup"
   ],
-  "install": "npx skills add normlstudio/moonpresschat-skill -g",
-  "installNote": "Requires Node.js 22.20 or newer.",
+  "install": "npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a codex",
+  "installNote": "Requires Node.js 22.20 or newer. Replace codex with claude-code or gemini-cli for that runtime.",
   "callout": {
     "label": "Public alpha",
-    "text": "Version 0.3.2 ships both paths. **The API path is the default** — MoonPress Chat's stable setup API plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, older plugins, or unsupported credential backends."
+    "text": "Version 0.4.0 ships both paths. **The API path is the default** — MoonPress Chat's stable setup API plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, older plugins, or unsupported credential backends."
   },
   "capabilities": {
-    "label": "What works in 0.3.2",
+    "label": "What works in 0.4.0",
     "items": [
       {
         "name": "Cold-start preflight",
@@ -107,7 +107,38 @@
       "No arbitrary plugin package, no production change without backup and explicit approval, and go-live is a separate approval that revokes the connection."
     ]
   },
-  "covers": "0.3.2",
+  "architecture": {
+    "label": "Inside the skill",
+    "lede": "The public package keeps the executable workflow, security contracts, helper, templates, and verification gate together.",
+    "root": "moonpresschat-setup/",
+    "items": [
+      {
+        "path": "SKILL.md",
+        "role": "Workflow router and security boundary"
+      },
+      {
+        "path": "actions/",
+        "role": "Preflight, research, questions, connect, configure, and verify"
+      },
+      {
+        "path": "contracts/",
+        "role": "API, guided fallback, fields, installation, rollback, and security"
+      },
+      {
+        "path": "helper/moonpresschat-setup-helper.mjs",
+        "role": "Keychain-backed local credential bridge"
+      },
+      {
+        "path": "templates/",
+        "role": "Non-secret setup artifact formats"
+      },
+      {
+        "path": "qa/verification-checklist.md",
+        "role": "Prelaunch and postlaunch release gate"
+      }
+    ]
+  },
+  "covers": "0.4.0",
   "generated": "2026-09-01",
   "hasHumanMd": true
 }

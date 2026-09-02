@@ -18,16 +18,25 @@ stores only non-secret setup artifacts.
 
 Install the public skill for your local agent:
 
+Choose the runtime you use and run one command:
+
 ```bash
-npx skills add normlstudio/moonpresschat-skill -g
+# Claude Code
+npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a claude-code
+
+# Codex
+npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a codex
+
+# Gemini CLI
+npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a gemini-cli
 ```
 
 The current open `skills` installer requires Node.js 22.20 or newer. If it
 reports an engine-version error, update Node through your normal developer
 tooling before retrying.
 
-The installer supports Codex, Claude Code, Cursor, and other agents in the open
-skills ecosystem. Then start a new agent turn with:
+The installer supports agents in the open skills ecosystem. Then start a new
+agent turn with:
 
 ```text
 Use moonpresschat-setup to set up MoonPress Chat on https://example.com
@@ -62,7 +71,7 @@ Application Password, or secret URL in the command or conversation.
 6. It records passed, failed, and blocked checks in `verification.md`, then asks
    separately before the public widget goes live.
 
-> **Public alpha:** version 0.3.2 ships both paths. The API path is the
+> **Public alpha:** version 0.4.0 ships both paths. The API path is the
 > default — MoonPress Chat's stable setup API plus the bundled macOS credential
 > helper — and the human-guided wp-admin path remains the documented fallback
 > for multisite, older plugins, or platforms without a supported credential
@@ -87,7 +96,7 @@ The workflow has six visible stages:
    handoff, lead, appearance, language, and launch settings.
 6. **Verify** — checks authority, data, behavior, privacy, and launch gates.
 
-Version 0.3.2 runs all six stages through the shipped setup API by default
+Version 0.4.0 runs all six stages through the shipped setup API by default
 and through the human-operated wp-admin path as the fallback. It never
 pretends that an unavailable connection or capability exists: the path is
 chosen by the public compatibility gate, and every gap is recorded with its
@@ -330,4 +339,4 @@ appearance) remain human-observed on both paths.
 
 ---
 
-_Covers SKILL.md v0.3.2 | Last changelog entry: v0.3.2 | Generated: 2026-09-01._
+_Covers SKILL.md v0.4.0 | Last changelog entry: v0.4.0 | Generated: 2026-09-01._

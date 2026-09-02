@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0 — 2026-09-01
+
+- Repackaged the public release under
+  `.claude/skills/moonpresschat-setup/`, with a repository-level README,
+  validator, and one-skill install commands for Claude Code, Codex, and Gemini
+  CLI.
+- Added the package architecture to the generated human documentation and
+  synchronized every public install example with the scoped
+  `npx skills@latest` command.
+- Prepared a reproducible release ZIP and checksum for the MoonPress Chat and
+  Norml Studio website distribution surfaces.
+
 ## 0.3.2 — 2026-09-01
 
 - Corrected the public GitHub owner slug to the verified `normlstudio/moonpresschat-skill` repository so the install command resolves for the newly published skill.
