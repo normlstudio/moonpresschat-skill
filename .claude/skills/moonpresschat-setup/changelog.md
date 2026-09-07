@@ -1,5 +1,50 @@
 # Changelog
 
+## 0.5.0 — 2026-09-02
+
+- Moved the API path to the MoonPress Chat 5.0.0 contract. The plugin renamed
+  every internal identifier in 5.0.0: REST namespace `moonpresschat/v1/setup`
+  (`/wp-json/moonpresschat/v1/setup/...` and the
+  `?rest_route=/moonpresschat/v1/setup/...` fallback), stable error codes
+  `moonpresschat_setup_*`, and the idempotency header
+  `X-MoonPressChat-Setup-Idempotency-Key` — updated in the helper, the API
+  contract, and every action and contract document. The helper still
+  resolves every `/setup/...` call against the `rest_url` the compatibility
+  payload advertises.
+- Documented the compatibility payload as a table, including the new stable
+  machine id `plugin_slug: "moonpresschat"` beside the display label
+  `plugin: "MoonPress Chat"`; identity keys on `plugin_slug`, never on the
+  label. `api_version` `"1.0"`, envelope `schema_version` `"1.0"`, and the
+  application id are unchanged.
+- Recorded the renamed guided-path admin anchors — page slugs
+  `admin.php?page=moonpresschat-*` (`moonpresschat-start`,
+  `moonpresschat-analyze`, `moonpresschat-kb`, `moonpresschat-settings`) and
+  `moonpresschat-*` DOM ids/classes — for recognizing URLs the human reads
+  back; the guided sequence navigates by menu label and is otherwise
+  unchanged.
+- Raised the API-path floor to MoonPress Chat 5.0.0 or newer. MoonPress Chat
+  5.0.0 renamed the plugin and every internal identifier; 4.8.0 and older
+  (released as QuipBot) register only the old `quipbot/v1` namespace. Against
+  them, `GET .../moonpresschat/v1/setup/compatibility` answers 404 and the
+  skill takes the guided path with `reason: plugin-predates-api`, exactly as
+  when the API is unavailable.
+- Compatibility matrix: skill 0.4.0 keeps working only with plugin 4.8.0 or
+  older (old namespace); skill 0.5.0 pairs with plugin 5.0.0 or newer. Any
+  other pairing falls back to the guided path.
+- Unchanged: the `moonpresschat-setup` slug, the helper's Keychain service
+  (`moonpresschat-setup:<origin-slug>`) and `~/.moonpresschat-setup/` record
+  directory, the guided-path fallback logic, and all credential handling.
+- Re-checked the error-code list in `contracts/current-api-contract.md`
+  against the plugin source (5.3.0; the setup contract is unchanged since
+  5.0.0): removed `moonpresschat_setup_provider_test_failed`, which the
+  plugin never emits (a failed provider test answers 409 with `ok: false`);
+  added `moonpresschat_setup_connection_required` (401),
+  `moonpresschat_setup_rate_limited` (429),
+  `moonpresschat_setup_validation_failed` (400) and the authentication-time
+  refusals `moonpresschat_setup_too_many_connections` and
+  `moonpresschat_setup_connection_expired`; every code now carries its HTTP
+  status.
+
 ## 0.4.0 — 2026-09-01
 
 - Repackaged the public release under

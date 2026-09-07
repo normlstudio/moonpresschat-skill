@@ -7,7 +7,8 @@ Use this map to build a field-level plan. Two tiers:
   differ, stop that section with `compatibility: blocked-guide-drift`; do not
   guess internal option names.
 - **Envelope mapping (API path)** — the last section maps each field/group to
-  its configuration-envelope section and key, verified against MoonPress Chat 4.8.0.
+  its configuration-envelope section and key, verified against MoonPress Chat 5.0.0
+  (contract unchanged through 5.3.0).
 
 ## Settings → AI providers
 
@@ -87,12 +88,12 @@ explicit `not-applicable-existing-key-no-safe-fault-injection` evidence.
 | Launcher size | 44, 48, or 56 px | No | Touch target check |
 | Make bot live | Off during setup; separate approval required | Release gate | Anonymous public check |
 
-## Envelope mapping (API path, verified against MoonPress Chat 4.8.0)
+## Envelope mapping (API path, verified against MoonPress Chat 5.0.0, contract unchanged through 5.3.0)
 
 The configuration envelope sent to `POST /setup/validate` and
 `POST /setup/apply` is `{"schema_version": "1.0", "configuration": {…}}` with
 these sections. The schema is closed — an unknown key fails the whole request
-with `quipbot_setup_unknown_field`; never invent a key this table does not
+with `moonpresschat_setup_unknown_field`; never invent a key this table does not
 name.
 
 | Field / group (wp-admin) | Envelope section | Key(s) |

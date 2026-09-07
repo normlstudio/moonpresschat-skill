@@ -24,25 +24,35 @@ compatibility endpoint answers the version and availability questions without
 asking the human. Fetch (no authentication):
 
 ```text
-GET <origin>/wp-json/quipbot/v1/setup/compatibility
-GET <origin>/?rest_route=/quipbot/v1/setup/compatibility   # pretty-permalink fallback
+GET <origin>/wp-json/moonpresschat/v1/setup/compatibility
+GET <origin>/?rest_route=/moonpresschat/v1/setup/compatibility   # pretty-permalink fallback
 ```
 
-It reports `plugin_version`, `available`/`unavailable_reason`,
-`schema_versions`, `capabilities`, `site_url`, and the connection policy —
-record them and decide the path per `actions/connect.md`. Ask the human only
-for what the payload cannot answer: whether **MoonPress Chat** appears under
-**Plugins → Installed Plugins** when the endpoint is unreachable (absent,
-inactive, or a pre-API version answer 404), and the WordPress and PHP versions
-from **Tools → Site Health → Info**.
+It reports `plugin_slug` (`moonpresschat`), `plugin_version`,
+`available`/`unavailable_reason`, `schema_versions`, `capabilities`,
+`site_url`, `rest_url`, and the connection policy — record them and decide the
+path per `actions/connect.md`. Ask the human only for what the payload cannot
+answer: whether **MoonPress Chat** appears under **Plugins → Installed
+Plugins** and which version, when the endpoint is unreachable (absent,
+inactive, or older than 5.0.0 — those releases register only the pre-5.0.0
+namespace `quipbot/v1`, so the URLs above answer 404), and the WordPress and
+PHP versions from **Tools → Site Health → Info**.
 
-Version 0.3.0 of this skill verifies the guided screen guidance against
-MoonPress Chat 3.11.0 and the API contract against 4.8.0 (base setup API since
-4.3.0). The documented runtime floor is WordPress 6.2 and PHP 7.4.
+Version 0.5.0 of this skill verifies the guided screen guidance against
+MoonPress Chat 3.11.0 and the API contract against MoonPress Chat 5.0.0 (contract
+unchanged through 5.3.0); the API path requires 5.0.0 or newer. MoonPress Chat 5.0.0 renamed the plugin and
+every internal identifier; 4.8.0 and older (released as QuipBot) register only
+the old `quipbot/v1` namespace, so against them the compatibility URL answers
+404 and the skill takes the guided path. The documented runtime floor is
+WordPress 6.2 and PHP 7.4.
 
-- MoonPress Chat older than 3.11.0: `compatibility: blocked-plugin-upgrade`.
-- MoonPress Chat 3.11.0 or newer without a passing compatibility gate: guided path
-  (`connection: guided-manual` with its `reason`), not a blocker.
+- MoonPress Chat 5.0.0 or newer with a passing compatibility gate: API path.
+- MoonPress Chat 5.0.0 or newer without a passing gate (multisite, missing
+  capability, origin mismatch, declined helper, unsupported backend): guided
+  path (`connection: guided-manual` with its `reason`), not a blocker.
+- A release from 3.11.0 through 4.8.0 (compatibility URL answers 404): guided
+  path with `reason: plugin-predates-api`, not a blocker.
+- A release older than 3.11.0: `compatibility: blocked-plugin-upgrade`.
 - WordPress older than 6.2 or PHP older than 7.4:
   `compatibility: blocked-runtime`.
 - On the guided path, a MoonPress Chat whose labels materially differ from the field
@@ -84,7 +94,7 @@ artifact_folder: /absolute/non-secret/path/moonpresschat-setup
 environment: staging | production | unresolved
 canonical_origin: https://example.com
 installation: active | inactive | absent | blocked-official-package | unresolved
-plugin_version: 4.8.0 | unknown
+plugin_version: 5.0.0 | unknown
 connection: api | guided-manual | unresolved
 wordpress_version: value | unknown
 php_version: value | unknown

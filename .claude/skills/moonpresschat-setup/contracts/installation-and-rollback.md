@@ -39,8 +39,11 @@ to improvise.
 6. Human confirms public visibility is off.
 
 The guided screen-by-screen guidance is verified against MoonPress Chat 3.11.0; the
-API path's contract is verified against MoonPress Chat 4.8.0 (base setup API since
-4.3.0). WordPress 6.2+ and PHP 7.4+ are the runtime floors. Treat these as
+API path's contract is verified against MoonPress Chat 5.0.0 (contract unchanged
+through 5.3.0) and requires 5.0.0 or newer (MoonPress Chat 5.0.0 renamed the plugin and every internal
+identifier; 4.8.0 and older, released as QuipBot, register only the old
+`quipbot/v1` namespace and use the guided path). WordPress 6.2+ and PHP 7.4+
+are the runtime floors. Treat these as
 compatibility floors, not a claim that every unrelated plugin/theme
 combination is compatible.
 
@@ -74,7 +77,7 @@ node helper/moonpresschat-setup-helper.mjs call https://example.com POST /setup/
 
 with `rollback.json` containing `{"rollback_id": "<the id the apply response
 returned>"}`. It restores exactly the MoonPress Chat options the apply snapshotted
-and consumes the snapshot on success; `quipbot_setup_no_snapshot` means there
+and consumes the snapshot on success; `moonpresschat_setup_no_snapshot` means there
 is nothing left to restore.
 
 **The provider secret is never restored by rollback.** The snapshot never

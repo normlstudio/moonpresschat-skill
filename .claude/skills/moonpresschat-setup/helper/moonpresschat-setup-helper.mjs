@@ -4,7 +4,9 @@
  *
  * This single-file script is the only component that ever touches the
  * WordPress Application Password minted for the MoonPress Chat setup API
- * (namespace quipbot/v1/setup, API version 1.0). The agent composes
+ * (namespace moonpresschat/v1/setup, API version 1.0; MoonPress Chat 5.0.0 or
+ * newer — older plugins register only the pre-5.0.0 namespace, answer 404 on
+ * compatibility, and route to the skill's guided path). The agent composes
  * non-secret JSON and calls this helper; the helper authenticates.
  *
  * Security contract:
@@ -40,6 +42,8 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync, unlinkSync, existsSync, chmodSync } from 'node:fs';
 
 const API_VERSION = '1.0';
+const REST_NAMESPACE = 'moonpresschat/v1'; // MoonPress Chat 5.0.0+; 4.8.0 and older speak a different namespace
+const IDEMPOTENCY_HEADER = 'X-MoonPressChat-Setup-Idempotency-Key';
 const REQUIRED_CAPABILITIES = [
 	'status', 'validate', 'apply', 'verify', 'rollback',
 	'go_live', 'provider_write', 'self_revoke',
@@ -237,11 +241,11 @@ function basicAuth( userLogin, password ) {
 
 /** GET /setup/compatibility — pretty permalinks first, ?rest_route= fallback. */
 async function fetchCompatibility( origin ) {
-	const pretty = await httpJson( `${origin}/wp-json/quipbot/v1/setup/compatibility`, { timeout: COMPAT_TIMEOUT_MS } );
+	const pretty = await httpJson( `${origin}/wp-json/${REST_NAMESPACE}/setup/compatibility`, { timeout: COMPAT_TIMEOUT_MS } );
 	if ( pretty.ok && pretty.body && typeof pretty.body.api_version === 'string' ) {
 		return pretty;
 	}
-	const fallback = await httpJson( `${origin}/?rest_route=/quipbot/v1/setup/compatibility`, { timeout: COMPAT_TIMEOUT_MS } );
+	const fallback = await httpJson( `${origin}/?rest_route=/${REST_NAMESPACE}/setup/compatibility`, { timeout: COMPAT_TIMEOUT_MS } );
 	if ( fallback.ok && fallback.body && typeof fallback.body.api_version === 'string' ) {
 		return fallback;
 	}
@@ -268,9 +272,10 @@ function requireConnection( origin ) {
 }
 
 /**
- * Resolve a /setup/... path against the recorded rest_url. Works for both
- * pretty permalinks (…/wp-json/quipbot/v1/setup) and the ?rest_route= form
- * (…/?rest_route=/quipbot/v1/setup) because both concatenate correctly.
+ * Resolve a /setup/... path against the rest_url the compatibility payload
+ * advertised at connect time. Works for both pretty permalinks
+ * (…/wp-json/moonpresschat/v1/setup) and the ?rest_route= form
+ * (…/?rest_route=/moonpresschat/v1/setup) because both concatenate correctly.
  */
 function resolveSetupPath( record, path ) {
 	return record.rest_url.replace( /\/$/, '' ) + path.slice( SETUP_PREFIX.length );
@@ -285,7 +290,7 @@ async function setupRequest( conn, method, path, bodyText, idempotencyKey ) {
 		headers[ 'Content-Type' ] = 'application/json';
 	}
 	if ( idempotencyKey ) {
-		headers[ 'X-Quip-Setup-Idempotency-Key' ] = idempotencyKey;
+		headers[ IDEMPOTENCY_HEADER ] = idempotencyKey;
 	}
 	return httpJson( resolveSetupPath( conn.record, path ), { method, headers, body: bodyText ?? null } );
 }

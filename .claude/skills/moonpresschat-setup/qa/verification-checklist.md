@@ -28,7 +28,7 @@ anonymous observation, never another API call.
 |---|---|
 | A01 | Unchanged — human confirmation |
 | A02 | Helper `connect` gate: compatibility `site_url` equals the supplied origin |
-| A03 | Compatibility payload (`available`, `plugin_version`, capabilities) + verify check `compatibility` |
+| A03 | Compatibility payload (`available`, `plugin_slug`, `plugin_version`, capabilities) + verify check `compatibility` |
 | A04 | Unchanged — human confirmation; also record the apply's `rollback_id` |
 | A05 | Verify check `visibility` reports `blocked` (off) during setup |
 | A06 | Guided runs only — the API-path counterpart is A07 |

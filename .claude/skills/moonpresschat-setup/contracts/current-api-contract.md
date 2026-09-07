@@ -3,12 +3,22 @@
 ## Shipped public setup surface
 
 MoonPress Chat ships a stable public setup API. This document is the client-side
-record of that surface as verified against MoonPress Chat 4.8.0; the base API shipped
-in 4.3.0.
+record of that surface as verified against MoonPress Chat 5.0.0 (contract
+unchanged through 5.3.0) — the first release under the MoonPress Chat name and
+the floor for this skill's API path.
+MoonPress Chat 5.0.0 renamed the plugin and every internal identifier; 4.8.0
+and older (released as QuipBot) register only the old `quipbot/v1` namespace,
+which this skill no longer speaks, so against them the compatibility URL
+answers 404 and the skill takes the guided path.
 
-- Namespace: `quipbot/v1/setup` (the pre-4.x internal `iqb/v1` namespace no
-  longer exists on current plugins and is not part of any contract).
-- API version: `1.0` (also the only entry in `schema_versions`).
+- Namespace: `moonpresschat/v1/setup` — pretty permalinks
+  `<origin>/wp-json/moonpresschat/v1/setup/...`, fallback
+  `<origin>/?rest_route=/moonpresschat/v1/setup/...`. On a plugin older than
+  5.0.0 the compatibility route answers 404 and the skill takes the guided
+  path (`reason: plugin-predates-api`). No other namespace is part of any
+  contract.
+- API version: `1.0` (also the only entry in `schema_versions`); the envelope
+  `schema_version` is likewise `1.0`. Neither changed with the rename.
 - Content type: `application/json`. Every response is
   `Cache-Control: no-store, private`.
 - Request body ceilings: 512 KiB general; 16 KiB for the provider-secret body
@@ -19,9 +29,28 @@ in 4.3.0.
   HTTPS Basic Auth. The plugin confines that credential to this namespace and
   every operation additionally requires `manage_options`.
 
-The plugin's internal admin routes (`quipbot/v1/admin/*`) remain outside the
+The plugin's internal admin routes (`moonpresschat/v1/admin/*`) remain outside the
 contract. The setup credential cannot reach them: authentication fails with
-`quipbot_setup_scope_denied`. The skill never calls them.
+`moonpresschat_setup_scope_denied`. The skill never calls them.
+
+## Compatibility payload
+
+`GET /setup/compatibility` is public and returns:
+
+| Field | Value / meaning |
+|---|---|
+| `plugin` | Display label, `"MoonPress Chat"`. Presentation only — never key identity on it |
+| `plugin_slug` | Stable machine id, `"moonpresschat"` (new in 5.0.0). Use this wherever the plugin's identity matters |
+| `plugin_version` | Installed plugin version, `5.0.0` or newer on the API path |
+| `api_version` | `"1.0"` — unchanged by the rename |
+| `schema_versions` | Supported envelope schema versions; must contain `"1.0"` |
+| `available` / `unavailable_reason` | `false` plus a human-readable reason on multisite or any other refusal |
+| `capabilities` | The advertised capability list (see below); empty when unavailable |
+| `site_url` | The site's canonical origin; must equal the owner-supplied origin after normalization |
+| `rest_url` | The advertised setup base, `.../wp-json/moonpresschat/v1/setup`; the helper records it at connect and resolves every `/setup/...` path against it |
+| `authorization_url` | WordPress core's Application Password consent screen |
+| `application.id` / `application.name` | `c8d4bd65-7694-4c34-b8cd-4d54b44b389e` (unchanged) / `"MoonPress Chat setup"` |
+| `connection` | `{ max_lifetime, idle_timeout, revoked_on_go_live }` — see "Connection lifetime" |
 
 ## Endpoints
 
@@ -37,10 +66,10 @@ contract. The setup credential cannot reach them: authentication fails with
 | PUT | `/setup/provider` | Setup credential | Write/clear a provider secret; response never echoes it (helper `provider` subcommand only) |
 | POST | `/setup/provider/test` | Setup credential | Test the stored active provider; returns non-secret status |
 | DELETE | `/setup/connection` | Setup credential | Revoke the setup credential(s); returns `{"revoked": true}` |
-| GET | `/setup/interview` | Setup credential | Interview questions, stored answers, orphaned ids, progress (4.8.0+) |
-| PUT | `/setup/interview/answers` | Setup credential | Merge answers `{ set_id?, answers: { id: value\|null } }`; returns the fresh GET payload (4.8.0+) |
-| DELETE | `/setup/interview` | Setup credential | Reset the interview ("start over"); never touches knowledge or the analysis draft (4.8.0+) |
-| GET | `/setup/interview/preview` | Setup credential | Assembled prompt, its parts, the selection, and `envelope` — the knowledge envelope to validate/apply (4.8.0+) |
+| GET | `/setup/interview` | Setup credential | Interview questions, stored answers, orphaned ids, progress (`interview` capability) |
+| PUT | `/setup/interview/answers` | Setup credential | Merge answers `{ set_id?, answers: { id: value\|null } }`; returns the fresh GET payload (`interview` capability) |
+| DELETE | `/setup/interview` | Setup credential | Reset the interview ("start over"); never touches knowledge or the analysis draft (`interview` capability) |
+| GET | `/setup/interview/preview` | Setup credential | Assembled prompt, its parts, the selection, and `envelope` — the knowledge envelope to validate/apply (`interview` capability) |
 
 There is deliberately no `/setup/interview/apply`: the agent posts the
 preview's `envelope` through the normal `validate` → `apply` pipeline, which
@@ -54,19 +83,21 @@ or infer entitlement from anything this API returns.
 ## Capabilities and feature tiers
 
 The compatibility payload advertises capabilities; gate on the list, never on
-a plugin version string.
+a plugin version string. Every capability below is advertised by MoonPress
+Chat 5.0.0, the floor for this skill (the base set and the interview routes
+predate the rename, but only under the old namespace).
 
-| Capability | Meaning | Shipped since |
+| Capability | Meaning | Under `moonpresschat/v1` since |
 |---|---|---|
-| `status` | `GET /setup/status` | 4.3.0 |
-| `validate` | `POST /setup/validate` | 4.3.0 |
-| `apply` | `POST /setup/apply` | 4.3.0 |
-| `verify` | `POST /setup/verify` | 4.3.0 |
-| `rollback` | `POST /setup/rollback` | 4.3.0 |
-| `go_live` | `POST /setup/go-live` | 4.3.0 |
-| `provider_write` | `PUT /setup/provider` + `POST /setup/provider/test` | 4.3.0 |
-| `self_revoke` | `DELETE /setup/connection` | 4.3.0 |
-| `interview` | The four `/setup/interview*` routes | 4.8.0 |
+| `status` | `GET /setup/status` | 5.0.0 |
+| `validate` | `POST /setup/validate` | 5.0.0 |
+| `apply` | `POST /setup/apply` | 5.0.0 |
+| `verify` | `POST /setup/verify` | 5.0.0 |
+| `rollback` | `POST /setup/rollback` | 5.0.0 |
+| `go_live` | `POST /setup/go-live` | 5.0.0 |
+| `provider_write` | `PUT /setup/provider` + `POST /setup/provider/test` | 5.0.0 |
+| `self_revoke` | `DELETE /setup/connection` | 5.0.0 |
+| `interview` | The four `/setup/interview*` routes | 5.0.0 |
 
 ## The API-path gate
 
@@ -80,7 +111,9 @@ Use the API path only when the public compatibility payload reports all of:
 4. `site_url` equal to the owner-supplied origin after normalization.
 
 Anything less routes to the guided path with a recorded `reason`. The helper
-enforces this gate itself during `connect`.
+enforces this gate itself during `connect`. A 404 from both compatibility
+URLs is the pre-5.0.0 signature (or an absent/inactive plugin): guided path,
+`reason: plugin-predates-api`.
 
 ## Connection lifetime and revocation
 
@@ -100,14 +133,14 @@ The compatibility payload advertises the effective policy as
   running assisted setup against the same site simultaneously is not a
   supported flow.
 - At most 8 credentials are tracked; a ninth is refused
-  (`quipbot_setup_too_many_connections` in the site's audit log) and the run
+  (`moonpresschat_setup_too_many_connections` in the site's audit log) and the run
   must stop.
 - Multisite: refused outright — see below.
 
 **The refusal reason does not reach the client.** When the plugin refuses a
 credential at authentication (expired, capacity, non-administrator owner), the
 request proceeds anonymously and the route answers a plain
-`401 quipbot_setup_auth_required`. A client cannot tell "expired" from "never
+`401 moonpresschat_setup_auth_required`. A client cannot tell "expired" from "never
 authorized" from the response body. On any mid-flow 401: re-read the public
 `GET /setup/compatibility` and ask the owner to re-authorize (`connect`
 again). This is documented plugin behavior, not a bug to work around.
@@ -145,8 +178,8 @@ envelope shape:
 ```
 
 - Every object is closed: unknown keys fail with
-  `quipbot_setup_unknown_field` and a JSON-pointer-like `field`; unsupported
-  versions fail with `quipbot_setup_unsupported_schema`. **Stop on either;
+  `moonpresschat_setup_unknown_field` and a JSON-pointer-like `field`; unsupported
+  versions fail with `moonpresschat_setup_unsupported_schema`. **Stop on either;
   never retry a mutated envelope.**
 - Sections may be omitted for partial setup; an included section cannot be
   empty when empty would cause destructive replacement.
@@ -163,23 +196,23 @@ envelope shape:
 2. The approval fingerprint comes **from the server**: `apply` requires
    `approval.confirmed: true` and `approval.artifact_sha256` equal to the
    `configuration_sha256` validate returned. Never hash locally.
-3. `apply` additionally requires the `X-Quip-Setup-Idempotency-Key` header
+3. `apply` additionally requires the `X-MoonPressChat-Setup-Idempotency-Key` header
    (16–128 URL-safe characters; the helper auto-generates 32 hex chars for
    apply and go-live). A retry with the same key and fingerprint returns the
    original response; the same key with a different fingerprint fails
-   `quipbot_setup_idempotency_conflict`. Records expire after 24 hours.
+   `moonpresschat_setup_idempotency_conflict`. Records expire after 24 hours.
 4. Before the first mutation the plugin snapshots exactly the options the
    included sections can change. The apply response carries `apply_id`,
    `rollback_id`, the fingerprint, and the applied sections — record all of
    them in the configuration plan.
 5. A mid-apply failure restores the snapshot before returning. Success leaves
-   `quipbot_live` exactly as it was.
+   `moonpresschat_live` exactly as it was.
 
 ### Rollback
 
 `POST /setup/rollback` with `{"rollback_id": "<the id apply returned>"}`
 restores only the exact MoonPress Chat options in the snapshot and consumes it on
-success (`quipbot_setup_no_snapshot` when there is nothing to restore or the
+success (`moonpresschat_setup_no_snapshot` when there is nothing to restore or the
 id does not match). **The provider secret is never snapshotted and never
 restored** — rollback restores the provider *selection* only. It also never
 restores WordPress users, plugins, posts, arbitrary options, or external
@@ -207,48 +240,86 @@ the expected state during setup).
 `POST /setup/go-live` requires `approval.confirmed: true`, the approved
 `apply_id` and `configuration_sha256` from the last apply, a fresh idempotency
 key, and every blocking verification check passing (`409
-quipbot_setup_verification_failed` otherwise). It changes only `quipbot_live`,
+moonpresschat_setup_verification_failed` otherwise). It changes only `moonpresschat_live`,
 records a redacted audit event, and **revokes every tracked setup credential**
 (`connection_revoked` in the response). It never runs as part of apply.
 
 ## Error codes
 
-Errors use the normal WordPress REST shape with stable codes:
+Errors use the normal WordPress REST shape with stable codes. The list below
+is every `moonpresschat_setup_*` code the plugin can return, checked against
+the plugin source of MoonPress Chat 5.0.0 (contract unchanged through 5.3.0).
 
-- `quipbot_setup_auth_required`
-- `quipbot_setup_capability_required`
-- `quipbot_setup_scope_denied`
-- `quipbot_setup_unsupported_schema`
-- `quipbot_setup_unknown_field`
-- `quipbot_setup_invalid_field`
-- `quipbot_setup_request_too_large`
-- `quipbot_setup_approval_required`
-- `quipbot_setup_artifact_mismatch`
-- `quipbot_setup_idempotency_required`
-- `quipbot_setup_idempotency_conflict`
-- `quipbot_setup_apply_failed`
-- `quipbot_setup_no_snapshot`
-- `quipbot_setup_verification_failed`
-- `quipbot_setup_provider_missing`
-- `quipbot_setup_provider_test_failed`
-- `quipbot_setup_revoke_failed`
+Authentication and admission (every credentialed route):
 
-Interview routes (4.8.0+) add:
+- `moonpresschat_setup_auth_required` — no authenticated user (401).
+- `moonpresschat_setup_connection_required` — authenticated, but not with the
+  setup Application Password (401).
+- `moonpresschat_setup_capability_required` — the user lacks `manage_options`
+  (403).
+- `moonpresschat_setup_scope_denied` — the setup credential was used outside
+  `/setup` (403); also raised at authentication when the credential is
+  presented outside REST, by a non-administrator, or on multisite (401).
+- `moonpresschat_setup_rate_limited` — more than 180 authenticated setup
+  requests in a minute (429).
+- `moonpresschat_setup_too_many_connections` — a ninth tracked credential,
+  refused at authentication (401; see "Connection lifetime").
+- `moonpresschat_setup_connection_expired` — the credential passed its idle
+  or maximum lifetime; refused and deleted at authentication (401).
 
-- `quipbot_setup_interview_no_source` — nothing to ask about yet; apply a
+Request shape (any route with a body):
+
+- `moonpresschat_setup_request_too_large` — body over the route's ceiling (413).
+- `moonpresschat_setup_invalid_field` — malformed or missing value; carries
+  `field` where known (400).
+- `moonpresschat_setup_unknown_field` — a key outside the closed schema;
+  carries `field` (400).
+
+Validate, apply, rollback, go-live:
+
+- `moonpresschat_setup_validation_failed` — apply received an envelope that
+  validate rejects; the `validation` report is attached (400).
+- `moonpresschat_setup_unsupported_schema` — `schema_version` is not `1.0`;
+  an entry in the validation report's `errors`, not a top-level code.
+- `moonpresschat_setup_provider_missing` — the selected provider has no stored
+  key yet; an entry in the validation report's `warnings`, never blocking.
+- `moonpresschat_setup_approval_required` — `approval.confirmed` is not `true`
+  (400).
+- `moonpresschat_setup_idempotency_required` —
+  `X-MoonPressChat-Setup-Idempotency-Key` missing or malformed (400).
+- `moonpresschat_setup_artifact_mismatch` — `approval.artifact_sha256` (apply)
+  or `apply_id` + `configuration_sha256` (go-live) do not match the server's
+  (409).
+- `moonpresschat_setup_idempotency_conflict` — same key, different fingerprint
+  (409).
+- `moonpresschat_setup_no_snapshot` — nothing to roll back, or the
+  `rollback_id` does not match (409).
+- `moonpresschat_setup_apply_failed` — a write failed; apply restored the
+  snapshot, or rollback could not restore it (500).
+- `moonpresschat_setup_verification_failed` — a blocking check failed at
+  go-live; the `verification` report is attached (409).
+
+Connection and interview:
+
+- `moonpresschat_setup_revoke_failed` — `DELETE /setup/connection` could not
+  identify (409) or delete (500) the credential.
+- `moonpresschat_setup_interview_no_source` — nothing to ask about yet; apply a
   preset or run the site analysis first (409).
-- `quipbot_setup_interview_stale` — the question set changed; fetch
+- `moonpresschat_setup_interview_stale` — the question set changed; fetch
   `GET /setup/interview` again and answer against its `set_id` (409).
+
+Two failures carry no top-level code: `POST /setup/provider/test` answers 409
+with `ok: false`, the provider, the model, and a message; `POST /setup/validate`
+answers 400 with `valid: false` and the report.
 
 HTTP mapping: client-caused validation errors 400; unauthenticated 401;
 insufficient capability 403; conflicts and failed gates 409; body too large
-413; rate limit 429; unexpected storage/provider failures 500/502 without
-sensitive detail.
+413; rate limit 429; unexpected storage failures 500 without sensitive detail.
 
 ## Fail-closed rules
 
-- Unknown fields or versions: stop on `quipbot_setup_unknown_field` /
-  `quipbot_setup_unsupported_schema`. Never retry mutated envelopes to probe
+- Unknown fields or versions: stop on `moonpresschat_setup_unknown_field` /
+  `moonpresschat_setup_unsupported_schema`. Never retry mutated envelopes to probe
   the schema.
 - A 401 mid-flow means an expired or revoked connection. Re-read the public
   `GET /setup/compatibility` and ask the owner to re-authorize; the refusal
@@ -257,7 +328,7 @@ sensitive detail.
   plain 401) stop the run; do not mint credentials in a loop.
 - Never route `PUT /setup/provider` through the generic bridge; never place a
   secret in an envelope, a file, argv, or chat.
-- Never call `quipbot/v1/admin/*`, `/license/*`, XML-RPC, or any route outside
+- Never call `moonpresschat/v1/admin/*`, `/license/*`, XML-RPC, or any route outside
   `/setup`.
 - When the compatibility gate does not pass in full, use the guided path; do
   not improvise partial automation.

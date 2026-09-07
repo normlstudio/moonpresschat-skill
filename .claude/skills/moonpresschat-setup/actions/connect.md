@@ -3,9 +3,12 @@
 ## Choose the path
 
 Fetch the public `GET /setup/compatibility` endpoint (no authentication; try
-`<origin>/wp-json/quipbot/v1/setup/compatibility`, then
-`<origin>/?rest_route=/quipbot/v1/setup/compatibility`). Use the API path only
-when **all** of the following hold — the helper re-checks the same gate itself:
+`<origin>/wp-json/moonpresschat/v1/setup/compatibility`, then
+`<origin>/?rest_route=/moonpresschat/v1/setup/compatibility`). A 404 from both
+means the plugin is absent, inactive, or older than MoonPress Chat 5.0.0 (still
+on the pre-5.0.0 namespace): guided path, `reason: plugin-predates-api`. Use
+the API path only when **all** of the following hold — the helper re-checks
+the same gate itself:
 
 - `available: true`;
 - `"1.0"` in `schema_versions`;
@@ -15,7 +18,9 @@ when **all** of the following hold — the helper re-checks the same gate itself
 - the operator's machine is macOS (the helper's only credential backend in
   this release) and the owner agrees to run the helper.
 
-Record the outcome in the configuration plan:
+Record the outcome in the configuration plan, together with the payload's
+`plugin_slug` (`moonpresschat` — the stable machine id; the `plugin` label
+is display-only) and `plugin_version`:
 
 ```yaml
 connection: api | guided-manual
@@ -47,8 +52,9 @@ reason: multisite | plugin-predates-api | owner-declined-helper | credential-bac
    the query from browser history, and closes the listener. On rejection, a
    wrong state, or a second callback it exits non-zero and stores nothing.
 6. The helper writes the non-secret connection record to
-   `~/.moonpresschat-setup/<origin-slug>.json` (origin, `rest_url`, `user_login`,
-   `connected_at`, connection policy) and smoke-tests `GET /setup/status`.
+   `~/.moonpresschat-setup/<origin-slug>.json` (origin, the advertised `rest_url`
+   — `.../wp-json/moonpresschat/v1/setup` — `user_login`, `connected_at`,
+   connection policy) and smoke-tests `GET /setup/status`.
 7. Record only the redacted summary the helper prints: connection status,
    origin, user login, connected-at, policy, smoke result. Never the
    credential — the helper never prints it.
