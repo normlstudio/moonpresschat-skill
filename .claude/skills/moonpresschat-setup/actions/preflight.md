@@ -39,8 +39,8 @@ namespace `quipbot/v1`, so the URLs above answer 404), and the WordPress and
 PHP versions from **Tools → Site Health → Info**.
 
 Version 0.5.0 of this skill verifies the guided screen guidance against
-MoonPress Chat 3.11.0 and the API contract against MoonPress Chat 5.0.0; the
-API path requires 5.0.0 or newer. MoonPress Chat 5.0.0 renamed the plugin and
+MoonPress Chat 3.11.0 and the API contract against MoonPress Chat 5.0.0 (contract
+unchanged through 5.3.0); the API path requires 5.0.0 or newer. MoonPress Chat 5.0.0 renamed the plugin and
 every internal identifier; 4.8.0 and older (released as QuipBot) register only
 the old `quipbot/v1` namespace, so against them the compatibility URL answers
 404 and the skill takes the guided path. The documented runtime floor is

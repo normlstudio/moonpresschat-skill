@@ -3,8 +3,9 @@
 ## Shipped public setup surface
 
 MoonPress Chat ships a stable public setup API. This document is the client-side
-record of that surface as verified against MoonPress Chat 5.0.0 — the first
-release under the MoonPress Chat name and the floor for this skill's API path.
+record of that surface as verified against MoonPress Chat 5.0.0 (contract
+unchanged through 5.3.0) — the first release under the MoonPress Chat name and
+the floor for this skill's API path.
 MoonPress Chat 5.0.0 renamed the plugin and every internal identifier; 4.8.0
 and older (released as QuipBot) register only the old `quipbot/v1` namespace,
 which this skill no longer speaks, so against them the compatibility URL
@@ -245,37 +246,75 @@ records a redacted audit event, and **revokes every tracked setup credential**
 
 ## Error codes
 
-Errors use the normal WordPress REST shape with stable codes:
+Errors use the normal WordPress REST shape with stable codes. The list below
+is every `moonpresschat_setup_*` code the plugin can return, checked against
+the plugin source of MoonPress Chat 5.0.0 (contract unchanged through 5.3.0).
 
-- `moonpresschat_setup_auth_required`
-- `moonpresschat_setup_capability_required`
-- `moonpresschat_setup_scope_denied`
-- `moonpresschat_setup_unsupported_schema`
-- `moonpresschat_setup_unknown_field`
-- `moonpresschat_setup_invalid_field`
-- `moonpresschat_setup_request_too_large`
-- `moonpresschat_setup_approval_required`
-- `moonpresschat_setup_artifact_mismatch`
-- `moonpresschat_setup_idempotency_required`
-- `moonpresschat_setup_idempotency_conflict`
-- `moonpresschat_setup_apply_failed`
-- `moonpresschat_setup_no_snapshot`
-- `moonpresschat_setup_verification_failed`
-- `moonpresschat_setup_provider_missing`
-- `moonpresschat_setup_provider_test_failed`
-- `moonpresschat_setup_revoke_failed`
+Authentication and admission (every credentialed route):
 
-Interview routes (`interview` capability) add:
+- `moonpresschat_setup_auth_required` — no authenticated user (401).
+- `moonpresschat_setup_connection_required` — authenticated, but not with the
+  setup Application Password (401).
+- `moonpresschat_setup_capability_required` — the user lacks `manage_options`
+  (403).
+- `moonpresschat_setup_scope_denied` — the setup credential was used outside
+  `/setup` (403); also raised at authentication when the credential is
+  presented outside REST, by a non-administrator, or on multisite (401).
+- `moonpresschat_setup_rate_limited` — more than 180 authenticated setup
+  requests in a minute (429).
+- `moonpresschat_setup_too_many_connections` — a ninth tracked credential,
+  refused at authentication (401; see "Connection lifetime").
+- `moonpresschat_setup_connection_expired` — the credential passed its idle
+  or maximum lifetime; refused and deleted at authentication (401).
 
+Request shape (any route with a body):
+
+- `moonpresschat_setup_request_too_large` — body over the route's ceiling (413).
+- `moonpresschat_setup_invalid_field` — malformed or missing value; carries
+  `field` where known (400).
+- `moonpresschat_setup_unknown_field` — a key outside the closed schema;
+  carries `field` (400).
+
+Validate, apply, rollback, go-live:
+
+- `moonpresschat_setup_validation_failed` — apply received an envelope that
+  validate rejects; the `validation` report is attached (400).
+- `moonpresschat_setup_unsupported_schema` — `schema_version` is not `1.0`;
+  an entry in the validation report's `errors`, not a top-level code.
+- `moonpresschat_setup_provider_missing` — the selected provider has no stored
+  key yet; an entry in the validation report's `warnings`, never blocking.
+- `moonpresschat_setup_approval_required` — `approval.confirmed` is not `true`
+  (400).
+- `moonpresschat_setup_idempotency_required` —
+  `X-MoonPressChat-Setup-Idempotency-Key` missing or malformed (400).
+- `moonpresschat_setup_artifact_mismatch` — `approval.artifact_sha256` (apply)
+  or `apply_id` + `configuration_sha256` (go-live) do not match the server's
+  (409).
+- `moonpresschat_setup_idempotency_conflict` — same key, different fingerprint
+  (409).
+- `moonpresschat_setup_no_snapshot` — nothing to roll back, or the
+  `rollback_id` does not match (409).
+- `moonpresschat_setup_apply_failed` — a write failed; apply restored the
+  snapshot, or rollback could not restore it (500).
+- `moonpresschat_setup_verification_failed` — a blocking check failed at
+  go-live; the `verification` report is attached (409).
+
+Connection and interview:
+
+- `moonpresschat_setup_revoke_failed` — `DELETE /setup/connection` could not
+  identify (409) or delete (500) the credential.
 - `moonpresschat_setup_interview_no_source` — nothing to ask about yet; apply a
   preset or run the site analysis first (409).
 - `moonpresschat_setup_interview_stale` — the question set changed; fetch
   `GET /setup/interview` again and answer against its `set_id` (409).
 
+Two failures carry no top-level code: `POST /setup/provider/test` answers 409
+with `ok: false`, the provider, the model, and a message; `POST /setup/validate`
+answers 400 with `valid: false` and the report.
+
 HTTP mapping: client-caused validation errors 400; unauthenticated 401;
 insufficient capability 403; conflicts and failed gates 409; body too large
-413; rate limit 429; unexpected storage/provider failures 500/502 without
-sensitive detail.
+413; rate limit 429; unexpected storage failures 500 without sensitive detail.
 
 ## Fail-closed rules
 

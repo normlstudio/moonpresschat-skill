@@ -34,6 +34,16 @@
 - Unchanged: the `moonpresschat-setup` slug, the helper's Keychain service
   (`moonpresschat-setup:<origin-slug>`) and `~/.moonpresschat-setup/` record
   directory, the guided-path fallback logic, and all credential handling.
+- Re-checked the error-code list in `contracts/current-api-contract.md`
+  against the plugin source (5.3.0; the setup contract is unchanged since
+  5.0.0): removed `moonpresschat_setup_provider_test_failed`, which the
+  plugin never emits (a failed provider test answers 409 with `ok: false`);
+  added `moonpresschat_setup_connection_required` (401),
+  `moonpresschat_setup_rate_limited` (429),
+  `moonpresschat_setup_validation_failed` (400) and the authentication-time
+  refusals `moonpresschat_setup_too_many_connections` and
+  `moonpresschat_setup_connection_expired`; every code now carries its HTTP
+  status.
 
 ## 0.4.0 — 2026-09-01
 

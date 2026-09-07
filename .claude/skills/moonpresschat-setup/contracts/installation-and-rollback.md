@@ -39,8 +39,8 @@ to improvise.
 6. Human confirms public visibility is off.
 
 The guided screen-by-screen guidance is verified against MoonPress Chat 3.11.0; the
-API path's contract is verified against MoonPress Chat 5.0.0 and requires 5.0.0
-or newer (MoonPress Chat 5.0.0 renamed the plugin and every internal
+API path's contract is verified against MoonPress Chat 5.0.0 (contract unchanged
+through 5.3.0) and requires 5.0.0 or newer (MoonPress Chat 5.0.0 renamed the plugin and every internal
 identifier; 4.8.0 and older, released as QuipBot, register only the old
 `quipbot/v1` namespace and use the guided path). WordPress 6.2+ and PHP 7.4+
 are the runtime floors. Treat these as
