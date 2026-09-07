@@ -239,7 +239,7 @@ access, or a credential pasted into chat.
 On the API path, the skill builds one non-secret configuration envelope from
 the approved plan and drives it through the published contract
 (`moonpresschat/v1/setup`, API version 1.0, verified against MoonPress Chat 5.0.0,
-contract unchanged through 5.3.0):
+contract unchanged through 5.3.1):
 
 1. `POST /setup/validate` — side-effect free; returns the server's
    configuration fingerprint, warnings, and a summary;

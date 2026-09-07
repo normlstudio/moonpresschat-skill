@@ -4,7 +4,7 @@
 
 MoonPress Chat ships a stable public setup API. This document is the client-side
 record of that surface as verified against MoonPress Chat 5.0.0 (contract
-unchanged through 5.3.0) — the first release under the MoonPress Chat name and
+unchanged through 5.3.1) — the first release under the MoonPress Chat name and
 the floor for this skill's API path.
 MoonPress Chat 5.0.0 renamed the plugin and every internal identifier; 4.8.0
 and older (released as QuipBot) register only the old `quipbot/v1` namespace,
@@ -248,7 +248,7 @@ records a redacted audit event, and **revokes every tracked setup credential**
 
 Errors use the normal WordPress REST shape with stable codes. The list below
 is every `moonpresschat_setup_*` code the plugin can return, checked against
-the plugin source of MoonPress Chat 5.0.0 (contract unchanged through 5.3.0).
+the plugin source of MoonPress Chat 5.0.0 (contract unchanged through 5.3.1).
 
 Authentication and admission (every credentialed route):
 
@@ -259,13 +259,17 @@ Authentication and admission (every credentialed route):
   (403).
 - `moonpresschat_setup_scope_denied` — the setup credential was used outside
   `/setup` (403); also raised at authentication when the credential is
-  presented outside REST, by a non-administrator, or on multisite (401).
+  presented outside REST, by a non-administrator, or on multisite — that
+  variant is written to the site's audit log and the client receives
+  `401 moonpresschat_setup_auth_required` (see "Connection lifetime").
 - `moonpresschat_setup_rate_limited` — more than 180 authenticated setup
   requests in a minute (429).
 - `moonpresschat_setup_too_many_connections` — a ninth tracked credential,
-  refused at authentication (401; see "Connection lifetime").
+  refused at authentication; written to the audit log, the client receives
+  `401 moonpresschat_setup_auth_required` (see "Connection lifetime").
 - `moonpresschat_setup_connection_expired` — the credential passed its idle
-  or maximum lifetime; refused and deleted at authentication (401).
+  or maximum lifetime; refused and deleted at authentication, written to the
+  audit log — the client receives `401 moonpresschat_setup_auth_required`.
 
 Request shape (any route with a body):
 

@@ -178,7 +178,7 @@ public `GET /setup/compatibility` endpoint answers the plugin version,
 availability, and capability questions without asking the human. The guided
 path's screen-by-screen guidance is verified against MoonPress Chat 3.11.0; the API
 path's contract is verified against MoonPress Chat 5.0.0 (contract unchanged
-through 5.3.0) and requires 5.0.0 or newer. Against an older plugin (4.8.0 and earlier, still on the pre-5.0.0
+through 5.3.1) and requires 5.0.0 or newer. Against an older plugin (4.8.0 and earlier, still on the pre-5.0.0
 namespace) `GET .../moonpresschat/v1/setup/compatibility` answers 404, and the
 skill takes the guided path with `reason: plugin-predates-api` — exactly as it
 does whenever the API is unavailable. Stop on an incompatible WordPress/PHP

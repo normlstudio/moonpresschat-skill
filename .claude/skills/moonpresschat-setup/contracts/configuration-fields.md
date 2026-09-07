@@ -8,7 +8,7 @@ Use this map to build a field-level plan. Two tiers:
   guess internal option names.
 - **Envelope mapping (API path)** — the last section maps each field/group to
   its configuration-envelope section and key, verified against MoonPress Chat 5.0.0
-  (contract unchanged through 5.3.0).
+  (contract unchanged through 5.3.1).
 
 ## Settings → AI providers
 
@@ -88,7 +88,7 @@ explicit `not-applicable-existing-key-no-safe-fault-injection` evidence.
 | Launcher size | 44, 48, or 56 px | No | Touch target check |
 | Make bot live | Off during setup; separate approval required | Release gate | Anonymous public check |
 
-## Envelope mapping (API path, verified against MoonPress Chat 5.0.0, contract unchanged through 5.3.0)
+## Envelope mapping (API path, verified against MoonPress Chat 5.0.0, contract unchanged through 5.3.1)
 
 The configuration envelope sent to `POST /setup/validate` and
 `POST /setup/apply` is `{"schema_version": "1.0", "configuration": {…}}` with
