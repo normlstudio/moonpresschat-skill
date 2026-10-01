@@ -1,0 +1,10 @@
+{
+  "name": "moonpresschat",
+  "displayName": "MoonPress Chat setup",
+  "version": "0.6.0",
+  "description": "Safely research, configure, and verify MoonPress Chat on WordPress.",
+  "author": { "name": "Norml Studio" },
+  "repository": "https://github.com/normlstudio/moonpresschat-skill",
+  "license": "MIT",
+  "skills": ["./.claude/skills/moonpresschat-setup"]
+}
