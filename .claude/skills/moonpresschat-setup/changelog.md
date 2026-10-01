@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.6.0 — 2026-10-01
+
+- Added Marketplace packaging and version-aware setup preflight.
+- Added Claude Code/Codex marketplace manifests, retained the Skills CLI channel,
+  and documented migration without duplicate installations.
+- Added minimum/recommended checks, numeric semver, guided fallback, optional
+  client-version headers, Node prerequisite checks, and a once-per-update notice.
+- Added one version authority, version stamping, package/contract tests, and
+  tagged-release CI for exact committed ZIPs and checksums.
+- Verified actual CLI compatibility gates before authentication, symlink entry,
+  custom runtime-home update channels, and all active version stamps; 12 tests.
+- Recorded local Code execution only; Chat/Cowork stop before any site action.
+- Author: Artur Tsitou. Desktop update acceptance and release publication remain pending.
+
 ## 0.5.0 — 2026-09-02
 
 - Moved the API path to the MoonPress Chat 5.0.0 contract. The plugin renamed

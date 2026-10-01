@@ -9,7 +9,7 @@ description: >
   MoonPress Chat without exposing WordPress passwords or AI-provider keys to the
   agent.
 metadata:
-  version: "0.5.0"
+  version: "0.6.0"
   author: "Norml Studio"
 ---
 
@@ -38,8 +38,11 @@ production change explicit and reviewable.
 
 ## Current release state
 
-Version 0.5.0 is a public alpha with two complete setup paths. It speaks
+Version 0.6.0 is a public alpha release candidate with two setup paths. It speaks
 the MoonPress Chat 5.0.0 contract; see the compatibility note below.
+
+Marketplace publication and independent desktop acceptance are pending;
+see `qa/distribution-acceptance.md`. Do not claim this candidate is released.
 
 - The **API path is the default**: MoonPress Chat ships its stable public setup API
   (`moonpresschat/v1/setup`, API version 1.0, MoonPress Chat 5.0.0+), and this skill ships
@@ -112,10 +115,25 @@ key into these files.
 
 ## Start from the MoonPress Chat onboarding page
 
-The plugin's Setup page may link to this public repository. If the skill is not
-installed, ask the human to run this in their own terminal:
+Install from the MoonPress Chat marketplace in a local Code session:
 
-Install only this skill for the agent the human uses:
+```bash
+# Claude Code
+claude plugin marketplace add normlstudio/moonpresschat-skill
+claude plugin install moonpresschat@moonpresschat
+
+# Codex
+codex plugin marketplace add normlstudio/moonpresschat-skill
+codex plugin add moonpresschat@moonpresschat
+```
+
+In the Claude desktop app, open **Customize → Plugins → Add marketplace**,
+add `normlstudio/moonpresschat-skill`, install **MoonPress Chat setup**, and
+run it in the **Code** tab with a local folder. Chat and Cowork are unsupported:
+stop before contacting or changing the site and ask the owner to open Code.
+Desktop labels need verification against the owner's app version.
+
+The Skills CLI remains available (Node.js 22.20 or newer):
 
 ```bash
 npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a claude-code
@@ -123,8 +141,10 @@ npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setu
 npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a gemini-cli
 ```
 
-Run one command, not all three. Replace the final agent id only when the open
-`skills` CLI names a different supported runtime.
+Choose the commands for your runtime. Existing Skills CLI installations remain
+supported. To switch to Marketplace, remove only this skill with
+`npx skills@latest remove moonpresschat-setup -g -a claude-code` (or `-a codex`)
+before installing the Marketplace plugin; avoid loading both copies.
 
 The current open `skills` installer requires Node.js 22.20 or newer. If the
 command reports an engine-version error, stop and ask the human to update Node
@@ -148,6 +168,7 @@ ESM script with zero npm dependencies, and it is the only component that ever
 touches the WordPress Application Password.
 
 ```bash
+node helper/moonpresschat-setup-helper.mjs preflight https://example.com   # public, no credentials
 node helper/moonpresschat-setup-helper.mjs connect https://example.com
 node helper/moonpresschat-setup-helper.mjs status https://example.com
 node helper/moonpresschat-setup-helper.mjs call https://example.com POST /setup/validate --body moonpresschat-setup/configuration-envelope.json
@@ -169,7 +190,14 @@ node helper/moonpresschat-setup-helper.mjs disconnect https://example.com
 
 ### 0. Preflight and installation
 
-Read `actions/preflight.md` and `contracts/installation-and-rollback.md`.
+Read `actions/preflight.md`, `contracts/distribution-and-updates.md`, and
+`contracts/installation-and-rollback.md`.
+
+First confirm this is a local Code/CLI session; Chat and Cowork are unsupported.
+If unsupported, state that a local Code session is required and stop before contacting the site.
+Run the helper `preflight <origin>` before connecting on every run. If it reports
+`api_allowed: false`, use guided wp-admin and record its reason. A below-minimum
+skill must never use the API path; a recommendation notice does not block it.
 
 Before researching or changing WordPress, explicitly confirm management
 authority, canonical origin, artifact folder, target environment, backup state,

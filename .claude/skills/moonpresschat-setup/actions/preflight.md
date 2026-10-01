@@ -2,6 +2,17 @@
 
 Complete this gate before public research or any WordPress configuration.
 
+## Local execution and skill compatibility
+
+Run only in a local Code/CLI session with a writable folder. In Claude Chat
+or Cowork, state that the skill needs the Code tab and stop before any site call.
+Run `node helper/moonpresschat-setup-helper.mjs preflight <origin>` every time;
+this public check needs neither an Application Password nor a provider key.
+Read `contracts/distribution-and-updates.md`. If `api_allowed` is false, record
+`connection: guided-manual` and the returned reason; never connect through the
+API when the installed skill is below `setup_skill.minimum`. A recommendation
+notice is informational. Update Node only through the owner's normal tooling.
+
 ## Opening questions
 
 Ask for and record these four items first:
@@ -38,7 +49,7 @@ inactive, or older than 5.0.0 — those releases register only the pre-5.0.0
 namespace `quipbot/v1`, so the URLs above answer 404), and the WordPress and
 PHP versions from **Tools → Site Health → Info**.
 
-Version 0.5.0 of this skill verifies the guided screen guidance against
+Version 0.6.0 of this skill verifies the guided screen guidance against
 MoonPress Chat 3.11.0 and the API contract against MoonPress Chat 5.0.0 (contract
 unchanged through 5.3.1); the API path requires 5.0.0 or newer. MoonPress Chat 5.0.0 renamed the plugin and
 every internal identifier; 4.8.0 and older (released as QuipBot) register only

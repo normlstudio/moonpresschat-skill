@@ -1,5 +1,8 @@
 # MoonPress Chat setup
 
+0.6.0 release candidate. Marketplace publication and independent desktop
+acceptance are pending; see the [candidate checks](.claude/skills/moonpresschat-setup/qa/distribution-acceptance.md).
+
 `moonpresschat-setup` safely installs, researches, configures, and verifies
 [MoonPress Chat](https://moonpresschat.com) on WordPress without exposing a
 WordPress password or AI-provider key to the agent.
@@ -12,18 +15,36 @@ control.
 
 ## Install
 
-Choose the agent you use and run one command:
+Install from the MoonPress Chat marketplace in a local Code session:
 
 ```bash
 # Claude Code
-npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a claude-code
+claude plugin marketplace add normlstudio/moonpresschat-skill
+claude plugin install moonpresschat@moonpresschat
 
 # Codex
-npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a codex
+codex plugin marketplace add normlstudio/moonpresschat-skill
+codex plugin add moonpresschat@moonpresschat
+```
 
-# Gemini CLI
+In the Claude desktop app, open **Customize → Plugins → Add marketplace**,
+add `normlstudio/moonpresschat-skill`, install **MoonPress Chat setup**, and
+run it in the **Code** tab with a local folder. Chat and Cowork are unsupported:
+stop before contacting or changing the site and ask the owner to open Code.
+Desktop labels need verification against the owner's app version.
+
+The Skills CLI remains available (Node.js 22.20 or newer):
+
+```bash
+npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a claude-code
+npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a codex
 npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a gemini-cli
 ```
+
+Choose the commands for your runtime. Existing Skills CLI installations remain
+supported. To switch to Marketplace, remove only this skill with
+`npx skills@latest remove moonpresschat-setup -g -a claude-code` (or `-a codex`)
+before installing the Marketplace plugin; avoid loading both copies.
 
 Requires Node.js 22.20 or newer. Then start a new agent turn with:
 
@@ -61,7 +82,7 @@ Read the [human guide](.claude/skills/moonpresschat-setup/readme.md),
 - The free core and AI-provider usage are separate: the site owner pays the
   selected provider directly.
 
-Version 0.5.0 is a public alpha built for MoonPress Chat 5.0.0 or newer (skill
+Version 0.6.0 is a public alpha built for MoonPress Chat 5.0.0 or newer (skill
 0.4.0 pairs with plugin 4.8.0 and older, which speak a different REST
 namespace; mismatched pairs fall back to the guided path). The helper
 currently stores credentials only in macOS Keychain; Windows and Linux use the
