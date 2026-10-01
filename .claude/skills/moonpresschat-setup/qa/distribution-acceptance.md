@@ -12,7 +12,8 @@ Author: Artur Tsitou. Candidate: 0.6.0; plugin issue #211, skill issue #2.
 | Claude marketplace/plugin manifests | Pass | `claude plugin validate .` and explicit plugin.json both accepted |
 | Codex local candidate install | Pass | `codex plugin marketplace add <candidate-path>` then `codex plugin add moonpresschat@moonpresschat`; installs 0.6.0 |
 | Codex local version selection/recovery | Pass | Isolated temporary config: candidate manifest 0.6.0 → 0.6.1 installs new cache; remove/reinstall after reset recovers 0.6.0 |
-| Git marketplace upgrade / restart auto-update | Pending | Local-directory sources reject `marketplace upgrade` as non-Git; a published Git candidate and desktop restart remain required |
+| Git marketplace add/install/upgrade | Pass | Isolated Codex config, remote feature branch: all three CLI commands succeed; version-changing upstream discovery remains pending |
+| Desktop restart auto-update | Pending | No desktop restart/update acceptance claimed |
 | New Codex-specific manifest | Not needed | Codex installs the shared `.claude-plugin` manifests successfully |
 | Generated guide at 1200px and 390px | Pass | Playwright, existing Chromium 1234; no overflow or console/page errors; screenshots reviewed with reduced motion |
 | Skill-folder names / portable paths | Pass | Shared Norml lints |
@@ -24,3 +25,11 @@ The local update fixture changed only a temporary manifest, not this repository
 or a published tag. The check proves CLI version selection and recovery;
 it does not establish upstream Git auto-update or WordPress setup completion.
 Existing personal installations, credentials and model keys were not used.
+
+Independent Codex review of candidate `48d85fc` found four defects despite
+nine passing exported-function tests: missing CLI wiring, silent symlink entry,
+incomplete version stamps, and custom-home update-channel detection. The
+coordinator corrected all four and added real child-process mock-server tests,
+symlink preflight, configured runtime-home detection, and isolated release-bump
+drift checks. **12 tests pass on Node 22.20.0**, along with package validation.
+No Keychain, authenticated WordPress, or live provider operation was used.

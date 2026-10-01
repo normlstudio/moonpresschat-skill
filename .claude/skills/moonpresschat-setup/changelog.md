@@ -9,6 +9,8 @@
   client-version headers, Node prerequisite checks, and a once-per-update notice.
 - Added one version authority, version stamping, package/contract tests, and
   tagged-release CI for exact committed ZIPs and checksums.
+- Verified actual CLI compatibility gates before authentication, symlink entry,
+  custom runtime-home update channels, and all active version stamps; 12 tests.
 - Recorded local Code execution only; Chat/Cowork stop before any site action.
 - Author: Artur Tsitou. Desktop update acceptance and release publication remain pending.
 

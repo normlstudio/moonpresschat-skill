@@ -46,6 +46,14 @@ test('update instructions match marketplace versus skills installation', () => {
   assert.match(updateAction('/tmp/.codex/plugins/cache/moonpresschat/helper.mjs'), /codex plugin marketplace upgrade moonpresschat/);
   assert.match(updateAction('/tmp/.agents/skills/moonpresschat-setup/helper.mjs'), /skills@latest update moonpresschat-setup -g/);
 });
+test('custom runtime homes retain marketplace update channels', () => {
+  const roots = { CODEX_HOME: '/tmp/orca-account/home', CLAUDE_CONFIG_DIR: '/tmp/claude-account/home' };
+  assert.match(updateAction('/tmp/orca-account/home/plugins/cache/moonpresschat/helper.mjs', roots), /codex plugin marketplace upgrade/);
+  assert.match(updateAction('/tmp/claude-account/home/plugins/cache/moonpresschat/helper.mjs', roots), /reload-plugins/);
+  assert.doesNotMatch(updateAction('/tmp/unknown/plugins/cache/moonpresschat/helper.mjs', {}), /npx/);
+  assert.match(updateAction('/tmp/.agents/skills/moonpresschat-setup/helper.mjs', roots), /npx/);
+});
+
 test('after-update notice occurs once per installed version in non-secret state', () => {
   const dir = mkdtempSync(join(tmpdir(), 'moonpresschat-version-'));
   const messages = [];

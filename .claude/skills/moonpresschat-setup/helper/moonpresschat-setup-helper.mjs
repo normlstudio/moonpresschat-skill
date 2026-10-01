@@ -41,7 +41,7 @@ import { resolve } from 'node:path';
 import { createServer } from 'node:http';
 import { randomBytes, timingSafeEqual } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { readFileSync, writeFileSync, mkdirSync, unlinkSync, existsSync, chmodSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, unlinkSync, existsSync, chmodSync, realpathSync } from 'node:fs';
 
 export const SKILL_VERSION = '0.6.0';
 export const MIN_NODE_VERSION = '22.20.0';
@@ -624,12 +624,18 @@ export function compareVersions( left, right ) {
 	return 0;
 }
 
-export function updateAction( path = fileURLToPath( import.meta.url ) ) {
-	const portable = path.replace( /\\/g, '/' );
-	if ( /\/(?:\.claude|claude-code)\/plugins\//.test( portable ) ) {
+export function updateAction( path = fileURLToPath( import.meta.url ), roots = process.env ) {
+	const canonical = ( value ) => {
+		try { return realpathSync( value ).replace( /\\/g, '/' ); }
+		catch { return resolve( value ).replace( /\\/g, '/' ); }
+	};
+	const portable = canonical( path );
+	const inside = ( root ) => root && portable.startsWith( canonical( root ).replace( /\/$/, '' ) + '/plugins/' );
+	if ( inside( roots.CLAUDE_CONFIG_DIR ) || /\/(?:\.claude|claude-code)\/plugins\//.test( portable ) ) {
 		return 'Restart the Claude app or run /reload-plugins. For CLI installs, enable auto-update in /plugin → Marketplaces → moonpresschat; update now with /plugin marketplace update moonpresschat.';
 	}
-	if ( /\/(?:\.codex|codex)\/plugins\//.test( portable ) ) return 'Run codex plugin marketplace upgrade moonpresschat, then restart Codex.';
+	if ( inside( roots.CODEX_HOME ) || /\/(?:\.codex|codex)\/plugins\//.test( portable ) ) return 'Run codex plugin marketplace upgrade moonpresschat, then restart Codex.';
+	if ( /\/plugins\/cache\//.test( portable ) ) return 'Update moonpresschat in the marketplace of the agent that installed this plugin, then restart that agent.';
 	return 'Run npx skills@latest update moonpresschat-setup -g, then restart your agent.';
 }
 
@@ -701,49 +707,61 @@ const USAGE = `Usage:
 async function main() {
 	const argv = process.argv.slice( 2 );
 	const command = argv.shift();
-	switch ( command ) {
-		case 'connect':
-			if ( argv.length !== 1 ) fail( 2, USAGE );
-			await cmdConnect( argv[ 0 ], compat );
-			break;
-		case 'status':
-			if ( argv.length !== 1 ) fail( 2, USAGE );
-			await cmdStatus( argv[ 0 ] );
-			break;
-		case 'call': {
-			const positional = [];
-			const options = {};
-			for ( let i = 0; i < argv.length; i++ ) {
-				if ( argv[ i ] === '--body' ) {
-					options.body = argv[ ++i ];
-					if ( options.body === undefined ) fail( 2, '--body requires a file path.' );
-				} else if ( argv[ i ] === '--idempotency-key' ) {
-					options.idempotencyKey = argv[ ++i ];
-					if ( options.idempotencyKey === undefined ) fail( 2, '--idempotency-key requires a value.' );
-				} else if ( argv[ i ].startsWith( '--' ) ) {
-					fail( 2, `Unknown option: ${argv[ i ]}` );
-				} else {
-					positional.push( argv[ i ] );
-				}
-			}
-			if ( positional.length !== 3 ) fail( 2, USAGE );
-			await cmdCall( positional[ 0 ], positional[ 1 ], positional[ 2 ], options );
-			break;
+	if ( compareVersions( process.versions.node, MIN_NODE_VERSION ) < 0 ) {
+		fail( 2, `node-version-unsupported: requires Node.js ${MIN_NODE_VERSION} or newer. Update Node through your normal tooling, restart the agent, and rerun preflight; guided wp-admin remains available.` );
+	}
+	let args = argv;
+	const options = {};
+	if ( command === 'call' ) {
+		args = [];
+		for ( let i = 0; i < argv.length; i++ ) {
+			if ( argv[ i ] === '--body' ) {
+				options.body = argv[ ++i ];
+				if ( options.body === undefined ) fail( 2, '--body requires a file path.' );
+			} else if ( argv[ i ] === '--idempotency-key' ) {
+				options.idempotencyKey = argv[ ++i ];
+				if ( options.idempotencyKey === undefined ) fail( 2, '--idempotency-key requires a value.' );
+			} else if ( argv[ i ].startsWith( '--' ) ) {
+				fail( 2, `Unknown option: ${argv[ i ]}` );
+			} else { args.push( argv[ i ] ); }
 		}
-		case 'provider':
-			if ( argv.length !== 3 ) fail( 2, USAGE );
-			await cmdProvider( argv[ 0 ], argv[ 1 ], argv[ 2 ] );
-			break;
-		case 'disconnect':
-			if ( argv.length !== 1 ) fail( 2, USAGE );
-			await cmdDisconnect( argv[ 0 ] );
-			break;
-		default:
-			fail( 2, USAGE );
+		if ( args.length !== 3 ) fail( 2, USAGE );
+		args[ 1 ] = args[ 1 ].toUpperCase();
+		if ( ! [ 'GET', 'POST', 'PUT', 'DELETE' ].includes( args[ 1 ] ) ) fail( 2, `Unsupported method: ${args[ 1 ]}` );
+		try { args[ 2 ] = validateCallPath( args[ 1 ], args[ 2 ] ); }
+		catch ( error ) { fail( 2, error.message ); }
+	} else if ( command === 'provider' ) {
+		if ( args.length !== 3 ) fail( 2, USAGE );
+	} else if ( [ 'preflight', 'connect', 'status', 'disconnect' ].includes( command ) ) {
+		if ( args.length !== 1 ) fail( 2, USAGE );
+	} else { fail( 2, USAGE ); }
+
+	const normalized = normalizeOrigin( args[ 0 ] );
+	showUpdateNotice( process.env.MOONPRESSCHAT_SETUP_NOTICE_DIR || recordDir() );
+	let compat;
+	// Revocation must remain possible even when a newly raised floor blocks setup.
+	if ( command !== 'disconnect' ) {
+		compat = await fetchCompatibility( normalized );
+		const gate = compatibilityDecision( compat );
+		if ( gate.notice ) note( gate.notice );
+		if ( command === 'preflight' || ! gate.api_allowed ) {
+			printResult( { skill_version: SKILL_VERSION, ...gate, compatibility: compat.body } );
+			return;
+		}
+	}
+	if ( process.platform !== 'darwin' ) {
+		fail( 2, 'credential-backend-unsupported: this helper stores credentials only in the macOS Keychain; use the moonpresschat-setup guided path on this platform.' );
+	}
+	switch ( command ) {
+		case 'connect': await cmdConnect( normalized, compat ); break;
+		case 'status': await cmdStatus( normalized ); break;
+		case 'call': await cmdCall( normalized, args[ 1 ], args[ 2 ], options ); break;
+		case 'provider': await cmdProvider( normalized, args[ 1 ], args[ 2 ] ); break;
+		case 'disconnect': await cmdDisconnect( normalized ); break;
 	}
 }
 
-if ( process.argv[ 1 ] && resolve( process.argv[ 1 ] ) === fileURLToPath( import.meta.url ) ) {
+if ( process.argv[ 1 ] && realpathSync( process.argv[ 1 ] ) === realpathSync( fileURLToPath( import.meta.url ) ) ) {
 	main().catch( ( error ) => {
 		fail( 2, `Unexpected failure: ${redact( error && error.stack ? error.stack : String( error ) )}` );
 	} );
