@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6.0 — 2026-10-01
+## 0.6.0 — unreleased candidate (updated 2026-10-07)
 
 - Added Marketplace packaging and version-aware setup preflight.
 - Added Claude Code/Codex marketplace manifests, retained the Skills CLI channel,
@@ -10,7 +10,11 @@
 - Added one version authority, version stamping, package/contract tests, and
   tagged-release CI for exact committed ZIPs and checksums.
 - Verified actual CLI compatibility gates before authentication, symlink entry,
-  custom runtime-home update channels, and all active version stamps; 12 tests.
+  custom runtime-home update channels, and all active version stamps; 13 tests.
+- Added a release promotion guard requiring develop and an increased version.
+- Verified actual Codex/Claude CLI install, upstream update and recovery against
+  an isolated HTTP Git remote; development-only changes stay off the installed channel.
+- Protected release-only main with required PR/validate checks and admin enforcement.
 - Recorded local Code execution only; Chat/Cowork stop before any site action.
 - Author: Artur Tsitou. Desktop update acceptance and release publication remain pending.
 
