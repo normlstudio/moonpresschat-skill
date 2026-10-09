@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.6.0 — unreleased candidate (updated 2026-10-09)
+
+- Added Marketplace packaging and version-aware setup preflight.
+- Simplified owner interaction: reuse known decisions, prepare one corrected
+  proposal, request one apply approval, then verify and disconnect automatically.
+- Removed the outdated free-core one-language restriction from all instructions.
+- Review interview preview content, FAQ and topic subtitles for preset
+  contradictions before validation; schema success is not factual verification.
+- Reuse an installed compatible Node and resume unchanged approvals after
+  reauthorization; keep hashes and diagnostics in artifacts.
+- Recorded human Desktop ZIP installation and Code setup on plugin 5.9.1,
+  including browser consent, apply, verification and disconnect. The provider
+  and mail were fixtures; no real-provider or launch-readiness claim.
+- Corrected candidate install guidance: default main has no marketplace yet;
+  ZIP acceptance does not prove marketplace installation or restart updates.
+- Added Claude Code/Codex marketplace manifests, retained the Skills CLI channel,
+  and documented migration without duplicate installations.
+- Added minimum/recommended checks, numeric semver, guided fallback, optional
+  client-version headers, Node prerequisite checks, and a once-per-update notice.
+- Added one version authority, version stamping, package/contract tests, and
+  tagged-release CI for exact committed ZIPs and checksums.
+- Verified actual CLI compatibility gates before authentication, symlink entry,
+  custom runtime-home update channels, and all active version stamps; 13 tests.
+- Added a release promotion guard requiring develop and an increased version.
+- Verified actual Codex/Claude CLI install, upstream update and recovery against
+  an isolated HTTP Git remote; development-only changes stay off the installed channel.
+- Protected release-only main with required PR/validate checks and admin enforcement.
+- Recorded local Code execution only; Chat/Cowork stop before any site action.
+- Added development/scratch isolation checks for Skills CLI and documented
+  explicit-target reinstall recovery for stale Claude copies after cross-agent updates.
+- Author: Artur Tsitou. Desktop update acceptance and release publication remain pending.
+
 ## 0.5.0 — 2026-09-02
 
 - Moved the API path to the MoonPress Chat 5.0.0 contract. The plugin renamed

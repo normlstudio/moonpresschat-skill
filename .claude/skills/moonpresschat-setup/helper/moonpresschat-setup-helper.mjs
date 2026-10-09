@@ -36,11 +36,16 @@
  * `credential-backend-unsupported`; use the skill's guided path there.
  */
 
+import { fileURLToPath } from 'node:url';
+import { resolve } from 'node:path';
 import { createServer } from 'node:http';
 import { randomBytes, timingSafeEqual } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { readFileSync, writeFileSync, mkdirSync, unlinkSync, existsSync, chmodSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, unlinkSync, existsSync, chmodSync, realpathSync } from 'node:fs';
 
+export const SKILL_VERSION = '0.6.0';
+export const MIN_NODE_VERSION = '22.20.0';
+const CLIENT_HEADER = 'X-MoonPressChat-Setup-Client';
 const API_VERSION = '1.0';
 const REST_NAMESPACE = 'moonpresschat/v1'; // MoonPress Chat 5.0.0+; 4.8.0 and older speak a different namespace
 const IDEMPOTENCY_HEADER = 'X-MoonPressChat-Setup-Idempotency-Key';
@@ -83,9 +88,6 @@ function printResult( value ) {
  * Platform gate — macOS Keychain is the only supported credential backend.
  * ------------------------------------------------------------------------ */
 
-if ( process.platform !== 'darwin' ) {
-	fail( 2, 'credential-backend-unsupported: this helper stores credentials only in the macOS Keychain; use the moonpresschat-setup guided path on this platform.' );
-}
 
 /* --------------------------------------------------------------------------
  * Origin handling
@@ -281,10 +283,11 @@ function resolveSetupPath( record, path ) {
 	return record.rest_url.replace( /\/$/, '' ) + path.slice( SETUP_PREFIX.length );
 }
 
-async function setupRequest( conn, method, path, bodyText, idempotencyKey ) {
+export async function setupRequest( conn, method, path, bodyText, idempotencyKey ) {
 	const headers = {
 		Authorization: basicAuth( conn.record.user_login, conn.secret ),
 		Accept: 'application/json',
+		[ CLIENT_HEADER ]: `moonpresschat-setup/${SKILL_VERSION}`,
 	};
 	if ( bodyText !== null && bodyText !== undefined ) {
 		headers[ 'Content-Type' ] = 'application/json';
@@ -340,12 +343,11 @@ function readHidden( prompt ) {
  * connect <origin>
  * ------------------------------------------------------------------------ */
 
-async function cmdConnect( origin ) {
+async function cmdConnect( origin, compat ) {
 	const normalized = normalizeOrigin( origin );
 	const slug = originSlug( normalized );
 
 	// 1. Compatibility gate.
-	const compat = await fetchCompatibility( normalized );
 	if ( ! compat.ok || ! compat.body || typeof compat.body !== 'object' ) {
 		printResult( { connected: false, reason: 'compatibility-unreachable', status: compat.status, body: compat.body } );
 		process.exit( 1 );
@@ -537,16 +539,8 @@ async function cmdCall( origin, method, path, options ) {
 	if ( ! [ 'GET', 'POST', 'PUT', 'DELETE' ].includes( method ) ) {
 		fail( 2, `Unsupported method: ${method}` );
 	}
-	path = String( path || '' );
-	if ( /^[a-z]+:\/\//i.test( path ) || path.startsWith( '//' ) ) {
-		fail( 2, 'Absolute URLs are refused; pass a relative path starting with /setup.' );
-	}
-	if ( path !== SETUP_PREFIX && ! path.startsWith( SETUP_PREFIX + '/' ) ) {
-		fail( 2, 'Only paths inside /setup are allowed.' );
-	}
-	if ( method === 'PUT' && path.replace( /\/+$/, '' ) === '/setup/provider' ) {
-		fail( 2, 'PUT /setup/provider is refused here: use the provider subcommand, which reads the key on its own TTY.' );
-	}
+	try { path = validateCallPath( method, path ); }
+	catch ( error ) { fail( 2, error.message ); }
 
 	let bodyText = null;
 	if ( options.body !== undefined ) {
@@ -619,11 +613,91 @@ async function cmdDisconnect( origin ) {
 	process.exit( credentialRemoved ? 0 : 1 );
 }
 
+/** Numeric semver only; malformed compatibility floors must never unlock the API. */
+export function compareVersions( left, right ) {
+	const parse = ( value ) => typeof value === 'string' && /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test( value )
+		? value.split( '.' ).map( Number ) : null;
+	const a = parse( left );
+	const b = parse( right );
+	if ( ! a || ! b || [ ...a, ...b ].some( ( n ) => ! Number.isSafeInteger( n ) ) ) throw new Error( 'Invalid numeric semver' );
+	for ( let i = 0; i < 3; i++ ) { if ( a[ i ] !== b[ i ] ) return a[ i ] < b[ i ] ? -1 : 1; }
+	return 0;
+}
+
+export function updateAction( path = fileURLToPath( import.meta.url ), roots = process.env ) {
+	const canonical = ( value ) => {
+		try { return realpathSync( value ).replace( /\\/g, '/' ); }
+		catch { return resolve( value ).replace( /\\/g, '/' ); }
+	};
+	const portable = canonical( path );
+	const inside = ( root ) => root && portable.startsWith( canonical( root ).replace( /\/$/, '' ) + '/plugins/' );
+	if ( inside( roots.CLAUDE_CONFIG_DIR ) || /\/(?:\.claude|claude-code)\/plugins\//.test( portable ) ) {
+		return 'Restart the Claude app or run /reload-plugins. For CLI installs, enable auto-update in /plugin → Marketplaces → moonpresschat; update now with /plugin marketplace update moonpresschat.';
+	}
+	if ( inside( roots.CODEX_HOME ) || /\/(?:\.codex|codex)\/plugins\//.test( portable ) ) return 'Run codex plugin marketplace upgrade moonpresschat, then restart Codex.';
+	if ( /\/plugins\/cache\//.test( portable ) ) return 'Update moonpresschat in the marketplace of the agent that installed this plugin, then restart that agent.';
+	return 'Run npx skills@latest update moonpresschat-setup -g, then restart your agent.';
+}
+
+export function compatibilityDecision( response, installed = SKILL_VERSION, path ) {
+	const guided = ( reason, notice ) => ( { api_allowed: false, connection: 'guided-manual', reason, ...( notice ? { notice } : {} ) } );
+	if ( ! response.ok || ! response.body || typeof response.body !== 'object' ) {
+		return guided( response.status === 404 ? 'plugin-predates-api' : 'compatibility-unreachable' );
+	}
+	const payload = response.body;
+	if ( payload.setup_skill !== undefined ) {
+		try {
+			const { minimum, recommended } = payload.setup_skill;
+			if ( compareVersions( minimum, recommended ) > 0 ) throw new Error( 'Invalid floors' );
+			if ( compareVersions( installed, minimum ) < 0 ) return guided( 'setup-skill-too-old', `This site needs Setup Skill ${minimum} or newer. ${updateAction( path )} Continue through guided wp-admin.` );
+			if ( compareVersions( installed, recommended ) < 0 ) {
+				return { ...compatibilityDecision( { ...response, body: { ...payload, setup_skill: undefined } }, installed, path ), notice: `A newer Setup Skill (${recommended}) is available. ${updateAction( path )}` };
+			}
+		} catch { return guided( 'invalid-skill-compatibility' ); }
+	}
+	if ( payload.available !== true ) return guided( String( payload.unavailable_reason || 'unavailable' ) );
+	if ( ! Array.isArray( payload.schema_versions ) || ! payload.schema_versions.includes( API_VERSION ) ) return guided( 'unsupported-api-version' );
+	if ( ! Array.isArray( payload.capabilities ) || REQUIRED_CAPABILITIES.some( ( cap ) => ! payload.capabilities.includes( cap ) ) ) return guided( 'missing-capabilities' );
+	try { if ( compareVersions( payload.plugin_version, '5.0.0' ) < 0 ) return guided( 'plugin-predates-api' ); }
+	catch { return guided( 'invalid-plugin-version' ); }
+	return { api_allowed: true, connection: 'api' };
+}
+
+export function showUpdateNotice( dir = recordDir(), emit = note ) {
+	try {
+		const path = `${dir}/last_seen_skill_version`;
+		if ( existsSync( path ) && readFileSync( path, 'utf8' ).trim() === SKILL_VERSION ) return false;
+		const changelog = readFileSync( new URL( '../changelog.md', import.meta.url ), 'utf8' );
+		const bullet = changelog.match( /^- (.+)$/m )?.[ 1 ] || 'See the bundled changelog.';
+		emit( `Setup Skill updated to ${SKILL_VERSION}: ${bullet}` );
+		mkdirSync( dir, { recursive: true, mode: 0o700 } );
+		writeFileSync( path, SKILL_VERSION + '\n', { mode: 0o600 } );
+		return true;
+	} catch {
+		// An informational notice must not stop setup when its state cannot be saved.
+		emit( 'Could not save the Setup Skill update notice; setup continues.' );
+		return false;
+	}
+}
+
+export function validateCallPath( method, value ) {
+	const path = String( value || '' );
+	// Reject ambiguous/encoded separators, traversal and query route overrides.
+	if ( ! /^\/setup(?:\/[a-zA-Z0-9_-]+)*\/?$/.test( path ) ) {
+		throw new Error( 'Only literal relative routes inside /setup are allowed; queries, encoded paths and traversal are refused.' );
+	}
+	if ( method === 'PUT' && path.replace( /\/+$/, '' ) === '/setup/provider' ) {
+		throw new Error( 'PUT /setup/provider is refused here: use the provider subcommand, which reads the key on its own TTY.' );
+	}
+	return path;
+}
+
 /* --------------------------------------------------------------------------
  * Argument parsing
  * ------------------------------------------------------------------------ */
 
 const USAGE = `Usage:
+  moonpresschat-setup-helper.mjs preflight <origin>
   moonpresschat-setup-helper.mjs connect <origin>
   moonpresschat-setup-helper.mjs status <origin>
   moonpresschat-setup-helper.mjs call <origin> <METHOD> </setup/...> [--body <file>] [--idempotency-key <key>]
@@ -633,48 +707,62 @@ const USAGE = `Usage:
 async function main() {
 	const argv = process.argv.slice( 2 );
 	const command = argv.shift();
-	switch ( command ) {
-		case 'connect':
-			if ( argv.length !== 1 ) fail( 2, USAGE );
-			await cmdConnect( argv[ 0 ] );
-			break;
-		case 'status':
-			if ( argv.length !== 1 ) fail( 2, USAGE );
-			await cmdStatus( argv[ 0 ] );
-			break;
-		case 'call': {
-			const positional = [];
-			const options = {};
-			for ( let i = 0; i < argv.length; i++ ) {
-				if ( argv[ i ] === '--body' ) {
-					options.body = argv[ ++i ];
-					if ( options.body === undefined ) fail( 2, '--body requires a file path.' );
-				} else if ( argv[ i ] === '--idempotency-key' ) {
-					options.idempotencyKey = argv[ ++i ];
-					if ( options.idempotencyKey === undefined ) fail( 2, '--idempotency-key requires a value.' );
-				} else if ( argv[ i ].startsWith( '--' ) ) {
-					fail( 2, `Unknown option: ${argv[ i ]}` );
-				} else {
-					positional.push( argv[ i ] );
-				}
-			}
-			if ( positional.length !== 3 ) fail( 2, USAGE );
-			await cmdCall( positional[ 0 ], positional[ 1 ], positional[ 2 ], options );
-			break;
+	if ( compareVersions( process.versions.node, MIN_NODE_VERSION ) < 0 ) {
+		fail( 2, `node-version-unsupported: requires Node.js ${MIN_NODE_VERSION} or newer. Update Node through your normal tooling, restart the agent, and rerun preflight; guided wp-admin remains available.` );
+	}
+	let args = argv;
+	const options = {};
+	if ( command === 'call' ) {
+		args = [];
+		for ( let i = 0; i < argv.length; i++ ) {
+			if ( argv[ i ] === '--body' ) {
+				options.body = argv[ ++i ];
+				if ( options.body === undefined ) fail( 2, '--body requires a file path.' );
+			} else if ( argv[ i ] === '--idempotency-key' ) {
+				options.idempotencyKey = argv[ ++i ];
+				if ( options.idempotencyKey === undefined ) fail( 2, '--idempotency-key requires a value.' );
+			} else if ( argv[ i ].startsWith( '--' ) ) {
+				fail( 2, `Unknown option: ${argv[ i ]}` );
+			} else { args.push( argv[ i ] ); }
 		}
-		case 'provider':
-			if ( argv.length !== 3 ) fail( 2, USAGE );
-			await cmdProvider( argv[ 0 ], argv[ 1 ], argv[ 2 ] );
-			break;
-		case 'disconnect':
-			if ( argv.length !== 1 ) fail( 2, USAGE );
-			await cmdDisconnect( argv[ 0 ] );
-			break;
-		default:
-			fail( 2, USAGE );
+		if ( args.length !== 3 ) fail( 2, USAGE );
+		args[ 1 ] = args[ 1 ].toUpperCase();
+		if ( ! [ 'GET', 'POST', 'PUT', 'DELETE' ].includes( args[ 1 ] ) ) fail( 2, `Unsupported method: ${args[ 1 ]}` );
+		try { args[ 2 ] = validateCallPath( args[ 1 ], args[ 2 ] ); }
+		catch ( error ) { fail( 2, error.message ); }
+	} else if ( command === 'provider' ) {
+		if ( args.length !== 3 ) fail( 2, USAGE );
+	} else if ( [ 'preflight', 'connect', 'status', 'disconnect' ].includes( command ) ) {
+		if ( args.length !== 1 ) fail( 2, USAGE );
+	} else { fail( 2, USAGE ); }
+
+	const normalized = normalizeOrigin( args[ 0 ] );
+	showUpdateNotice( process.env.MOONPRESSCHAT_SETUP_NOTICE_DIR || recordDir() );
+	let compat;
+	// Revocation must remain possible even when a newly raised floor blocks setup.
+	if ( command !== 'disconnect' ) {
+		compat = await fetchCompatibility( normalized );
+		const gate = compatibilityDecision( compat );
+		if ( gate.notice ) note( gate.notice );
+		if ( command === 'preflight' || ! gate.api_allowed ) {
+			printResult( { skill_version: SKILL_VERSION, ...gate, compatibility: compat.body } );
+			return;
+		}
+	}
+	if ( process.platform !== 'darwin' ) {
+		fail( 2, 'credential-backend-unsupported: this helper stores credentials only in the macOS Keychain; use the moonpresschat-setup guided path on this platform.' );
+	}
+	switch ( command ) {
+		case 'connect': await cmdConnect( normalized, compat ); break;
+		case 'status': await cmdStatus( normalized ); break;
+		case 'call': await cmdCall( normalized, args[ 1 ], args[ 2 ], options ); break;
+		case 'provider': await cmdProvider( normalized, args[ 1 ], args[ 2 ] ); break;
+		case 'disconnect': await cmdDisconnect( normalized ); break;
 	}
 }
 
-main().catch( ( error ) => {
-	fail( 2, `Unexpected failure: ${redact( error && error.stack ? error.stack : String( error ) )}` );
-} );
+if ( process.argv[ 1 ] && realpathSync( process.argv[ 1 ] ) === realpathSync( fileURLToPath( import.meta.url ) ) ) {
+	main().catch( ( error ) => {
+		fail( 2, `Unexpected failure: ${redact( error && error.stack ? error.stack : String( error ) )}` );
+	} );
+}

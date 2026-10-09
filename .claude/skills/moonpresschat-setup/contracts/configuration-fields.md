@@ -53,7 +53,7 @@ and mark legal review unresolved.
 
 | Field | Constraint | Sensitive | Verification |
 |---|---|---|---|
-| Allowed languages | Keep one configured WordPress site language for the free-core plan | No | Test in that language |
+| Allowed languages | One or more supported reply languages, with an enabled default; no free-core one-language cap | No | Test each enabled language |
 | Default language | Must be one enabled language | No | Unsupported-locale fallback |
 
 Do not promise or enable the separate Pro multilingual capability through the
