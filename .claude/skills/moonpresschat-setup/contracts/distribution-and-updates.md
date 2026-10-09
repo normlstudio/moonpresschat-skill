@@ -28,6 +28,17 @@ Update actions depend on the helper's installation path:
 - Codex plugin cache: `codex plugin marketplace upgrade moonpresschat`, then restart.
 - Other paths: `npx skills@latest update moonpresschat-setup -g`.
 
+After a Skills CLI update, check the installed skill's version in the target
+client; a successful command alone is not sufficient. Skills CLI 1.5.24 can
+refresh its shared copy but leave a Claude copy stale when invoked from a
+Codex agent session. If this happens, rerun the documented scoped installation
+for the original target (for example `npx skills@latest add
+normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a claude-code`)
+and verify the target copy before restarting. Preserve the installation scope:
+omit `-g` for project installations and run from that project. Never remove
+other skills or silently migrate between project/global scope. The isolated
+integration harness covers explicit-target reinstall recovery.
+
 Only local Code/CLI sessions are supported. Chat and Cowork stop before any
 site request and direct the owner to the local Code tab. Node.js 22.20 or newer
 is required; the helper detects an older runtime and gives guidance without

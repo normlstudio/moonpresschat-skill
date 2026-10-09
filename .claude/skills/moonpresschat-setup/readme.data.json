@@ -23,7 +23,7 @@
     },
     {
       "t": "Questions",
-      "d": "Collect only owner decisions the site cannot answer."
+      "d": "Reuse site facts and prior answers; ask only unresolved owner decisions."
     },
     {
       "t": "Connect",
@@ -31,11 +31,11 @@
     },
     {
       "t": "Configure",
-      "d": "Validate, approve, and apply one non-secret envelope through the setup API."
+      "d": "Review one corrected proposal; approve once, then apply and verify."
     },
     {
       "t": "Verify",
-      "d": "Expose passes, failures, and blockers before launch."
+      "d": "Report results briefly and disconnect; public launch needs separate approval."
     }
   ],
   "commands": [
@@ -47,10 +47,10 @@
     "Resume my MoonPress Chat setup"
   ],
   "install": "npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a codex",
-  "installNote": "Marketplace packaging for local Claude Code and Codex; Skills CLI retained. Requires Node.js 22.20 or newer. Desktop update acceptance is pending.",
+  "installNote": "Release channel only: the candidate marketplace is not on main yet. Desktop ZIP upload and local Code setup verified; marketplace restart/update acceptance pending.",
   "callout": {
     "label": "Public alpha",
-    "text": "Version 0.6.0 ships both paths. **The API path is the default** \u2014 MoonPress Chat's stable setup API (MoonPress Chat 5.0.0 or newer) plus the bundled macOS credential helper \u2014 and the human-guided wp-admin path remains the fallback for multisite, plugins older than 5.0.0, or unsupported credential backends."
+    "text": "Version 0.6.0 is an unreleased candidate with both paths. **The API path is the default** — MoonPress Chat's stable setup API (MoonPress Chat 5.0.0 or newer) plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, plugins older than 5.0.0, or unsupported credential backends."
   },
   "capabilities": {
     "label": "What works in 0.6.0",
@@ -108,7 +108,7 @@
   "limits": {
     "label": "Safety boundaries",
     "items": [
-      "No WordPress passwords, Application Passwords, provider keys, or tokens in chat \u2014 the helper holds the temporary credential in the macOS Keychain.",
+      "No WordPress passwords, Application Passwords, provider keys, or tokens in chat — the helper holds the temporary credential in the macOS Keychain.",
       "No browser automation, SSH, XML-RPC, direct database writes, or internal admin routes; API calls stay inside moonpresschat/v1/setup.",
       "No arbitrary plugin package, no production change without backup and explicit approval, and go-live is a separate approval that revokes the connection."
     ]
@@ -145,6 +145,6 @@
     ]
   },
   "covers": "0.6.0",
-  "generated": "2026-10-01",
+  "generated": "2026-10-09",
   "hasHumanMd": true
 }

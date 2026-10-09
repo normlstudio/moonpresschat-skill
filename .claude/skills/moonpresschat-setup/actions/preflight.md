@@ -11,11 +11,14 @@ this public check needs neither an Application Password nor a provider key.
 Read `contracts/distribution-and-updates.md`. If `api_allowed` is false, record
 `connection: guided-manual` and the returned reason; never connect through the
 API when the installed skill is below `setup_skill.minimum`. A recommendation
-notice is informational. Update Node only through the owner's normal tooling.
+notice is informational. If the default Node is too old, use an existing
+compatible Node executable by its explicit path when available. Do not install
+a runtime or change the system default without authorization.
 
 ## Opening questions
 
-Ask for and record these four items first:
+Resolve and record these four items from the request and existing context first.
+Ask only for missing items; do not ask the owner to repeat explicit decisions:
 
 1. The canonical public WordPress URL.
 2. An explicit statement that the user owns the site or is authorized to manage

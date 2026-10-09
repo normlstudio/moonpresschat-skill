@@ -2,12 +2,21 @@
 
 ## Plan verification
 
+Report the outcome in the owner’s language using `contracts/owner-experience.md`.
+For an intentionally offline disposable acceptance site, distinguish successful
+setup from production readiness. A documented mock provider or blocked mail
+transport is a test boundary, not a request to fix credentials or deliver mail.
+Never call a fixture provider response proof of real AI behavior or a valid key.
+Record human-reported fixture provenance; do not use prohibited internals to
+inspect it from this public skill. If unknown, state the limitation once.
+
 1. Ensure every required configuration section has a value, an explicit
    decision, or a visible blocker.
 2. Confirm every business fact is sourced.
 3. Confirm provider choice is recorded without a key.
 4. Confirm consent, handoff, and prohibited-claim decisions are explicit.
-5. Confirm the free-core language scope is represented accurately.
+5. Confirm the enabled reply languages and default match the owner’s decision;
+   do not infer a paid restriction from a single-language configuration.
 6. Confirm no write happened outside the approved path (API apply with
    recorded approval, or human-applied guided steps) and none was simulated.
 7. Write `moonpresschat-setup/verification.md` from the QA checklist.
@@ -47,8 +56,15 @@ It returns `ready`, `live`, `last_apply`, and stable checks — each `pass`,
 
 Map each result onto `qa/verification-checklist.md` (the checklist names the
 verify check that satisfies each row). Behavior tests (B01–B08) are not
-covered by the API — run them through the human-observed preview as in the
-guided path. Record every result without visitor personal data.
+covered by the API. Preserve the human-observed preview boundary below. When
+the owner only requested offline setup acceptance and no preview is available,
+record these rows as unverified for launch; do not send a long manual test list
+as if the completed setup had failed. Before an actual launch, the full blocking
+checklist still applies. Record every result without visitor personal data.
+
+When go-live was not requested, finish by calling helper `disconnect` and record
+server revocation and local credential removal separately. If revocation is
+unconfirmed, report it as unresolved rather than saying access was revoked.
 
 ### Go-live
 

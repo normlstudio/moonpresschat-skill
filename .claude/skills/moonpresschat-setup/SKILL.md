@@ -115,6 +115,12 @@ key into these files.
 
 ## Start from the MoonPress Chat onboarding page
 
+Candidate note: the default `main` branch does not contain the marketplace
+manifest yet. The commands below describe the release channel and cannot
+install this candidate until release promotion. Desktop ZIP upload has been
+verified for candidate testing; it does not establish marketplace updates.
+Do not give a `#branch` URL as a verified Desktop installation method.
+
 Install from the MoonPress Chat marketplace in a local Code session:
 
 ```bash
@@ -147,9 +153,9 @@ supported. To switch to Marketplace, remove only this skill with
 before installing the Marketplace plugin; avoid loading both copies.
 
 The current open `skills` installer requires Node.js 22.20 or newer. If the
-command reports an engine-version error, stop and ask the human to update Node
-through their normal developer-tooling process; do not install or replace their
-runtime without approval.
+command reports an engine-version error, first check for an already installed
+compatible Node and use its explicit path. Ask about installation only if none
+is available; do not install a runtime or change their default without approval.
 
 Then ask them to start a new agent turn with:
 
@@ -186,6 +192,13 @@ node helper/moonpresschat-setup-helper.mjs disconnect https://example.com
 - Exit codes: 0 success (HTTP 2xx), 1 HTTP/contract failure, 2 usage or
   platform error.
 
+## Owner interaction
+
+Read `contracts/owner-experience.md` before starting. Reuse decisions already
+given, ask only unresolved business questions, and show one corrected proposal
+for one explicit apply approval. Keep API identifiers and diagnostics in the
+artifacts. Browser consent and separate go-live authorization remain required.
+
 ## Workflow
 
 ### 0. Preflight and installation
@@ -199,9 +212,11 @@ Run the helper `preflight <origin>` before connecting on every run. If it report
 `api_allowed: false`, use guided wp-admin and record its reason. A below-minimum
 skill must never use the API path; a recommendation notice does not block it.
 
-Before researching or changing WordPress, explicitly confirm management
-authority, canonical origin, artifact folder, target environment, backup state,
-and whether MoonPress Chat is installed and active. When the site is reachable, the
+Before researching or changing WordPress, establish management authority,
+canonical origin, artifact folder, target environment, backup state, and whether
+MoonPress Chat is installed and active. Reuse explicit instructions from this
+session and inspect non-secret state; ask only for missing information.
+When the site is reachable, the
 public `GET /setup/compatibility` endpoint answers the plugin version,
 availability, and capability questions without asking the human. The guided
 path's screen-by-screen guidance is verified against MoonPress Chat 3.11.0; the API
@@ -247,8 +262,8 @@ through `node helper/moonpresschat-setup-helper.mjs connect <origin>`: the syste
 browser opens WordPress core's Application Password consent screen, the owner
 signs in and approves, and the helper stores the credential in the macOS
 Keychain before printing a redacted summary. Record `connection: api` plus the
-advertised connection policy, and warn the owner that the whole run has a
-two-hour hard ceiling and a 30-minute idle timeout.
+advertised connection policy in the artifacts. Explain temporary access once;
+show timeout details only when they affect the owner’s next action.
 
 Otherwise record `connection: guided-manual` with an explicit `reason`
 (`multisite`, `plugin-predates-api`, `owner-declined-helper`, or
@@ -263,17 +278,18 @@ Read `actions/configure.md`, `contracts/current-api-contract.md`,
 `templates/configuration-plan.md`.
 
 Map the approved research and owner answers to MoonPress Chat settings, knowledge,
-consent, handoff, provider choice, appearance, and launch gates, then show the
-reviewed plan and ask for explicit approval.
+consent, handoff, provider choice, appearance, and launch gates. Validate the
+completed proposal before requesting the single explicit apply approval.
 
 On the API path: build the configuration envelope from the approved plan,
-`call POST /setup/validate`, show the returned summary and warnings, and only
+`call POST /setup/validate`, summarize actual changes and actionable warnings, and only
 after the owner's explicit approval `call POST /setup/apply` with
 `approval.confirmed: true` and `approval.artifact_sha256` equal to the
 `configuration_sha256` the validate response returned. When the `interview`
 capability is advertised, run the interview stage first: GET the questions,
-ask the owner in chat, PUT the answers, GET the preview, and fold the
-preview's envelope into the configuration envelope. Apply never changes
+reuse sourced facts and approved answers, ask only unresolved questions, PUT
+the answers, GET the preview, and review the complete envelope for conflicting
+preset text before validation. Apply never changes
 visibility.
 
 The provider key is entered by the human — through the helper's `provider`

@@ -16,6 +16,12 @@ stores only non-secret setup artifacts.
 
 ## Install
 
+Candidate note: the default `main` branch does not contain the marketplace
+manifest yet. The commands below describe the release channel and cannot
+install this candidate until release promotion. Desktop ZIP upload has been
+verified for candidate testing; it does not establish marketplace updates.
+Do not give a `#branch` URL as a verified Desktop installation method.
+
 Install from the MoonPress Chat marketplace in a local Code session:
 
 ```bash
@@ -47,6 +53,12 @@ supported. To switch to Marketplace, remove only this skill with
 `npx skills@latest remove moonpresschat-setup -g -a claude-code` (or `-a codex`)
 before installing the Marketplace plugin; avoid loading both copies.
 
+After updating through Skills CLI, check the version in the client you use.
+If it still shows the old version, repeat the scoped install command above for
+that same client. Keep the original global/project scope; do not remove other
+skills. This avoids a verified CLI edge case where an update from another
+agent refreshes the shared copy but leaves the target client's copy unchanged.
+
 The current open `skills` installer requires Node.js 22.20 or newer. If it
 reports an engine-version error, update Node through your normal developer
 tooling before retrying.
@@ -73,6 +85,12 @@ Application Password, or secret URL in the command or conversation.
 | Continue existing work | *"Resume my MoonPress Chat setup."* |
 
 ## A typical run
+
+You approve temporary WordPress access, answer only the business questions the
+site cannot resolve, and review one corrected configuration. The agent handles
+validation, applying your approved changes, verification and disconnecting.
+Public launch is a separate decision. Technical identifiers stay in the report.
+
 
 1. It confirms authority, environment, official installation, compatibility,
    backup/reset, rollback, and public visibility in `moonpresschat-setup/preflight.md`.
@@ -161,7 +179,7 @@ Collected during setup:
 - handoff and lead-routing rules;
 - tone, disclosure, consent, and launch authority;
 - provider and model choice, excluding the provider key;
-- one free-core site language.
+- enabled reply languages and their default (multiple languages work in the free core).
 
 Optional inputs include a staging URL, existing support or policy documents,
 and prior setup artifacts.
@@ -236,7 +254,7 @@ Questions arrive in short batches and cover:
 - voice, terminology, and prohibited wording;
 - disclosure, consent, and legal-review status;
 - provider and model choice;
-- free-core site language;
+- enabled reply languages and default;
 - production-write and go-live approvers.
 
 The skill marks an unanswered decision `unresolved`; it does not manufacture an

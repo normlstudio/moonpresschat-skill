@@ -15,6 +15,12 @@ control.
 
 ## Install
 
+Candidate note: the default `main` branch does not contain the marketplace
+manifest yet. The commands below describe the release channel and cannot
+install this candidate until release promotion. Desktop ZIP upload has been
+verified for candidate testing; it does not establish marketplace updates.
+Do not give a `#branch` URL as a verified Desktop installation method.
+
 Install from the MoonPress Chat marketplace in a local Code session:
 
 ```bash
