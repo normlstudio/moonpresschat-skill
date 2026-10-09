@@ -6,7 +6,10 @@ Fill only the gaps that public research cannot answer.
 
 ## Question groups
 
-Ask in short batches and explain why each answer changes the bot.
+Read `contracts/owner-experience.md`. These groups are an internal coverage
+checklist, not a questionnaire to paste into chat. Reuse current configuration,
+sourced facts and prior answers. Ask at most three unresolved questions at a
+time; group related privacy defaults into one concrete proposal for approval.
 
 1. **Environment:** Is this staging or production, and who approves changes?
 2. **Safety:** What backup/reset checkpoint and rollback path will be used?
@@ -18,8 +21,9 @@ Ask in short batches and explain why each answer changes the bot.
 8. **Voice:** What tone, terminology, and prohibited wording apply?
 9. **Consent:** What disclosure is approved? Is legal review required?
 10. **Provider:** Which supported provider and model will the owner use?
-11. **Language:** What is the single free-core site language? Multi-language
-   operation is a separate premium decision and must not be promised.
+11. **Language:** Which supported reply languages should be enabled, and which
+   is the default? Several languages are supported by the free core. A single
+   selected language is a configuration choice, not a license restriction.
 12. **Launch:** Who may approve production writes and public go-live?
 
 Also collect the field-level privacy and operational decisions in

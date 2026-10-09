@@ -1,0 +1,35 @@
+name: Release package
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.20.0'
+      - name: Check release-only main and exact version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+          test "$RELEASE_TAG" = "v$(node -p "require('./.claude-plugin/plugin.json').version")"
+          bash scripts/validate-package.sh
+          node --test tests/*.test.mjs
+      - name: Build exact committed archive
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          git archive --format=zip --prefix=moonpresschat-skill/ -o "moonpresschat-setup-$RELEASE_TAG.zip" HEAD
+          sha256sum "moonpresschat-setup-$RELEASE_TAG.zip" > "moonpresschat-setup-$RELEASE_TAG.zip.sha256"
+      - name: Publish verified release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: gh release create "$RELEASE_TAG" "moonpresschat-setup-$RELEASE_TAG.zip" "moonpresschat-setup-$RELEASE_TAG.zip.sha256" --verify-tag --generate-notes
