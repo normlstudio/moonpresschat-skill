@@ -424,4 +424,4 @@ appearance) remain human-observed on both paths.
 
 ---
 
-_Covers SKILL.md v0.7.0 | Last changelog entry: v0.7.0 | Generated: 2026-10-01._
+_Covers SKILL.md v0.7.0 | Last changelog entry: v0.7.0 | Generated: Oct 12, 2026._

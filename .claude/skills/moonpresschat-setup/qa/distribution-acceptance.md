@@ -30,6 +30,27 @@ Pending: public URL delivery/checksum, actual no-site and preselected-site agent
 runs, fresh published-channel install, Desktop automatic updates/branch isolation
 and public release verification. Source checks do not prove these outcomes.
 
+### Prepared 0.7.0 checks
+
+Runtime source `fc4d703` passed all 13 Node tests and package validation on
+Node 22.22.2. The version check includes the public prompt; compatibility
+fixtures still verify refusal before any credential/backend access after a
+version bump. Shared skill-folder and portable-path lints passed.
+
+Actual Claude Code and Codex plugin-management commands passed against the
+isolated HTTP Git fixture: fresh install of 0.7.0, development/scratch isolation,
+promotion to a synthetic 0.8.0, installed-helper once-only notices, update,
+remove and recovery. All 16 recorded checks passed. The synthetic version is
+only test data; no public 0.8.0 release, personal installation change, provider
+request, Keychain access or WordPress authentication occurred. Skills CLI was
+not enabled for this run, and Gemini fresh installation is not claimed.
+
+The regenerated human guide was inspected at 1200px and 390px. The primary
+copy-and-paste request is visible and wraps; both widths have no horizontal
+overflow or console/page errors. No blocking finding remained in the scoped
+source review. The proposed public URL returned HTTP 404 during preparation;
+website publication is not complete.
+
 ## Previous candidate evidence
 
 Author: Artur Tsitou. Candidate: 0.6.0; plugin issue #211, skill issue #2.
