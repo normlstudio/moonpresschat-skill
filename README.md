@@ -1,6 +1,6 @@
 # MoonPress Chat setup
 
-0.6.0 release candidate. Marketplace publication and independent desktop
+0.7.0 release candidate. Marketplace publication and independent desktop
 acceptance are pending; see the [candidate checks](.claude/skills/moonpresschat-setup/qa/distribution-acceptance.md).
 
 `moonpresschat-setup` safely installs, researches, configures, and verifies
@@ -14,6 +14,23 @@ than 5.0.0, unsupported credential backends, or owners who prefer manual
 control.
 
 ## Install
+
+The intended customer entry is one request in a local coding agent:
+
+```text
+Fetch and execute the appropriate instructions to set up MoonPress Chat from https://moonpresschat.com/agent-setup/prompt.md
+```
+
+The agent asks for your WordPress website, installs or reuses the setup skill,
+and guides the setup. You do not need to put a site address into this starting
+request or upload a plugin ZIP. Sign in to WordPress in your browser and approve
+the proposed configuration when asked. Public activation is a separate decision.
+
+**Publication pending:** this candidate includes the [instruction source](agent-setup/prompt.md);
+the URL and released installation must be verified before customer use.
+Chat/Cowork route you to local Code/CLI before contacting the site.
+
+### Advanced installation
 
 Candidate note: the default `main` branch does not contain the marketplace
 manifest yet. The commands below describe the release channel and cannot
@@ -88,7 +105,7 @@ Read the [human guide](.claude/skills/moonpresschat-setup/readme.md),
 - The free core and AI-provider usage are separate: the site owner pays the
   selected provider directly.
 
-Version 0.6.0 is a public alpha built for MoonPress Chat 5.0.0 or newer (skill
+Version 0.7.0 is an unreleased public alpha candidate built for MoonPress Chat 5.0.0 or newer (skill
 0.4.0 pairs with plugin 4.8.0 and older, which speak a different REST
 namespace; mismatched pairs fall back to the guided path). The helper
 currently stores credentials only in macOS Keychain; Windows and Linux use the

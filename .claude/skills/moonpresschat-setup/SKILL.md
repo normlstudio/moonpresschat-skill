@@ -9,7 +9,7 @@ description: >
   MoonPress Chat without exposing WordPress passwords or AI-provider keys to the
   agent.
 metadata:
-  version: "0.6.0"
+  version: "0.7.0"
   author: "Norml Studio"
 ---
 
@@ -38,7 +38,7 @@ production change explicit and reviewable.
 
 ## Current release state
 
-Version 0.6.0 is a public alpha release candidate with two setup paths. It speaks
+Version 0.7.0 is a public alpha release candidate with two setup paths. It speaks
 the MoonPress Chat 5.0.0 contract; see the compatibility note below.
 
 Marketplace publication and independent desktop acceptance are pending;
@@ -75,6 +75,13 @@ see `qa/distribution-acceptance.md`. Do not claim this candidate is released.
   operation exists in the shipped setup API; never present one as available.
 
 ## Inputs
+
+If the request does not include a website, first ask in the owner's language:
+"Which WordPress website should I set up MoonPress Chat on? Send its public URL."
+Wait for the answer before installation or site requests. Reuse an explicitly
+supplied site; never choose the current project's site or a local acceptance
+fixture automatically. Existing setup artifacts can be resumed only when their
+origin matches the owner's chosen site. See `contracts/bootstrap-entry.md`.
 
 Required:
 
@@ -114,6 +121,21 @@ Never write a credential, token, reset link, Application Password, or provider
 key into these files.
 
 ## Start from the MoonPress Chat onboarding page
+
+The primary entry is a public instruction URL. The owner can paste this request
+without editing a website argument:
+
+```text
+Fetch and execute the appropriate instructions to set up MoonPress Chat from https://moonpresschat.com/agent-setup/prompt.md
+```
+
+The agent asks for the website when missing, installs or reuses this skill for
+its local runtime, reads the installed instructions, and continues setup.
+The source lives in `agent-setup/prompt.md` at the repository root; publication
+and behavior acceptance are tracked in `contracts/bootstrap-entry.md`.
+The URL is not live merely because the source file exists in this candidate.
+
+### Advanced installation
 
 Candidate note: the default `main` branch does not contain the marketplace
 manifest yet. The commands below describe the release channel and cannot

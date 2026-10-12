@@ -10,6 +10,7 @@ const version = process.argv[2] === 'set' ? process.argv[3] : manifest.version;
 if (!/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(version ?? '')) throw new Error('Use numeric MAJOR.MINOR.PATCH');
 const active = /\b([Vv]ersion )\d+\.\d+\.\d+/g;
 const targets = [
+  ['agent-setup/prompt.md', active, `$1${version}`],
   [skill + 'SKILL.md', /^  version: "\d+\.\d+\.\d+"$/m, `  version: "${version}"`],
   [skill + 'helper/moonpresschat-setup-helper.mjs', /export const SKILL_VERSION = '\d+\.\d+\.\d+';/, `export const SKILL_VERSION = '${version}';`],
   ['README.md', /^\d+\.\d+\.\d+ release candidate/m, `${version} release candidate`],

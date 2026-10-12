@@ -16,6 +16,24 @@ stores only non-secret setup artifacts.
 
 ## Install
 
+Paste this request in your local coding agent:
+
+```text
+Fetch and execute the appropriate instructions to set up MoonPress Chat from https://moonpresschat.com/agent-setup/prompt.md
+```
+
+The agent asks which WordPress website to configure, installs or reuses the
+skill, and continues the setup. If you already provided the site, it reuses it.
+You sign in through your browser and review one configuration; no plugin ZIP
+upload or installation-command selection is needed in this primary flow.
+Artifacts for another site do not become this site's configuration or approval.
+
+**Publication pending:** the source is prepared in `agent-setup/prompt.md` at
+the repository root. Verify the public URL and released installation before
+using it with customers. Chat/Cowork direct you to local Code/CLI first.
+
+### Advanced installation
+
 Candidate note: the default `main` branch does not contain the marketplace
 manifest yet. The commands below describe the release channel and cannot
 install this candidate until release promotion. Desktop ZIP upload has been
@@ -105,7 +123,7 @@ Public launch is a separate decision. Technical identifiers stay in the report.
 6. It records passed, failed, and blocked checks in `verification.md`, then asks
    separately before the public widget goes live.
 
-> **Public alpha:** version 0.6.0 ships both paths. The API path is the
+> **Public alpha candidate:** version 0.7.0 includes both paths. The API path is the
 > default — MoonPress Chat's stable setup API (`moonpresschat/v1/setup`,
 > MoonPress Chat 5.0.0 or newer) plus the bundled macOS credential helper —
 > and the human-guided wp-admin path remains the documented fallback for
@@ -131,7 +149,7 @@ The workflow has six visible stages:
    handoff, lead, appearance, language, and launch settings.
 6. **Verify** — checks authority, data, behavior, privacy, and launch gates.
 
-Version 0.6.0 runs all six stages through the shipped setup API by default
+Version 0.7.0 runs all six stages through the shipped setup API by default
 and through the human-operated wp-admin path as the fallback. It never
 pretends that an unavailable connection or capability exists: the path is
 chosen by the public compatibility gate, and every gap is recorded with its
@@ -139,7 +157,7 @@ reason.
 
 ### Distribution and updates
 
-Version 0.6.0 adds the MoonPress Chat marketplace for local Claude Code and
+Version 0.7.0 adds the MoonPress Chat marketplace for local Claude Code and
 Codex sessions. Chat and Cowork cannot run the helper; use the Code tab.
 
 On each run the helper checks the public compatibility response. A missing
@@ -406,4 +424,4 @@ appearance) remain human-observed on both paths.
 
 ---
 
-_Covers SKILL.md v0.6.0 | Last changelog entry: v0.6.0 | Generated: 2026-10-01._
+_Covers SKILL.md v0.7.0 | Last changelog entry: v0.7.0 | Generated: 2026-10-01._

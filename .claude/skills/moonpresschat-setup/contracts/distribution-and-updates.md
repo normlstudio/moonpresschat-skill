@@ -1,6 +1,6 @@
 # Distribution and compatibility
 
-Author: Artur Tsitou. Version 0.6.0 release candidate, 2026-10-01.
+Author: Artur Tsitou. Version 0.7.0 release candidate, 2026-10-01.
 
 The same public repository serves Claude Code and Codex marketplaces and the
 Skills CLI. `.claude-plugin/plugin.json` is the release version authority;
@@ -8,6 +8,13 @@ the canonical skill stays in `.claude/skills/moonpresschat-setup/`.
 Use `scripts/set-version.sh X.Y.Z`, write the changelog, reconcile the human
 guide/data, regenerate the visual guide, and run the validator and tests.
 No copied runtime-specific skill is maintained.
+
+The primary customer entry is the public URL defined in
+`contracts/bootstrap-entry.md`; its canonical source is `agent-setup/prompt.md`
+at the repository root. It asks for the website and chooses the local install
+route before following the skill. Publish the exact released source bytes on
+moonpresschat.com and verify the response before claiming the URL works.
+The marketplace and Skills CLI remain the underlying installation channels.
 
 The helper checks public `/setup/compatibility` on every run and before
 authenticated commands. Missing `setup_skill` retains the original plugin

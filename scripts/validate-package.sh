@@ -7,6 +7,7 @@ skill_dir="$repo_root/.claude/skills/moonpresschat-setup"
 required=(
   "$repo_root/README.md"
   "$repo_root/LICENSE"
+  "$repo_root/agent-setup/prompt.md"
   "$repo_root/.claude-plugin/plugin.json"
   "$repo_root/.claude-plugin/marketplace.json"
   "$repo_root/scripts/version.mjs"
@@ -41,7 +42,7 @@ for (const path of plugin.skills) {
 JS
 
 if grep -RInE '/Users/|BEGIN (RSA |OPENSSH |EC )?PRIVATE KEY|sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}' \
-  "$repo_root/README.md" "$skill_dir" --exclude='readme.html'; then
+  "$repo_root/README.md" "$repo_root/agent-setup" "$skill_dir" --exclude='readme.html'; then
   echo 'private path or secret-shaped assignment found' >&2
   exit 1
 fi

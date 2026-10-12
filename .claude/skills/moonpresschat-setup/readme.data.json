@@ -1,6 +1,6 @@
 {
   "skill": "moonpresschat-setup",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "repo": "moonpresschat-skill",
   "audience": "WordPress site owners and developers",
   "actsOn": "MoonPress Chat setup",
@@ -14,8 +14,8 @@
   ],
   "flow": [
     {
-      "t": "Preflight",
-      "d": "Confirm authority, official installation, compatibility, and recovery."
+      "t": "Website & preflight",
+      "d": "Ask for the WordPress URL, then confirm authority, installation, compatibility and recovery."
     },
     {
       "t": "Research",
@@ -39,6 +39,7 @@
     }
   ],
   "commands": [
+    "Fetch and execute the appropriate instructions to set up MoonPress Chat from https://moonpresschat.com/agent-setup/prompt.md",
     "Set up MoonPress Chat on my WordPress site",
     "Research my site before configuring MoonPress Chat",
     "Help me plan the MoonPress Chat knowledge base",
@@ -46,15 +47,21 @@
     "Review whether MoonPress Chat is ready to go live",
     "Resume my MoonPress Chat setup"
   ],
-  "install": "npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a codex",
-  "installNote": "Release channel only: the candidate marketplace is not on main yet. Desktop ZIP upload and local Code setup verified; marketplace restart/update acceptance pending.",
+  "install": "Fetch and execute the appropriate instructions to set up MoonPress Chat from https://moonpresschat.com/agent-setup/prompt.md",
+  "installNote": "Publication pending. After release, paste this into your local coding agent; it asks for your website and installs the skill. Chat/Cowork direct you to local Code first.",
   "callout": {
     "label": "Public alpha",
-    "text": "Version 0.6.0 is an unreleased candidate with both paths. **The API path is the default** — MoonPress Chat's stable setup API (MoonPress Chat 5.0.0 or newer) plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, plugins older than 5.0.0, or unsupported credential backends."
+    "text": "Version 0.7.0 is an unreleased candidate with both paths. **The API path is the default** — MoonPress Chat's stable setup API (MoonPress Chat 5.0.0 or newer) plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, plugins older than 5.0.0, or unsupported credential backends."
   },
   "capabilities": {
-    "label": "What works in 0.6.0",
+    "label": "What works in 0.7.0",
     "items": [
+      {
+        "name": "Public URL entry",
+        "tag": "candidate",
+        "ok": false,
+        "desc": "One starting request; the agent asks for the website and chooses a local install route. Public delivery and agent behavior acceptance are pending."
+      },
       {
         "name": "Cold-start preflight",
         "tag": "ready",
@@ -123,6 +130,10 @@
         "role": "Workflow router and security boundary"
       },
       {
+        "path": "contracts/bootstrap-entry.md",
+        "role": "Public URL entry, website selection and installation routing"
+      },
+      {
         "path": "actions/",
         "role": "Preflight, research, questions, connect, configure, and verify"
       },
@@ -144,7 +155,7 @@
       }
     ]
   },
-  "covers": "0.6.0",
-  "generated": "2026-10-09",
+  "covers": "0.7.0",
+  "generated": "Oct 12, 2026",
   "hasHumanMd": true
 }

@@ -43,7 +43,7 @@ import { randomBytes, timingSafeEqual } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync, unlinkSync, existsSync, chmodSync, realpathSync } from 'node:fs';
 
-export const SKILL_VERSION = '0.6.0';
+export const SKILL_VERSION = '0.7.0';
 export const MIN_NODE_VERSION = '22.20.0';
 const CLIENT_HEADER = 'X-MoonPressChat-Setup-Client';
 const API_VERSION = '1.0';
