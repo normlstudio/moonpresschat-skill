@@ -1,4 +1,17 @@
-# Marketplace candidate acceptance — updated 2026-10-09
+# Distribution acceptance — updated 2026-10-13
+
+## Oct 13 public release
+
+Author: Artur Tsitou. Version 0.7.0 is now released, and the public instruction
+URL serves the exact released prompt. Fresh public-source installs passed for
+the Claude and Codex marketplaces and the Claude Code, Codex and Gemini Skills
+CLI routes. See [the release record](public-release-0.7.0.md) for commits,
+checksums, production verification and remaining user-surface checks.
+
+The dated preparation and candidate records below are historical evidence.
+Their pending publication statements describe those earlier checks, not the
+current release. CLI installation does not establish a passing model-run
+bootstrap, Desktop automatic update, real-provider behavior or launch readiness.
 
 ## Oct 12 handoff and public-entry direction
 
