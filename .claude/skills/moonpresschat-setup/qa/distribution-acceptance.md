@@ -1,5 +1,58 @@
 # Marketplace candidate acceptance — updated 2026-10-09
 
+## Oct 12 handoff and public-entry direction
+
+Author: Artur Tsitou. The owner closed the previous session and explicitly
+transferred continued work. Its installed acceptance fixture and saved WordPress
+setup artifacts remain the evidence for the previous candidate; no client site
+is inferred from that fixture.
+
+The owner observed local Desktop Code loading acceptance skill 0.6.1, reusing
+the existing setup decisions, and applying four approved knowledge corrections
+on plugin 5.9.1. Revalidation matched the approved fingerprint. Eight API checks
+passed, the widget stayed off, and the successful connection was revoked on the
+server and removed locally. An earlier connection expired before apply (401);
+its server revocation was not confirmed. Provider/mail were deliberate fixtures;
+browser behavior and real-provider/mail results remain unverified.
+
+The owner now selected a Cloudflare-style public instruction URL as the primary
+entry, with the agent asking for the client's website instead of requiring it
+in the pasted request. Source: `agent-setup/prompt.md`; detailed acceptance:
+`contracts/bootstrap-entry.md`. Version 0.7.0 prepares this route without
+publishing the website or promoting the release.
+
+The primary Chat/Cowork check is now fetching that public prompt and directing
+to local Code before website requests. It does not require a skill installed in
+the account. Earlier `Unknown skill` attempts do not exercise the old
+installed-skill refusal, and must not be called a passing bootstrap test.
+
+Pending: public URL delivery/checksum, actual no-site and preselected-site agent
+runs, fresh published-channel install, Desktop automatic updates/branch isolation
+and public release verification. Source checks do not prove these outcomes.
+
+### Prepared 0.7.0 checks
+
+Runtime source `fc4d703` passed all 13 Node tests and package validation on
+Node 22.22.2. The version check includes the public prompt; compatibility
+fixtures still verify refusal before any credential/backend access after a
+version bump. Shared skill-folder and portable-path lints passed.
+
+Actual Claude Code and Codex plugin-management commands passed against the
+isolated HTTP Git fixture: fresh install of 0.7.0, development/scratch isolation,
+promotion to a synthetic 0.8.0, installed-helper once-only notices, update,
+remove and recovery. All 16 recorded checks passed. The synthetic version is
+only test data; no public 0.8.0 release, personal installation change, provider
+request, Keychain access or WordPress authentication occurred. Skills CLI was
+not enabled for this run, and Gemini fresh installation is not claimed.
+
+The regenerated human guide was inspected at 1200px and 390px. The primary
+copy-and-paste request is visible and wraps; both widths have no horizontal
+overflow or console/page errors. No blocking finding remained in the scoped
+source review. The proposed public URL returned HTTP 404 during preparation;
+website publication is not complete.
+
+## Previous candidate evidence
+
 Author: Artur Tsitou. Candidate: 0.6.0; plugin issue #211, skill issue #2.
 
 | Check | Result | Evidence / boundary |

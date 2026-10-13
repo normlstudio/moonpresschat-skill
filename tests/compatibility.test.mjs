@@ -12,6 +12,8 @@ const compatible = {
   },
 };
 const withFloors = (minimum, recommended) => ({ ...compatible, body: { ...compatible.body, setup_skill: { minimum, recommended } } });
+const [major, minor] = SKILL_VERSION.split('.').map(Number);
+const futureVersion = `${major}.${minor + 1}.0`;
 
 test('legacy plugins without skill floors retain their original capability gate', () => {
   assert.equal(compatibilityDecision(compatible).api_allowed, true);
@@ -20,20 +22,20 @@ test('legacy plugins without skill floors retain their original capability gate'
   assert.equal(compatibilityDecision({ ...compatible, body: { ...compatible.body, plugin_version: '4.8.0' } }).api_allowed, false);
 });
 test('minimum blocks API; recommendation offers the detected update while continuing', () => {
-  const minimum = compatibilityDecision(withFloors('0.7.0', '0.7.0'));
+  const minimum = compatibilityDecision(withFloors(futureVersion, futureVersion));
   assert.equal(minimum.api_allowed, false);
   assert.equal(minimum.reason, 'setup-skill-too-old');
   assert.match(minimum.notice, /guided wp-admin/);
-  const recommended = compatibilityDecision(withFloors('0.5.0', '0.7.0'));
+  const recommended = compatibilityDecision(withFloors(SKILL_VERSION, futureVersion));
   assert.equal(recommended.api_allowed, true);
   assert.match(recommended.notice, /newer Setup Skill/);
-  assert.equal(compatibilityDecision(withFloors('0.6.0', '0.6.0')).notice, undefined);
+  assert.equal(compatibilityDecision(withFloors(SKILL_VERSION, SKILL_VERSION)).notice, undefined);
 });
 test('malformed or inverted floors cannot unlock the API', () => {
   for (const minimum of [null, 'garbage', '0.6', '0.06.0', '9007199254740992.0.0']) {
-    assert.equal(compatibilityDecision(withFloors(minimum, '0.7.0')).api_allowed, false);
+    assert.equal(compatibilityDecision(withFloors(minimum, futureVersion)).api_allowed, false);
   }
-  assert.equal(compatibilityDecision(withFloors('0.8.0', '0.7.0')).api_allowed, false);
+  assert.equal(compatibilityDecision(withFloors(futureVersion, SKILL_VERSION)).api_allowed, false);
   assert.equal(compatibilityDecision({ ...compatible, body: { ...compatible.body, setup_skill: null } }).api_allowed, false);
 });
 test('semver ordering is numeric, including differing minor digit lengths', () => {

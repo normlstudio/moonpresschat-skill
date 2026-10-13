@@ -6,9 +6,12 @@ import { mkdtempSync, mkdirSync, writeFileSync, existsSync, rmSync, symlinkSync 
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { SKILL_VERSION } from '../.claude/skills/moonpresschat-setup/helper/moonpresschat-setup-helper.mjs';
 
 const helper = fileURLToPath(new URL('../.claude/skills/moonpresschat-setup/helper/moonpresschat-setup-helper.mjs', import.meta.url));
 const capabilities = ['status', 'validate', 'apply', 'verify', 'rollback', 'go_live', 'provider_write', 'self_revoke'];
+const [major, minor] = SKILL_VERSION.split('.').map(Number);
+const futureVersion = `${major}.${minor + 1}.0`;
 
 async function run(args, env, preload, entry = helper) {
   const child = spawn(process.execPath, [...(preload ? ['--import', preload] : []), entry, ...args], { env });
@@ -54,7 +57,7 @@ test('real CLI connects public preflight and gates every authenticated setup com
     assert.equal(result.code, 0, result.stderr);
     assert.equal(JSON.parse(result.stdout).api_allowed, true, 'Symlink entry must run the actual CLI');
 
-    floors = { minimum: '0.7.0', recommended: '0.7.0' };
+    floors = { minimum: futureVersion, recommended: futureVersion };
     for (const args of [
       ['connect', origin], ['status', origin], ['call', origin, 'POST', '/setup/apply'],
       ['call', '--body', join(dir, 'nonexistent.json'), origin, 'POST', '/setup/validate'],
@@ -68,7 +71,7 @@ test('real CLI connects public preflight and gates every authenticated setup com
     assert.equal(existsSync(trap), false, 'No browser or credential backend may run below the minimum');
     assert.deepEqual(forbidden, []);
 
-    floors = { minimum: '0.5.0', recommended: '0.7.0' };
+    floors = { minimum: SKILL_VERSION, recommended: futureVersion };
     result = await run(['preflight', origin], env);
     assert.equal(JSON.parse(result.stdout).api_allowed, true);
     assert.match(result.stderr, /newer Setup Skill/);

@@ -12,13 +12,13 @@ test('release bump stamps active copies and validator rejects instruction drift'
   const skill = '.claude/skills/moonpresschat-setup/';
   const run = (...args) => spawnSync(process.execPath, [join(dir, 'scripts/version.mjs'), ...args], { encoding: 'utf8' });
   try {
-    for (const name of ['.claude', '.claude-plugin', 'scripts', 'README.md']) cpSync(join(source, name), join(dir, name), { recursive: true });
+    for (const name of ['.claude', '.claude-plugin', 'agent-setup', 'scripts', 'README.md']) cpSync(join(source, name), join(dir, name), { recursive: true });
     let result = run('set', '0.6.1');
     assert.equal(result.status, 0, result.stderr);
     const log = join(dir, skill, 'changelog.md');
     writeFileSync(log, '## 0.6.1 — fixture\n\n- Version stamping regression.\n\n' + readFileSync(log, 'utf8'));
     result = run('check'); assert.equal(result.status, 0, result.stderr);
-    for (const name of ['README.md', skill + 'SKILL.md', skill + 'actions/preflight.md', skill + 'contracts/distribution-and-updates.md', skill + 'readme.md', skill + 'readme.html']) {
+    for (const name of ['agent-setup/prompt.md', 'README.md', skill + 'SKILL.md', skill + 'actions/preflight.md', skill + 'contracts/distribution-and-updates.md', skill + 'readme.md', skill + 'readme.html']) {
       const path = join(dir, name), original = readFileSync(path, 'utf8');
       writeFileSync(path, original.replace(/([Vv]ersion )0\.6\.1/, '$10.6.0'));
       result = run('check'); assert.notEqual(result.status, 0, name + ' drift must fail');

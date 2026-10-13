@@ -1,0 +1,10 @@
+<Files "prompt.md">
+  ForceType text/plain
+  <IfModule mod_mime.c>
+    AddCharset UTF-8 .md
+  </IfModule>
+  <IfModule mod_headers.c>
+    Header set Cache-Control "public, max-age=300"
+    Header set X-Content-Type-Options "nosniff"
+  </IfModule>
+</Files>

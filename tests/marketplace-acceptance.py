@@ -10,13 +10,16 @@ archive=base/'source.tar';archive.write_bytes(subprocess.check_output(['git','ar
 with tarfile.open(archive)as t:t.extractall(src,filter='data')
 node=shutil.which('node')
 if not node: raise SystemExit('Node.js 22.20 or newer is required')
+initial_version=json.loads((src/'.claude-plugin/plugin.json').read_text())['version']
+major,minor,_=map(int,initial_version.split('.'))
+updated_version=f'{major}.{minor+1}.0'
 def run(args,cwd=None,env=None,ok=True):
  p=subprocess.run(args,cwd=cwd,env=env,text=True,capture_output=True,timeout=90)
  if ok and p.returncode:raise RuntimeError(str(args)+'\n'+p.stdout+'\n'+p.stderr)
  return p.stdout.strip()
 git_env={**os.environ,'GIT_AUTHOR_NAME':'Acceptance fixture','GIT_AUTHOR_EMAIL':'fixture@example.invalid','GIT_COMMITTER_NAME':'Acceptance fixture','GIT_COMMITTER_EMAIL':'fixture@example.invalid'}
 def g(*a):return run(['git',*a],src,git_env)
-g('init','-b','main');g('add','.');g('commit','-m','Fixture 0.6.0')
+g('init','-b','main');g('add','.');g('commit','-m',f'Fixture {initial_version}')
 remote=base/'market.git';run(['git','clone','--bare',str(src),str(remote)]);g('remote','add','origin',str(remote))
 run(['git','--git-dir',str(remote),'update-server-info'])
 backend=run(['git','--exec-path'])+'/git-http-backend'
@@ -67,12 +70,12 @@ def check(name,args,env):
  out=run(args,base,env);report['checks'].append({'check':name,'output':out});print(name+': '+out[:350],flush=True)
 try:
  check('Codex add HTTP Git marketplace',['codex','plugin','marketplace','add',url,'--ref','main','--json'],ce)
- check('Codex install 0.6.0',['codex','plugin','add','moonpresschat@moonpresschat'],ce)
+ check(f'Codex install {initial_version}',['codex','plugin','add','moonpresschat@moonpresschat'],ce)
  check('Claude add HTTP Git marketplace',['claude','plugin','marketplace','add',url+'#main'],ae)
- check('Claude install 0.6.0',['claude','plugin','install','moonpresschat@moonpresschat','--json'],ae)
+ check(f'Claude install {initial_version}',['claude','plugin','install','moonpresschat@moonpresschat','--json'],ae)
  def versions(name):
   return sorted({json.loads(p.read_text()).get('version') for p in configs[name].glob('plugins/cache/**/.claude-plugin/plugin.json')})
- for name in configs:assert versions(name)==['0.6.0'],(name,versions(name))
+ for name in configs:assert versions(name)==[initial_version],(name,versions(name))
  def helper_check(version):
   entry=configs['codex']/f'plugins/cache/moonpresschat/moonpresschat/{version}/.claude/skills/moonpresschat-setup/helper/moonpresschat-setup-helper.mjs'
   for attempt in range(2):
@@ -81,29 +84,29 @@ try:
    output=json.loads(result.stdout);assert output['api_allowed'] and output['skill_version']==version,output
    assert ('Setup Skill updated' in result.stderr)==(attempt==0),result.stderr
   report['checks'].append({'check':f'Installed helper {version} preflight and once-only notice','result':'PASS'})
- helper_check('0.6.0')
+ helper_check(initial_version)
  if skills_cli:
   skills('add',url,'-s','moonpresschat-setup','-a','claude-code','-y')
   skills_initial=skills_digest()
   report['checks'].append({'check':'Skills CLI project install from HTTP Git main','result':'PASS'})
- g('checkout','-b','develop');run([node,'scripts/version.mjs','set','0.6.1'],src);g('add','.');g('commit','-m','Fixture development 0.6.1');g('push','origin','develop');run(['git','--git-dir',str(remote),'update-server-info'])
+ g('checkout','-b','develop');run([node,'scripts/version.mjs','set',updated_version],src);g('add','.');g('commit','-m',f'Fixture development {updated_version}');g('push','origin','develop');run(['git','--git-dir',str(remote),'update-server-info'])
  g('checkout','-b','scratch-acceptance');(src/'scratch-only.txt').write_text('Not a release\n');g('add','scratch-only.txt');g('commit','-m','Fixture scratch branch');g('push','origin','scratch-acceptance')
  check('Codex refresh ignores develop and scratch',['codex','plugin','marketplace','upgrade','moonpresschat','--json'],ce)
  check('Claude refresh ignores develop and scratch',['claude','plugin','marketplace','update','moonpresschat'],ae)
- for name in configs:assert versions(name)==['0.6.0'],(name,versions(name))
+ for name in configs:assert versions(name)==[initial_version],(name,versions(name))
  if skills_cli:
   skills('update','moonpresschat-setup','-p','-y')
   assert skills_digest()==skills_initial,'Unreleased branch changed the installed skill'
   report['checks'].append({'check':'Skills CLI update ignores develop and scratch','result':'PASS'})
- g('checkout','main');g('merge','--ff-only','develop');g('tag','v0.6.1');g('push','origin','main','v0.6.1');run(['git','--git-dir',str(remote),'update-server-info'])
+ g('checkout','main');g('merge','--ff-only','develop');g('tag',f'v{updated_version}');g('push','origin','main',f'v{updated_version}');run(['git','--git-dir',str(remote),'update-server-info'])
  check('Codex refresh version-changing upstream',['codex','plugin','marketplace','upgrade','moonpresschat','--json'],ce)
  report['codex_cache_after_catalog_refresh']=versions('codex');print('Codex cache after catalog-only refresh: '+str(versions('codex')),flush=True)
- assert versions('codex')==['0.6.1'],'Catalog upgrade must refresh installed Codex plugin'
- helper_check('0.6.1')
+ assert versions('codex')==[updated_version],'Catalog upgrade must refresh installed Codex plugin'
+ helper_check(updated_version)
  check('Codex install updated upstream',['codex','plugin','add','moonpresschat@moonpresschat'],ce)
  check('Claude refresh version-changing upstream',['claude','plugin','marketplace','update','moonpresschat'],ae)
  check('Claude update installed plugin',['claude','plugin','update','moonpresschat@moonpresschat','--json'],ae)
- for name in configs:assert '0.6.1' in versions(name),(name,versions(name))
+ for name in configs:assert updated_version in versions(name),(name,versions(name))
  if skills_cli:
   skills('update','moonpresschat-setup','-p','-y')
   if skills_digest()==skills_initial:
@@ -111,13 +114,13 @@ try:
    skills('add',url,'-s','moonpresschat-setup','-a','claude-code','-y')
    report['checks'].append({'check':'Skills CLI explicit-target reinstall recovery','result':'PASS' if skills_digest()!=skills_initial else 'FAIL'})
   assert skills_digest()!=skills_initial,'Neither update nor targeted reinstall refreshed the Claude copy'
-  assert 'version: "0.6.1"' in (skills_project/'.claude/skills/moonpresschat-setup/SKILL.md').read_text()
+  assert f'version: "{updated_version}"' in (skills_project/'.claude/skills/moonpresschat-setup/SKILL.md').read_text()
   report['checks'].append({'check':'Skills CLI update consumes promoted main','result':'PASS'})
  check('Codex remove',['codex','plugin','remove','moonpresschat@moonpresschat'],ce)
  check('Codex recover',['codex','plugin','add','moonpresschat@moonpresschat'],ce)
  check('Claude remove',['claude','plugin','uninstall','moonpresschat@moonpresschat'],ae)
  check('Claude recover',['claude','plugin','install','moonpresschat@moonpresschat','--json'],ae)
- for name in configs:assert '0.6.1' in versions(name),(name,versions(name))
+ for name in configs:assert updated_version in versions(name),(name,versions(name))
  report['result']='PASS'
 except Exception as e:
  report['result']='FAIL';report['error']=repr(e);print(repr(e),flush=True)

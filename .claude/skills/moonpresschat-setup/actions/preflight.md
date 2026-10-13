@@ -6,7 +6,8 @@ Complete this gate before public research or any WordPress configuration.
 
 Run only in a local Code/CLI session with a writable folder. In Claude Chat
 or Cowork, state that the skill needs the Code tab and stop before any site call.
-Run `node helper/moonpresschat-setup-helper.mjs preflight <origin>` every time;
+Resolve the owner's chosen website and authority below before contacting it.
+Then run `node helper/moonpresschat-setup-helper.mjs preflight <origin>` every time;
 this public check needs neither an Application Password nor a provider key.
 Read `contracts/distribution-and-updates.md`. If `api_allowed` is false, record
 `connection: guided-manual` and the returned reason; never connect through the
@@ -16,6 +17,12 @@ compatible Node executable by its explicit path when available. Do not install
 a runtime or change the system default without authorization.
 
 ## Opening questions
+
+If no website was explicitly selected, first ask in the owner's language for
+the public WordPress URL and wait. Do not use the current folder or old setup
+artifacts to choose a customer site. Use HTTPS for a bare domain without asking
+for the same address again; clarify only an ambiguous target. Reuse a supplied URL. See
+`contracts/bootstrap-entry.md` for the public URL entry and same-turn install.
 
 Resolve and record these four items from the request and existing context first.
 Ask only for missing items; do not ask the owner to repeat explicit decisions:
@@ -52,7 +59,7 @@ inactive, or older than 5.0.0 — those releases register only the pre-5.0.0
 namespace `quipbot/v1`, so the URLs above answer 404), and the WordPress and
 PHP versions from **Tools → Site Health → Info**.
 
-Version 0.6.0 of this skill verifies the guided screen guidance against
+Version 0.7.0 of this skill verifies the guided screen guidance against
 MoonPress Chat 3.11.0 and the API contract against MoonPress Chat 5.0.0 (contract
 unchanged through 5.3.1); the API path requires 5.0.0 or newer. MoonPress Chat 5.0.0 renamed the plugin and
 every internal identifier; 4.8.0 and older (released as QuipBot) register only

@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.7.0 — Oct 13, 2026
+
+- Added a public URL bootstrap: the owner pastes one request, and the agent
+  asks for the WordPress website before installation or site requests
+- Kept the public entry free of a required website argument and local fixture
+  defaults; reuse a supplied URL without repeating the question
+- Route local Claude Code, Codex and Gemini CLI through the existing official
+  installation channels; read verified installed files in the same turn when
+  the current skill registry is stale
+- Preserve installation scope and existing customer decisions; never select a
+  customer from old test artifacts or reuse another site's knowledge or approval
+- Route Chat/Cowork to local Code from the public prompt before website requests;
+  no account-plugin upload is required to explain the supported path
+- Keep browser consent, exact apply approval, disconnect and separate go-live
+  approval; honor plan-only requests before installation or site requests
+- Add the bootstrap source to package validation and version stamping, and
+  reconcile the owner-facing installation guides
+- Keep compatibility test floors relative to the installed version so version
+  bumps still exercise refusal before credential access
+- Published entry routes local agents through the official main channel;
+  package/API checks do not establish client model answers or launch readiness
+- Author: Artur Tsitou
+
 ## 0.6.0 — unreleased candidate (updated 2026-10-09)
 
 - Added Marketplace packaging and version-aware setup preflight.

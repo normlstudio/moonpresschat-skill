@@ -4,6 +4,11 @@ Author: Artur Tsitou. Updated: 2026-10-09.
 
 ## One proposal, one apply decision
 
+- Start from the owner's chosen WordPress website. If it is missing, ask only
+  for its public URL first and wait. Do not require editing the bootstrap prompt,
+  choosing an installer, uploading a ZIP, or reusing a local testing address.
+- Reuse old artifacts only for that same site; a new customer site gets its own
+  knowledge and approval record. Never carry configuration or approval across sites.
 - Speak in the owner's language. Start with what is configured or what decision
   is needed, not a narration of tool calls.
 - Reuse explicit site authority, target environment, workspace, Node choice and
