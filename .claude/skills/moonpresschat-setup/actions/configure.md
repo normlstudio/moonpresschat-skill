@@ -2,6 +2,10 @@
 
 ## Prepare the reviewed plan
 
+Follow `contracts/owner-experience.md`. The field-level plan is an artifact,
+not an extra approval round. Prepare one corrected proposal and validate it
+before asking for apply approval.
+
 Create `moonpresschat-setup/configuration-plan.md` from the research and owner answers.
 For every field, record:
 
@@ -23,7 +27,7 @@ Cover at least:
 - operating boundaries and prohibited claims;
 - error/offline wording;
 - widget identity and appearance;
-- one site language for the free core;
+- supported reply languages and their default;
 - launch-gate status.
 
 Use `contracts/configuration-fields.md`; do not collapse the plan to one broad
@@ -44,10 +48,14 @@ flow through chat by design.
 1. `call <origin> GET /setup/interview` — returns `set_id`, the ranked
    `questions`, stored `answers`, `orphaned` answer ids, and `progress`. A
    `409 moonpresschat_setup_interview_no_source` means nothing to ask about yet:
-   apply a preset or run the site analysis first.
-2. Ask the owner the open questions in chat, in short batches, following the
-   recording rules of `actions/questions.md`. Do not invent answers; an
-   explicit skip is `null`.
+   use public research and owner answers to compose knowledge directly through
+   the documented envelope. Do not invent a setup preset/analysis route or
+   require the owner to run the admin wizard just to unlock the interview.
+2. Map public facts and already approved answers to the questions, recording
+   provenance. Ask only the unresolved decisions using `actions/questions.md`;
+   do not paste the full question catalog. Do not invent answers; an explicit
+   skip is `null`. Submission stores interview answers, even though it does not
+   apply the live knowledge configuration; do not describe it as zero writes.
 3. Write the answers to a file and
    `call <origin> PUT /setup/interview/answers --body <file>` with
    `{ "set_id": "<from step 1>", "answers": { "<question id>": <value or null> } }`.
@@ -55,8 +63,14 @@ flow through chat by design.
    re-answer against the new `set_id`.
 4. `call <origin> GET /setup/interview/preview` — returns the assembled
    prompt, its `parts`, the `selection`, `warnings`, and `envelope`: a ready
-   `{schema_version, configuration: {knowledge: …}}`. Show the owner what the
-   preview will make the assistant say.
+   `{schema_version, configuration: {knowledge: …}}`. Treat it as a draft:
+   preset text can remain alongside the answers. Check every field, FAQ, topic
+   label/subtitle and instruction against the source and owner decisions.
+   Remove or rewrite contradictory preset text in editable envelope fields;
+   preserve unrelated user content and locked safety rules. Do not offer a
+   known-incorrect variant as an alternative. Record corrections in the plan
+   and include their meaning in the one final approval summary. A missing
+   topic instruction is a gap only if the shared knowledge cannot cover it.
 5. Fold `envelope.configuration.knowledge` into the configuration envelope
    below (or validate the preview envelope as-is when knowledge is the only
    section). There is deliberately no interview apply route — the write goes
@@ -81,8 +95,15 @@ knowledge, the analysis draft, or the preset marker.
    Stop on `valid: false`, `moonpresschat_setup_unknown_field`, or
    `moonpresschat_setup_unsupported_schema` — fix the plan, never mutate-and-retry.
    Record the returned `configuration_sha256`, `warnings`, and `summary`.
-3. Show the owner the validate summary and warnings next to the plan and ask
-   for explicit approval of exactly this configuration.
+3. Show one concise summary of actual changes and actionable warnings and ask
+   for explicit approval of exactly this configuration. Keep fingerprints,
+   request paths, JSON and rollback IDs in artifacts unless the owner asks.
+   Validate checks the schema and rules, not the truth of business claims.
+   After approval, continue apply → provider test when needed → verify →
+   disconnect without another routine confirmation. Go-live is still separate.
+   On an expired connection, follow the resume rules in
+   `contracts/owner-experience.md`; authorization does not need repeating for
+   the same unchanged, revalidated proposal.
 4. On approval, add to the same envelope file:
 
    ```json

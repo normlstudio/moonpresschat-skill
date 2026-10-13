@@ -1,0 +1,12 @@
+{
+  "name": "moonpresschat",
+  "metadata": { "description": "MoonPress Chat setup for local coding agents." },
+  "owner": { "name": "Norml Studio" },
+  "plugins": [
+    {
+      "name": "moonpresschat",
+      "source": "./",
+      "description": "Safely research, configure, and verify MoonPress Chat on WordPress."
+    }
+  ]
+}

@@ -66,8 +66,8 @@
 - Provider:
 - Model:
 - Provider key entered in WordPress: `not-checked`
-- Free-core site language:
-- Multi-language premium decision: `not-requested`
+- Enabled reply languages:
+- Default reply language (must be enabled):
 
 ## Unresolved decisions
 

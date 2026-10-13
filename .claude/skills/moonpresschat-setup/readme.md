@@ -16,20 +16,63 @@ stores only non-secret setup artifacts.
 
 ## Install
 
-Install the public skill for your local agent:
+Paste this request in your local coding agent:
 
-Choose the runtime you use and run one command:
+```text
+Fetch and execute the appropriate instructions to set up MoonPress Chat from https://moonpresschat.com/agent-setup/prompt.md
+```
+
+The agent asks which WordPress website to configure, installs or reuses the
+skill, and continues the setup. If you already provided the site, it reuses it.
+You sign in through your browser and review one configuration; no plugin ZIP
+upload or installation-command selection is needed in this primary flow.
+Artifacts for another site do not become this site's configuration or approval.
+
+The source is versioned in `agent-setup/prompt.md` at the repository root.
+Chat/Cowork direct you to local Code/CLI before contacting the website.
+
+### Advanced installation
+
+The commands below use the official released main channel. Do not use an
+acceptance repository or a development branch for customer installation.
+
+Install from the MoonPress Chat marketplace in a local Code session:
 
 ```bash
 # Claude Code
-npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a claude-code
+claude plugin marketplace add normlstudio/moonpresschat-skill
+claude plugin install moonpresschat@moonpresschat
 
 # Codex
-npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a codex
-
-# Gemini CLI
-npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a gemini-cli
+codex plugin marketplace add normlstudio/moonpresschat-skill
+codex plugin add moonpresschat@moonpresschat
 ```
+
+In the Claude desktop app, open **Customize → Plugins → Add marketplace**,
+add `normlstudio/moonpresschat-skill`, install **MoonPress Chat setup**, and
+run it in the **Code** tab with a local folder. Chat and Cowork are unsupported:
+stop before contacting or changing the site and ask the owner to open Code.
+Desktop labels need verification against the owner's app version.
+
+The Skills CLI remains available (Node.js 22.20 or newer):
+
+```bash
+npx --yes skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -a claude-code --yes
+npx --yes skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -a codex --yes
+npx --yes skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -a gemini-cli --yes
+```
+
+These fresh installs use the current local workspace. Existing global Skills
+CLI installations remain supported; add `-g` to preserve that scope on update.
+To switch a global installation to Marketplace, remove only this skill with
+`npx skills@latest remove moonpresschat-setup -g -a claude-code` (or `-a codex`)
+before installing the Marketplace plugin; avoid loading both copies.
+
+After updating through Skills CLI, check the version in the client you use.
+If it still shows the old version, repeat the scoped install command above for
+that same client. Keep the original global/project scope; do not remove other
+skills. This avoids a verified CLI edge case where an update from another
+agent refreshes the shared copy but leaves the target client's copy unchanged.
 
 The current open `skills` installer requires Node.js 22.20 or newer. If it
 reports an engine-version error, update Node through your normal developer
@@ -58,6 +101,12 @@ Application Password, or secret URL in the command or conversation.
 
 ## A typical run
 
+You approve temporary WordPress access, answer only the business questions the
+site cannot resolve, and review one corrected configuration. The agent handles
+validation, applying your approved changes, verification and disconnecting.
+Public launch is a separate decision. Technical identifiers stay in the report.
+
+
 1. It confirms authority, environment, official installation, compatibility,
    backup/reset, rollback, and public visibility in `moonpresschat-setup/preflight.md`.
 2. The skill reads public pages and writes cited findings to
@@ -71,7 +120,7 @@ Application Password, or secret URL in the command or conversation.
 6. It records passed, failed, and blocked checks in `verification.md`, then asks
    separately before the public widget goes live.
 
-> **Public alpha:** version 0.5.0 ships both paths. The API path is the
+> **Public alpha:** version 0.7.0 includes both paths. The API path is the
 > default — MoonPress Chat's stable setup API (`moonpresschat/v1/setup`,
 > MoonPress Chat 5.0.0 or newer) plus the bundled macOS credential helper —
 > and the human-guided wp-admin path remains the documented fallback for
@@ -97,11 +146,36 @@ The workflow has six visible stages:
    handoff, lead, appearance, language, and launch settings.
 6. **Verify** — checks authority, data, behavior, privacy, and launch gates.
 
-Version 0.5.0 runs all six stages through the shipped setup API by default
+Version 0.7.0 runs all six stages through the shipped setup API by default
 and through the human-operated wp-admin path as the fallback. It never
 pretends that an unavailable connection or capability exists: the path is
 chosen by the public compatibility gate, and every gap is recorded with its
 reason.
+
+### Distribution and updates
+
+Version 0.7.0 adds the MoonPress Chat marketplace for local Claude Code and
+Codex sessions. Chat and Cowork cannot run the helper; use the Code tab.
+
+On each run the helper checks the public compatibility response. A missing
+`setup_skill` key keeps the original gate. A skill below the site's `minimum`
+uses guided wp-admin; below `recommended` it shows the matching update action
+and continues. Malformed floors fail closed. No GitHub call is needed.
+
+The helper sends its version on authenticated setup requests and prints the
+first changelog bullet once after an update. It stores only the last version
+in `~/.moonpresschat-setup/last_seen_skill_version`.
+
+- Claude marketplace: restart the app or `/reload-plugins`; CLI users can
+  enable marketplace auto-update and run `/plugin marketplace update moonpresschat`.
+- Codex marketplace: `codex plugin marketplace upgrade moonpresschat`, then restart.
+- Skills CLI: `npx skills@latest update moonpresschat-setup -g`.
+
+Maintain releases with `scripts/set-version.sh X.Y.Z`; `plugin.json` is the
+version authority. Work happens on `develop` and feature branches; `main`
+contains releases only. Tag CI checks the main commit, version, package, and
+tests before publishing the committed ZIP and checksum. Repository branch
+protection and desktop install/update acceptance still need separate verification.
 
 ### Inputs
 
@@ -120,7 +194,7 @@ Collected during setup:
 - handoff and lead-routing rules;
 - tone, disclosure, consent, and launch authority;
 - provider and model choice, excluding the provider key;
-- one free-core site language.
+- enabled reply languages and their default (multiple languages work in the free core).
 
 Optional inputs include a staging URL, existing support or policy documents,
 and prior setup artifacts.
@@ -195,7 +269,7 @@ Questions arrive in short batches and cover:
 - voice, terminology, and prohibited wording;
 - disclosure, consent, and legal-review status;
 - provider and model choice;
-- free-core site language;
+- enabled reply languages and default;
 - production-write and go-live approvers.
 
 The skill marks an unanswered decision `unresolved`; it does not manufacture an
@@ -347,4 +421,4 @@ appearance) remain human-observed on both paths.
 
 ---
 
-_Covers SKILL.md v0.5.0 | Last changelog entry: v0.5.0 | Generated: 2026-09-02._
+_Covers SKILL.md v0.7.0 | Last changelog entry: v0.7.0 | Generated: Oct 13, 2026._

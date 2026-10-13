@@ -1,0 +1,25 @@
+name: Validate package
+on:
+  pull_request:
+  push:
+    branches: [develop]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.20.0'
+      - run: bash scripts/validate-package.sh
+      - run: node --test tests/*.test.mjs
+      - name: Validate release-only main promotion
+        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        env:
+          SOURCE_REF: ${{ github.head_ref }}
+          TARGET_REF: ${{ github.base_ref }}
+        run: node scripts/check-release.mjs origin/main HEAD "$SOURCE_REF" "$TARGET_REF"

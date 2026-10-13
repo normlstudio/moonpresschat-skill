@@ -1,6 +1,6 @@
 {
   "skill": "moonpresschat-setup",
-  "version": "0.5.0",
+  "version": "0.7.0",
   "repo": "moonpresschat-skill",
   "audience": "WordPress site owners and developers",
   "actsOn": "MoonPress Chat setup",
@@ -14,8 +14,8 @@
   ],
   "flow": [
     {
-      "t": "Preflight",
-      "d": "Confirm authority, official installation, compatibility, and recovery."
+      "t": "Website & preflight",
+      "d": "Ask for the WordPress URL, then confirm authority, installation, compatibility and recovery."
     },
     {
       "t": "Research",
@@ -23,7 +23,7 @@
     },
     {
       "t": "Questions",
-      "d": "Collect only owner decisions the site cannot answer."
+      "d": "Reuse site facts and prior answers; ask only unresolved owner decisions."
     },
     {
       "t": "Connect",
@@ -31,14 +31,15 @@
     },
     {
       "t": "Configure",
-      "d": "Validate, approve, and apply one non-secret envelope through the setup API."
+      "d": "Review one corrected proposal; approve once, then apply and verify."
     },
     {
       "t": "Verify",
-      "d": "Expose passes, failures, and blockers before launch."
+      "d": "Report results briefly and disconnect; public launch needs separate approval."
     }
   ],
   "commands": [
+    "Fetch and execute the appropriate instructions to set up MoonPress Chat from https://moonpresschat.com/agent-setup/prompt.md",
     "Set up MoonPress Chat on my WordPress site",
     "Research my site before configuring MoonPress Chat",
     "Help me plan the MoonPress Chat knowledge base",
@@ -46,15 +47,21 @@
     "Review whether MoonPress Chat is ready to go live",
     "Resume my MoonPress Chat setup"
   ],
-  "install": "npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a codex",
-  "installNote": "Requires Node.js 22.20 or newer. Replace codex with claude-code or gemini-cli for that runtime.",
+  "install": "Fetch and execute the appropriate instructions to set up MoonPress Chat from https://moonpresschat.com/agent-setup/prompt.md",
+  "installNote": "Paste this into your local coding agent; it asks for your website and installs the skill. Chat/Cowork direct you to local Code first.",
   "callout": {
     "label": "Public alpha",
-    "text": "Version 0.5.0 ships both paths. **The API path is the default** — MoonPress Chat's stable setup API (MoonPress Chat 5.0.0 or newer) plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, plugins older than 5.0.0, or unsupported credential backends."
+    "text": "Version 0.7.0 is a public alpha with both paths. **The API path is the default** — MoonPress Chat's stable setup API (MoonPress Chat 5.0.0 or newer) plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, plugins older than 5.0.0, or unsupported credential backends."
   },
   "capabilities": {
-    "label": "What works in 0.5.0",
+    "label": "What works in 0.7.0",
     "items": [
+      {
+        "name": "Public URL entry",
+        "tag": "available",
+        "ok": true,
+        "desc": "One starting request; the agent asks for your WordPress website and chooses the local install route."
+      },
       {
         "name": "Cold-start preflight",
         "tag": "ready",
@@ -96,6 +103,12 @@
         "tag": "blocked",
         "ok": false,
         "desc": "The helper is macOS-only in this release; other platforms route to the guided path."
+      },
+      {
+        "name": "Version-aware preflight",
+        "tag": "ready",
+        "ok": true,
+        "desc": "Checks the site's skill minimum and recommendation, shows the matching update action, and uses guided wp-admin when the API gate fails."
       }
     ]
   },
@@ -115,6 +128,10 @@
       {
         "path": "SKILL.md",
         "role": "Workflow router and security boundary"
+      },
+      {
+        "path": "contracts/bootstrap-entry.md",
+        "role": "Public URL entry, website selection and installation routing"
       },
       {
         "path": "actions/",
@@ -138,7 +155,7 @@
       }
     ]
   },
-  "covers": "0.5.0",
-  "generated": "2026-09-02",
+  "covers": "0.7.0",
+  "generated": "Oct 13, 2026",
   "hasHumanMd": true
 }

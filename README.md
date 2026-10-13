@@ -1,5 +1,7 @@
 # MoonPress Chat setup
 
+0.7.0 public alpha. Start with the instruction URL below; see the [scoped checks](.claude/skills/moonpresschat-setup/qa/distribution-acceptance.md).
+
 `moonpresschat-setup` safely installs, researches, configures, and verifies
 [MoonPress Chat](https://moonpresschat.com) on WordPress without exposing a
 WordPress password or AI-provider key to the agent.
@@ -12,18 +14,56 @@ control.
 
 ## Install
 
-Choose the agent you use and run one command:
+The intended customer entry is one request in a local coding agent:
+
+```text
+Fetch and execute the appropriate instructions to set up MoonPress Chat from https://moonpresschat.com/agent-setup/prompt.md
+```
+
+The agent asks for your WordPress website, installs or reuses the setup skill,
+and guides the setup. You do not need to put a site address into this starting
+request or upload a plugin ZIP. Sign in to WordPress in your browser and approve
+the proposed configuration when asked. Public activation is a separate decision.
+
+The [instruction source](agent-setup/prompt.md) is versioned with the package.
+Chat/Cowork route you to local Code/CLI before contacting the site.
+
+### Advanced installation
+
+The commands below use the official released main channel. Do not use an
+acceptance repository or a development branch for customer installation.
+
+Install from the MoonPress Chat marketplace in a local Code session:
 
 ```bash
 # Claude Code
-npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a claude-code
+claude plugin marketplace add normlstudio/moonpresschat-skill
+claude plugin install moonpresschat@moonpresschat
 
 # Codex
-npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a codex
-
-# Gemini CLI
-npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a gemini-cli
+codex plugin marketplace add normlstudio/moonpresschat-skill
+codex plugin add moonpresschat@moonpresschat
 ```
+
+In the Claude desktop app, open **Customize → Plugins → Add marketplace**,
+add `normlstudio/moonpresschat-skill`, install **MoonPress Chat setup**, and
+run it in the **Code** tab with a local folder. Chat and Cowork are unsupported:
+stop before contacting or changing the site and ask the owner to open Code.
+Desktop labels need verification against the owner's app version.
+
+The Skills CLI remains available (Node.js 22.20 or newer):
+
+```bash
+npx --yes skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -a claude-code --yes
+npx --yes skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -a codex --yes
+npx --yes skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -a gemini-cli --yes
+```
+
+These fresh installs use the current local workspace. Existing global Skills
+CLI installations remain supported; add `-g` to preserve that scope on update.
+To switch a global installation to Marketplace, remove only this skill with
+`npx skills@latest remove moonpresschat-setup -g -a claude-code` (or `-a codex`)
+before installing the Marketplace plugin; avoid loading both copies.
 
 Requires Node.js 22.20 or newer. Then start a new agent turn with:
 
@@ -61,7 +101,7 @@ Read the [human guide](.claude/skills/moonpresschat-setup/readme.md),
 - The free core and AI-provider usage are separate: the site owner pays the
   selected provider directly.
 
-Version 0.5.0 is a public alpha built for MoonPress Chat 5.0.0 or newer (skill
+Version 0.7.0 is a public alpha built for MoonPress Chat 5.0.0 or newer (skill
 0.4.0 pairs with plugin 4.8.0 and older, which speak a different REST
 namespace; mismatched pairs fall back to the guided path). The helper
 currently stores credentials only in macOS Keychain; Windows and Linux use the

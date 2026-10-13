@@ -59,10 +59,13 @@ reason: multisite | plugin-predates-api | owner-declined-helper | credential-bac
    origin, user login, connected-at, policy, smoke result. Never the
    credential — the helper never prints it.
 
-Warn the operator up front: the connection has a **two-hour hard lifetime**
-(measured from credential creation — the whole run must finish inside it) and
-a **30-minute idle timeout**. A mid-flow 401 means the connection expired or
-was revoked; re-read compatibility and run `connect` again.
+Record the **two-hour hard lifetime** and **30-minute idle timeout** in the
+artifacts. Tell the owner once: “Approve temporary access in WordPress; I will
+continue automatically.” Explain expiry only if it occurs. Reuse a working
+connection; do not run connect at each stage or send keep-alives to avoid
+expiry. On 401, re-read compatibility, reconnect with human consent, then
+re-read status and validate the saved proposal before resuming; see
+`contracts/owner-experience.md`.
 
 ## Transcript boundary
 

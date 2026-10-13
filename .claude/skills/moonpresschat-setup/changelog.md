@@ -1,5 +1,60 @@
 # Changelog
 
+## 0.7.0 — Oct 13, 2026
+
+- Added a public URL bootstrap: the owner pastes one request, and the agent
+  asks for the WordPress website before installation or site requests
+- Kept the public entry free of a required website argument and local fixture
+  defaults; reuse a supplied URL without repeating the question
+- Route local Claude Code, Codex and Gemini CLI through the existing official
+  installation channels; read verified installed files in the same turn when
+  the current skill registry is stale
+- Preserve installation scope and existing customer decisions; never select a
+  customer from old test artifacts or reuse another site's knowledge or approval
+- Route Chat/Cowork to local Code from the public prompt before website requests;
+  no account-plugin upload is required to explain the supported path
+- Keep browser consent, exact apply approval, disconnect and separate go-live
+  approval; honor plan-only requests before installation or site requests
+- Add the bootstrap source to package validation and version stamping, and
+  reconcile the owner-facing installation guides
+- Keep compatibility test floors relative to the installed version so version
+  bumps still exercise refusal before credential access
+- Published entry routes local agents through the official main channel;
+  package/API checks do not establish client model answers or launch readiness
+- Author: Artur Tsitou
+
+## 0.6.0 — unreleased candidate (updated 2026-10-09)
+
+- Added Marketplace packaging and version-aware setup preflight.
+- Simplified owner interaction: reuse known decisions, prepare one corrected
+  proposal, request one apply approval, then verify and disconnect automatically.
+- Removed the outdated free-core one-language restriction from all instructions.
+- Review interview preview content, FAQ and topic subtitles for preset
+  contradictions before validation; schema success is not factual verification.
+- Reuse an installed compatible Node and resume unchanged approvals after
+  reauthorization; keep hashes and diagnostics in artifacts.
+- Recorded human Desktop ZIP installation and Code setup on plugin 5.9.1,
+  including browser consent, apply, verification and disconnect. The provider
+  and mail were fixtures; no real-provider or launch-readiness claim.
+- Corrected candidate install guidance: default main has no marketplace yet;
+  ZIP acceptance does not prove marketplace installation or restart updates.
+- Added Claude Code/Codex marketplace manifests, retained the Skills CLI channel,
+  and documented migration without duplicate installations.
+- Added minimum/recommended checks, numeric semver, guided fallback, optional
+  client-version headers, Node prerequisite checks, and a once-per-update notice.
+- Added one version authority, version stamping, package/contract tests, and
+  tagged-release CI for exact committed ZIPs and checksums.
+- Verified actual CLI compatibility gates before authentication, symlink entry,
+  custom runtime-home update channels, and all active version stamps; 13 tests.
+- Added a release promotion guard requiring develop and an increased version.
+- Verified actual Codex/Claude CLI install, upstream update and recovery against
+  an isolated HTTP Git remote; development-only changes stay off the installed channel.
+- Protected release-only main with required PR/validate checks and admin enforcement.
+- Recorded local Code execution only; Chat/Cowork stop before any site action.
+- Added development/scratch isolation checks for Skills CLI and documented
+  explicit-target reinstall recovery for stale Claude copies after cross-agent updates.
+- Author: Artur Tsitou. Desktop update acceptance and release publication remain pending.
+
 ## 0.5.0 — 2026-09-02
 
 - Moved the API path to the MoonPress Chat 5.0.0 contract. The plugin renamed

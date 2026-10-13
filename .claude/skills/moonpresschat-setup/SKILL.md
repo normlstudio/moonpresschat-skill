@@ -9,7 +9,7 @@ description: >
   MoonPress Chat without exposing WordPress passwords or AI-provider keys to the
   agent.
 metadata:
-  version: "0.5.0"
+  version: "0.7.0"
   author: "Norml Studio"
 ---
 
@@ -38,8 +38,13 @@ production change explicit and reviewable.
 
 ## Current release state
 
-Version 0.5.0 is a public alpha with two complete setup paths. It speaks
+Version 0.7.0 is a public alpha with two setup paths. It speaks
 the MoonPress Chat 5.0.0 contract; see the compatibility note below.
+
+The public instruction URL and the released main package are the primary
+installation entry. See `qa/distribution-acceptance.md` for scoped evidence.
+Desktop automatic updates, real-provider answers and customer launch readiness
+must not be inferred from package validation or the offline acceptance fixture.
 
 - The **API path is the default**: MoonPress Chat ships its stable public setup API
   (`moonpresschat/v1/setup`, API version 1.0, MoonPress Chat 5.0.0+), and this skill ships
@@ -72,6 +77,13 @@ the MoonPress Chat 5.0.0 contract; see the compatibility note below.
   operation exists in the shipped setup API; never present one as available.
 
 ## Inputs
+
+If the request does not include a website, first ask in the owner's language:
+"Which WordPress website should I set up MoonPress Chat on? Send its public URL."
+Wait for the answer before installation or site requests. Reuse an explicitly
+supplied site; never choose the current project's site or a local acceptance
+fixture automatically. Existing setup artifacts can be resumed only when their
+origin matches the owner's chosen site. See `contracts/bootstrap-entry.md`.
 
 Required:
 
@@ -112,24 +124,60 @@ key into these files.
 
 ## Start from the MoonPress Chat onboarding page
 
-The plugin's Setup page may link to this public repository. If the skill is not
-installed, ask the human to run this in their own terminal:
+The primary entry is a public instruction URL. The owner can paste this request
+without editing a website argument:
 
-Install only this skill for the agent the human uses:
-
-```bash
-npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a claude-code
-npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a codex
-npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a gemini-cli
+```text
+Fetch and execute the appropriate instructions to set up MoonPress Chat from https://moonpresschat.com/agent-setup/prompt.md
 ```
 
-Run one command, not all three. Replace the final agent id only when the open
-`skills` CLI names a different supported runtime.
+The agent asks for the website when missing, installs or reuses this skill for
+its local runtime, reads the installed instructions, and continues setup.
+The source lives in `agent-setup/prompt.md` at the repository root; publication
+and behavior acceptance are tracked in `contracts/bootstrap-entry.md`.
+The website serves the released source as plain text.
+
+### Advanced installation
+
+The commands below use the official released main channel. Do not give a
+`#branch` URL or an acceptance repository as a customer installation method.
+
+Install from the MoonPress Chat marketplace in a local Code session:
+
+```bash
+# Claude Code
+claude plugin marketplace add normlstudio/moonpresschat-skill
+claude plugin install moonpresschat@moonpresschat
+
+# Codex
+codex plugin marketplace add normlstudio/moonpresschat-skill
+codex plugin add moonpresschat@moonpresschat
+```
+
+In the Claude desktop app, open **Customize → Plugins → Add marketplace**,
+add `normlstudio/moonpresschat-skill`, install **MoonPress Chat setup**, and
+run it in the **Code** tab with a local folder. Chat and Cowork are unsupported:
+stop before contacting or changing the site and ask the owner to open Code.
+Desktop labels need verification against the owner's app version.
+
+The Skills CLI remains available (Node.js 22.20 or newer):
+
+```bash
+npx --yes skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -a claude-code --yes
+npx --yes skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -a codex --yes
+npx --yes skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -a gemini-cli --yes
+```
+
+These fresh installs use the current local workspace. Existing global Skills
+CLI installations remain supported; add `-g` to preserve that scope on update.
+To switch a global installation to Marketplace, remove only this skill with
+`npx skills@latest remove moonpresschat-setup -g -a claude-code` (or `-a codex`)
+before installing the Marketplace plugin; avoid loading both copies.
 
 The current open `skills` installer requires Node.js 22.20 or newer. If the
-command reports an engine-version error, stop and ask the human to update Node
-through their normal developer-tooling process; do not install or replace their
-runtime without approval.
+command reports an engine-version error, first check for an already installed
+compatible Node and use its explicit path. Ask about installation only if none
+is available; do not install a runtime or change their default without approval.
 
 Then ask them to start a new agent turn with:
 
@@ -148,6 +196,7 @@ ESM script with zero npm dependencies, and it is the only component that ever
 touches the WordPress Application Password.
 
 ```bash
+node helper/moonpresschat-setup-helper.mjs preflight https://example.com   # public, no credentials
 node helper/moonpresschat-setup-helper.mjs connect https://example.com
 node helper/moonpresschat-setup-helper.mjs status https://example.com
 node helper/moonpresschat-setup-helper.mjs call https://example.com POST /setup/validate --body moonpresschat-setup/configuration-envelope.json
@@ -165,15 +214,31 @@ node helper/moonpresschat-setup-helper.mjs disconnect https://example.com
 - Exit codes: 0 success (HTTP 2xx), 1 HTTP/contract failure, 2 usage or
   platform error.
 
+## Owner interaction
+
+Read `contracts/owner-experience.md` before starting. Reuse decisions already
+given, ask only unresolved business questions, and show one corrected proposal
+for one explicit apply approval. Keep API identifiers and diagnostics in the
+artifacts. Browser consent and separate go-live authorization remain required.
+
 ## Workflow
 
 ### 0. Preflight and installation
 
-Read `actions/preflight.md` and `contracts/installation-and-rollback.md`.
+Read `actions/preflight.md`, `contracts/distribution-and-updates.md`, and
+`contracts/installation-and-rollback.md`.
 
-Before researching or changing WordPress, explicitly confirm management
-authority, canonical origin, artifact folder, target environment, backup state,
-and whether MoonPress Chat is installed and active. When the site is reachable, the
+First confirm this is a local Code/CLI session; Chat and Cowork are unsupported.
+If unsupported, state that a local Code session is required and stop before contacting the site.
+Run the helper `preflight <origin>` before connecting on every run. If it reports
+`api_allowed: false`, use guided wp-admin and record its reason. A below-minimum
+skill must never use the API path; a recommendation notice does not block it.
+
+Before researching or changing WordPress, establish management authority,
+canonical origin, artifact folder, target environment, backup state, and whether
+MoonPress Chat is installed and active. Reuse explicit instructions from this
+session and inspect non-secret state; ask only for missing information.
+When the site is reachable, the
 public `GET /setup/compatibility` endpoint answers the plugin version,
 availability, and capability questions without asking the human. The guided
 path's screen-by-screen guidance is verified against MoonPress Chat 3.11.0; the API
@@ -219,8 +284,8 @@ through `node helper/moonpresschat-setup-helper.mjs connect <origin>`: the syste
 browser opens WordPress core's Application Password consent screen, the owner
 signs in and approves, and the helper stores the credential in the macOS
 Keychain before printing a redacted summary. Record `connection: api` plus the
-advertised connection policy, and warn the owner that the whole run has a
-two-hour hard ceiling and a 30-minute idle timeout.
+advertised connection policy in the artifacts. Explain temporary access once;
+show timeout details only when they affect the owner’s next action.
 
 Otherwise record `connection: guided-manual` with an explicit `reason`
 (`multisite`, `plugin-predates-api`, `owner-declined-helper`, or
@@ -235,17 +300,18 @@ Read `actions/configure.md`, `contracts/current-api-contract.md`,
 `templates/configuration-plan.md`.
 
 Map the approved research and owner answers to MoonPress Chat settings, knowledge,
-consent, handoff, provider choice, appearance, and launch gates, then show the
-reviewed plan and ask for explicit approval.
+consent, handoff, provider choice, appearance, and launch gates. Validate the
+completed proposal before requesting the single explicit apply approval.
 
 On the API path: build the configuration envelope from the approved plan,
-`call POST /setup/validate`, show the returned summary and warnings, and only
+`call POST /setup/validate`, summarize actual changes and actionable warnings, and only
 after the owner's explicit approval `call POST /setup/apply` with
 `approval.confirmed: true` and `approval.artifact_sha256` equal to the
 `configuration_sha256` the validate response returned. When the `interview`
 capability is advertised, run the interview stage first: GET the questions,
-ask the owner in chat, PUT the answers, GET the preview, and fold the
-preview's envelope into the configuration envelope. Apply never changes
+reuse sourced facts and approved answers, ask only unresolved questions, PUT
+the answers, GET the preview, and review the complete envelope for conflicting
+preset text before validation. Apply never changes
 visibility.
 
 The provider key is entered by the human — through the helper's `provider`
