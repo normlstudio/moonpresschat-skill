@@ -20,8 +20,8 @@ a runtime or change the system default without authorization.
 
 If no website was explicitly selected, first ask in the owner's language for
 the public WordPress URL and wait. Do not use the current folder or old setup
-artifacts to choose a customer site. Resolve a bare domain by confirming its
-HTTPS address. If the owner already gave the URL, reuse it. See
+artifacts to choose a customer site. Use HTTPS for a bare domain without asking
+for the same address again; clarify only an ambiguous target. Reuse a supplied URL. See
 `contracts/bootstrap-entry.md` for the public URL entry and same-turn install.
 
 Resolve and record these four items from the request and existing context first.

@@ -28,8 +28,8 @@ Preparing this source does not publish the URL or promote the release.
 - The user's supplied website is required; never default to a local fixture,
   the MoonPress Chat documentation site, or a saved artifact's origin
 - Reuse a website explicitly selected in the conversation; do not ask twice
-- A bare domain needs confirmation of the proposed HTTPS address; keep an
-  explicitly selected WordPress subdirectory
+- A bare domain uses HTTPS without another address question; clarify only an
+  ambiguous target and keep an explicitly selected WordPress subdirectory
 - Existing artifacts may be resumed only when they belong to that chosen site
 - A plan-only request stops before installation or site requests
 - Existing authority and business decisions remain reusable only for their

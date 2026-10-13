@@ -48,19 +48,19 @@
     "Resume my MoonPress Chat setup"
   ],
   "install": "Fetch and execute the appropriate instructions to set up MoonPress Chat from https://moonpresschat.com/agent-setup/prompt.md",
-  "installNote": "Publication pending. After release, paste this into your local coding agent; it asks for your website and installs the skill. Chat/Cowork direct you to local Code first.",
+  "installNote": "Paste this into your local coding agent; it asks for your website and installs the skill. Chat/Cowork direct you to local Code first.",
   "callout": {
     "label": "Public alpha",
-    "text": "Version 0.7.0 is an unreleased candidate with both paths. **The API path is the default** — MoonPress Chat's stable setup API (MoonPress Chat 5.0.0 or newer) plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, plugins older than 5.0.0, or unsupported credential backends."
+    "text": "Version 0.7.0 is a public alpha with both paths. **The API path is the default** — MoonPress Chat's stable setup API (MoonPress Chat 5.0.0 or newer) plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, plugins older than 5.0.0, or unsupported credential backends."
   },
   "capabilities": {
     "label": "What works in 0.7.0",
     "items": [
       {
         "name": "Public URL entry",
-        "tag": "candidate",
-        "ok": false,
-        "desc": "One starting request; the agent asks for the website and chooses a local install route. Public delivery and agent behavior acceptance are pending."
+        "tag": "available",
+        "ok": true,
+        "desc": "One starting request; the agent asks for your WordPress website and chooses the local install route."
       },
       {
         "name": "Cold-start preflight",
@@ -156,6 +156,6 @@
     ]
   },
   "covers": "0.7.0",
-  "generated": "Oct 12, 2026",
+  "generated": "Oct 13, 2026",
   "hasHumanMd": true
 }

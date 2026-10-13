@@ -28,17 +28,13 @@ You sign in through your browser and review one configuration; no plugin ZIP
 upload or installation-command selection is needed in this primary flow.
 Artifacts for another site do not become this site's configuration or approval.
 
-**Publication pending:** the source is prepared in `agent-setup/prompt.md` at
-the repository root. Verify the public URL and released installation before
-using it with customers. Chat/Cowork direct you to local Code/CLI first.
+The source is versioned in `agent-setup/prompt.md` at the repository root.
+Chat/Cowork direct you to local Code/CLI before contacting the website.
 
 ### Advanced installation
 
-Candidate note: the default `main` branch does not contain the marketplace
-manifest yet. The commands below describe the release channel and cannot
-install this candidate until release promotion. Desktop ZIP upload has been
-verified for candidate testing; it does not establish marketplace updates.
-Do not give a `#branch` URL as a verified Desktop installation method.
+The commands below use the official released main channel. Do not use an
+acceptance repository or a development branch for customer installation.
 
 Install from the MoonPress Chat marketplace in a local Code session:
 
@@ -61,13 +57,14 @@ Desktop labels need verification against the owner's app version.
 The Skills CLI remains available (Node.js 22.20 or newer):
 
 ```bash
-npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a claude-code
-npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a codex
-npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a gemini-cli
+npx --yes skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -a claude-code --yes
+npx --yes skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -a codex --yes
+npx --yes skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -a gemini-cli --yes
 ```
 
-Choose the commands for your runtime. Existing Skills CLI installations remain
-supported. To switch to Marketplace, remove only this skill with
+These fresh installs use the current local workspace. Existing global Skills
+CLI installations remain supported; add `-g` to preserve that scope on update.
+To switch a global installation to Marketplace, remove only this skill with
 `npx skills@latest remove moonpresschat-setup -g -a claude-code` (or `-a codex`)
 before installing the Marketplace plugin; avoid loading both copies.
 
@@ -123,7 +120,7 @@ Public launch is a separate decision. Technical identifiers stay in the report.
 6. It records passed, failed, and blocked checks in `verification.md`, then asks
    separately before the public widget goes live.
 
-> **Public alpha candidate:** version 0.7.0 includes both paths. The API path is the
+> **Public alpha:** version 0.7.0 includes both paths. The API path is the
 > default — MoonPress Chat's stable setup API (`moonpresschat/v1/setup`,
 > MoonPress Chat 5.0.0 or newer) plus the bundled macOS credential helper —
 > and the human-guided wp-admin path remains the documented fallback for
@@ -424,4 +421,4 @@ appearance) remain human-observed on both paths.
 
 ---
 
-_Covers SKILL.md v0.7.0 | Last changelog entry: v0.7.0 | Generated: Oct 12, 2026._
+_Covers SKILL.md v0.7.0 | Last changelog entry: v0.7.0 | Generated: Oct 13, 2026._

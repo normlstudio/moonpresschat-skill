@@ -38,11 +38,13 @@ production change explicit and reviewable.
 
 ## Current release state
 
-Version 0.7.0 is a public alpha release candidate with two setup paths. It speaks
+Version 0.7.0 is a public alpha with two setup paths. It speaks
 the MoonPress Chat 5.0.0 contract; see the compatibility note below.
 
-Marketplace publication and independent desktop acceptance are pending;
-see `qa/distribution-acceptance.md`. Do not claim this candidate is released.
+The public instruction URL and the released main package are the primary
+installation entry. See `qa/distribution-acceptance.md` for scoped evidence.
+Desktop automatic updates, real-provider answers and customer launch readiness
+must not be inferred from package validation or the offline acceptance fixture.
 
 - The **API path is the default**: MoonPress Chat ships its stable public setup API
   (`moonpresschat/v1/setup`, API version 1.0, MoonPress Chat 5.0.0+), and this skill ships
@@ -133,15 +135,12 @@ The agent asks for the website when missing, installs or reuses this skill for
 its local runtime, reads the installed instructions, and continues setup.
 The source lives in `agent-setup/prompt.md` at the repository root; publication
 and behavior acceptance are tracked in `contracts/bootstrap-entry.md`.
-The URL is not live merely because the source file exists in this candidate.
+The website serves the released source as plain text.
 
 ### Advanced installation
 
-Candidate note: the default `main` branch does not contain the marketplace
-manifest yet. The commands below describe the release channel and cannot
-install this candidate until release promotion. Desktop ZIP upload has been
-verified for candidate testing; it does not establish marketplace updates.
-Do not give a `#branch` URL as a verified Desktop installation method.
+The commands below use the official released main channel. Do not give a
+`#branch` URL or an acceptance repository as a customer installation method.
 
 Install from the MoonPress Chat marketplace in a local Code session:
 
@@ -164,13 +163,14 @@ Desktop labels need verification against the owner's app version.
 The Skills CLI remains available (Node.js 22.20 or newer):
 
 ```bash
-npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a claude-code
-npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a codex
-npx skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -g -a gemini-cli
+npx --yes skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -a claude-code --yes
+npx --yes skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -a codex --yes
+npx --yes skills@latest add normlstudio/moonpresschat-skill --skill=moonpresschat-setup -a gemini-cli --yes
 ```
 
-Choose the commands for your runtime. Existing Skills CLI installations remain
-supported. To switch to Marketplace, remove only this skill with
+These fresh installs use the current local workspace. Existing global Skills
+CLI installations remain supported; add `-g` to preserve that scope on update.
+To switch a global installation to Marketplace, remove only this skill with
 `npx skills@latest remove moonpresschat-setup -g -a claude-code` (or `-a codex`)
 before installing the Marketplace plugin; avoid loading both copies.
 

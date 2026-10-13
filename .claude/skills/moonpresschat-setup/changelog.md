@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.7.0 — unreleased candidate (Oct 12, 2026)
+## 0.7.0 — Oct 13, 2026
 
 - Added a public URL bootstrap: the owner pastes one request, and the agent
   asks for the WordPress website before installation or site requests
@@ -19,8 +19,8 @@
   reconcile the owner-facing installation guides
 - Keep compatibility test floors relative to the installed version so version
   bumps still exercise refusal before credential access
-- Publication of the public URL, fresh published-channel bootstrap and observed
-  no-site/selected-site agent behavior remain pending
+- Published entry routes local agents through the official main channel;
+  package/API checks do not establish client model answers or launch readiness
 - Author: Artur Tsitou
 
 ## 0.6.0 — unreleased candidate (updated 2026-10-09)

@@ -8,6 +8,7 @@ required=(
   "$repo_root/README.md"
   "$repo_root/LICENSE"
   "$repo_root/agent-setup/prompt.md"
+  "$repo_root/agent-setup/.htaccess"
   "$repo_root/.claude-plugin/plugin.json"
   "$repo_root/.claude-plugin/marketplace.json"
   "$repo_root/scripts/version.mjs"

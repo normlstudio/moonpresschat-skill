@@ -1,6 +1,6 @@
 # Set up MoonPress Chat
 
-Version 0.7.0 release candidate. These are the MoonPress Chat instructions for
+Version 0.7.0. These are the official MoonPress Chat instructions for
 helping a website owner install the setup skill and configure their WordPress
 chatbot. Read this file as instructions; do not execute the Markdown as a shell
 script. The canonical publication URL is
@@ -27,8 +27,9 @@ example. A local acceptance site is used only when the owner explicitly selects
 it; it is never the default for a customer.
 
 Accept a public HTTP(S) website address, not a password, token, reset link,
-WordPress login link, or API endpoint. For a bare domain, propose its HTTPS
-address and confirm it. Preserve an explicitly supplied WordPress subdirectory.
+WordPress login link, or API endpoint. For a bare domain, use its HTTPS address;
+do not ask the owner to type it again. Ask only if the target is ambiguous.
+Preserve an explicitly supplied WordPress subdirectory.
 Do not copy userinfo, secret query parameters, or fragments into setup artifacts.
 Pass the confirmed URL as one literal argument to tools, never as shell code.
 
@@ -51,7 +52,13 @@ WordPress access. Installing a local Code plugin does not enable it in Cowork.
 Do the installation yourself. Reuse an existing verified `moonpresschat-setup`
 installation for the current agent when available. Do not install a second
 copy, change its project/global scope, or remove unrelated skills and plugins.
-Keep the current installation scope when updating an older copy.
+Keep the current installation scope when updating an older copy. If the
+installed skill is older than the version at the top of this prompt, refresh
+its own channel before reading it: Claude Code uses `claude plugin marketplace
+update moonpresschat` then `claude plugin update moonpresschat@moonpresschat`;
+Codex uses `codex plugin marketplace upgrade moonpresschat`. For a Skills CLI
+installation, rerun its explicit-agent add command with its original scope.
+Verify the actual installed version after the update.
 
 For a fresh installation, use the appropriate commands below. Resolve CLI
 availability first. If a prerequisite is missing, explain what is missing;
@@ -89,19 +96,18 @@ files. Continue in this turn; do not depend on a stale session's skill list.
 ### Gemini CLI
 
 ```sh
-npx --yes skills@latest add normlstudio/moonpresschat-skill --skill moonpresschat-setup --global --agent gemini-cli --yes
+npx --yes skills@latest add normlstudio/moonpresschat-skill --skill moonpresschat-setup --agent gemini-cli --yes
 ```
 
 Verify the installed path and version, then read `SKILL.md` and its linked files.
-For an existing project installation, preserve that scope instead of using
-`--global`. Do not claim this fresh-install route passed until it is verified
-for the published release.
+This fresh route installs into the current local workspace. For an existing
+global installation, preserve its scope by adding `--global` during an update.
 
 For another agent, stop and report that its installation route is not verified
 by these instructions. Do not invent CLI or MCP commands.
 
-Use only the official repository's released `main` channel. If it does not yet
-contain the required package, report that publication is pending and stop.
+Use only the official repository's released `main` channel. If the package
+cannot be installed or verified, explain the failure and stop.
 Never substitute an acceptance repository, development branch, or local ZIP
 without an explicit testing request from the owner.
 
