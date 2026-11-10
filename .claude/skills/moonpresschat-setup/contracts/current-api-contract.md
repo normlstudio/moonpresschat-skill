@@ -167,7 +167,7 @@ envelope shape:
     "provider":   { "id": "...", "model": "..." },
     "settings":   { "...": "see contracts/configuration-fields.md" },
     "knowledge":  { "fields": {}, "areas": [], "bank": {} },
-    "templates":  { "greet": "..." },
+    "templates":  { "greeting_line1": "Welcome", "greeting_line2": "How can we help?" },
     "appearance": { "...": "..." }
   },
   "approval": {
@@ -187,6 +187,12 @@ envelope shape:
   or already configured area.
 - No envelope ever contains `live`, a provider secret, a license, an arbitrary
   option/meta name, or an arbitrary HTTP target.
+- Greeting keys verified against the official 5.10.0 template registry are
+  `greeting_line1` (small opener), `greeting_line2` (main question), and
+  `greet_fallback` (greeting when AI is unreachable). `greet` is not registered
+  and must not be submitted. These fields do not configure a model-generated
+  greeting. Preserve omitted templates; do not treat the three keys as the
+  complete template registry.
 - The field-by-field mapping lives in `contracts/configuration-fields.md`.
 
 ### Validate → approve → apply

@@ -4,6 +4,10 @@
 
 Author: Iryna Melnyk. Unpublished candidate for issue #325.
 
+- Correct the greeting contract against official MoonPress Chat 5.10.0:
+  replace unsupported `templates.greet` with distinct `greeting_line1`,
+  `greeting_line2`, and `greet_fallback` mappings. Preserve other templates.
+
 - Add an explicitly gated WordPress bootstrap helper using a separate native
   Application Password, exact-plugin inventory/install/activation and own-UUID
   revocation. Secrets stay in Keychain and failed cleanup remains recoverable.
