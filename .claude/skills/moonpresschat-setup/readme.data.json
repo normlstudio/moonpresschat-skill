@@ -1,10 +1,10 @@
 {
   "skill": "moonpresschat-setup",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "repo": "moonpresschat-skill",
   "audience": "WordPress site owners and developers",
   "actsOn": "MoonPress Chat setup",
-  "badge": "public alpha",
+  "badge": "unpublished candidate",
   "pitch": "Safely install, research, plan, connect, configure, and verify MoonPress Chat without exposing credentials to the agent.",
   "pitchMark": "without exposing credentials",
   "problem": [
@@ -50,11 +50,11 @@
   "install": "Fetch and execute the appropriate instructions to set up MoonPress Chat from https://moonpresschat.com/agent-setup/prompt.md",
   "installNote": "Paste this into your local coding agent; it asks for your website and installs the skill. Chat/Cowork direct you to local Code first.",
   "callout": {
-    "label": "Public alpha",
-    "text": "Version 0.7.0 is a public alpha with both paths. **The API path is the default** — MoonPress Chat's stable setup API (MoonPress Chat 5.0.0 or newer) plus the bundled macOS credential helper — and the human-guided wp-admin path remains the fallback for multisite, plugins older than 5.0.0, or unsupported credential backends."
+    "label": "Unpublished candidate",
+    "text": "Version 0.8.0 adds a disabled-by-default experimental WordPress bootstrap. It installs absent plugins inactive and revokes its separate credential before existing restricted setup. Activation can restore retained visibility; real WordPress end-to-end acceptance is pending. The released wizard-only path remains available."
   },
   "capabilities": {
-    "label": "What works in 0.7.0",
+    "label": "What works in 0.8.0",
     "items": [
       {
         "name": "Public URL entry",
@@ -115,7 +115,7 @@
   "limits": {
     "label": "Safety boundaries",
     "items": [
-      "No WordPress passwords, Application Passwords, provider keys, or tokens in chat — the helper holds the temporary credential in the macOS Keychain.",
+      "No WordPress passwords, Application Passwords, provider keys, or tokens in chat \u2014 the helper holds the temporary credential in the macOS Keychain.",
       "No browser automation, SSH, XML-RPC, direct database writes, or internal admin routes; API calls stay inside moonpresschat/v1/setup.",
       "No arbitrary plugin package, no production change without backup and explicit approval, and go-live is a separate approval that revokes the connection."
     ]
@@ -155,7 +155,7 @@
       }
     ]
   },
-  "covers": "0.7.0",
+  "covers": "0.8.0",
   "generated": "Oct 13, 2026",
   "hasHumanMd": true
 }

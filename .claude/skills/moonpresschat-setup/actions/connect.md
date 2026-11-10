@@ -1,5 +1,14 @@
 # Action: connect WordPress safely
 
+## Resume after experimental installation
+
+If `contracts/wordpress-bootstrap.md` was explicitly used on an authorized local
+fixture, require `server_revoked: true`, no cleanup pending and an active plugin
+before this flow. Bootstrap authorization cannot be reused as setup authorization.
+Continue automatically to this helper's native consent, then inspect status and
+verify hidden state before any provider/widget test. Keep its `/setup/*` allowlist
+unchanged. This branch does not replace the ordinary wizard-only path.
+
 ## Choose the path
 
 Fetch the public `GET /setup/compatibility` endpoint (no authentication; try

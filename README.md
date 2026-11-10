@@ -1,6 +1,6 @@
 # MoonPress Chat setup
 
-0.7.0 public alpha. Start with the instruction URL below; see the [scoped checks](.claude/skills/moonpresschat-setup/qa/distribution-acceptance.md).
+0.8.0 release candidate. Start with the instruction URL below; see the [scoped checks](.claude/skills/moonpresschat-setup/qa/distribution-acceptance.md).
 
 `moonpresschat-setup` safely installs, researches, configures, and verifies
 [MoonPress Chat](https://moonpresschat.com) on WordPress without exposing a
@@ -101,7 +101,7 @@ Read the [human guide](.claude/skills/moonpresschat-setup/readme.md),
 - The free core and AI-provider usage are separate: the site owner pays the
   selected provider directly.
 
-Version 0.7.0 is a public alpha built for MoonPress Chat 5.0.0 or newer (skill
+Version 0.8.0 is a public alpha built for MoonPress Chat 5.0.0 or newer (skill
 0.4.0 pairs with plugin 4.8.0 and older, which speak a different REST
 namespace; mismatched pairs fall back to the guided path). The helper
 currently stores credentials only in macOS Keychain; Windows and Linux use the
@@ -110,3 +110,11 @@ guided path.
 ## License
 
 [MIT](LICENSE) © Norml Studio.
+
+## Unpublished bootstrap candidate
+
+This draft adds a disabled-by-default WordPress installation experiment. Read
+[the bootstrap contract](.claude/skills/moonpresschat-setup/contracts/wordpress-bootstrap.md).
+It installs absent plugins inactive and does not prove hidden state or automate
+unsafe activation. Existing released setup remains the default. No new version
+is published by this source change; independent WordPress acceptance remains.

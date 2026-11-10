@@ -9,7 +9,7 @@ description: >
   MoonPress Chat without exposing WordPress passwords or AI-provider keys to the
   agent.
 metadata:
-  version: "0.7.0"
+  version: "0.8.0"
   author: "Norml Studio"
 ---
 
@@ -38,7 +38,8 @@ production change explicit and reviewable.
 
 ## Current release state
 
-Version 0.7.0 is a public alpha with two setup paths. It speaks
+Version 0.8.0 is an unpublished candidate extending the public alpha with an
+experimental WordPress bootstrap; the two established setup paths remain. It speaks
 the MoonPress Chat 5.0.0 contract; see the compatibility note below.
 
 The public instruction URL and the released main package are the primary
@@ -75,6 +76,18 @@ must not be inferred from package validation or the offline acceptance fixture.
 - MoonPress Chat Pro and provider inference are separate purchases. Never imply that the
   $200/year Pro license includes AI usage. No Pro-activation or `/license/*`
   operation exists in the shipped setup API; never present one as available.
+
+## Experimental installation candidate
+
+Read `contracts/wordpress-bootstrap.md` only for explicitly authorized candidate
+work. Its separate helper installs an absent plugin inactive; automatic activation
+of unknown retained settings is not supported. Keep ordinary users on the existing
+released guided installation path until independent WordPress acceptance and
+publication. Do not enable the experimental gate merely because a user asks for
+normal setup. Current candidate testing is disposable-local only, never production.
+
+For page collection/default-200 decisions read `contracts/collection-default.md`;
+no new setup-envelope fields are supported.
 
 ## Inputs
 

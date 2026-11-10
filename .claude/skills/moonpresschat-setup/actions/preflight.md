@@ -59,7 +59,7 @@ inactive, or older than 5.0.0 — those releases register only the pre-5.0.0
 namespace `quipbot/v1`, so the URLs above answer 404), and the WordPress and
 PHP versions from **Tools → Site Health → Info**.
 
-Version 0.7.0 of this skill verifies the guided screen guidance against
+Version 0.8.0 of this skill verifies the guided screen guidance against
 MoonPress Chat 3.11.0 and the API contract against MoonPress Chat 5.0.0 (contract
 unchanged through 5.3.1); the API path requires 5.0.0 or newer. MoonPress Chat 5.0.0 renamed the plugin and
 every internal identifier; 4.8.0 and older (released as QuipBot) register only
@@ -81,6 +81,20 @@ WordPress 6.2 and PHP 7.4.
   `compatibility: blocked-guide-drift`.
 
 Never request an authenticated screenshot.
+
+## Experimental bootstrap branch
+
+For an explicitly requested candidate test, read
+`../contracts/wordpress-bootstrap.md`. Reuse the owner's site and decisions;
+never infer an installation from a compatibility 404. The gated helper may
+inventory and install an absent plugin inactive. Unknown saved visibility blocks
+automatic activation. After safe activation and confirmed bootstrap revocation,
+continue with the existing scoped setup connection and interview.
+
+This is not the default released path and is not production-accepted. The
+ordinary flow below remains supported. For page-limit choices also read
+`../contracts/collection-default.md`; preserve existing low limits and do not
+invent setup API fields.
 
 ## Human installation path
 

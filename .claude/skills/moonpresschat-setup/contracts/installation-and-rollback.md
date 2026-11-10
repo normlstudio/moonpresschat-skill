@@ -4,6 +4,15 @@ This is the cold-start safety contract. Installation and activation are
 human-operated on both paths; the API path adds an automated rollback for
 applied configuration (see "Automated rollback" below).
 
+## Candidate exception
+
+An unpublished experimental bootstrap can install an absent official-directory
+plugin **inactive** using owner-authorized core WordPress APIs; see
+`wordpress-bootstrap.md`. It is disabled by default and is not a production-ready
+replacement for the human sequence below. Activation cannot infer hidden state
+from a missing plugin: old options may remain. Rollback of configuration never
+uninstalls the plugin or removes client data.
+
 ## Verified distribution only
 
 An acceptable MoonPress Chat package comes from one of these surfaces:

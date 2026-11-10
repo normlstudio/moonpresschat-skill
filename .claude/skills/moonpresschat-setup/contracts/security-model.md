@@ -69,3 +69,13 @@ stream, share, or screenshot the authenticated session.
   credentials. The helper redacts stored secrets from all of its error output.
 - Redact emails unless they are necessary for the approved configuration.
 - Never include raw headers, cookies, reset links, secrets, or tokens.
+
+## Experimental WordPress installation credential
+
+The separately gated `wordpress-bootstrap.md` candidate uses a distinct
+Application Password and Keychain service for exact plugin inventory/install/
+activation and self-revocation. Core grants the approving user's capabilities;
+client-side route restrictions are not server-enforced scope or expiry. The
+helper installs inactive by default, never writes options, and retains cleanup
+state and credential on uncertain revocation. It must revoke before scoped setup
+consent. It does not relax the existing setup credential's namespace restriction.

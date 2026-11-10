@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.8.0 — November 10, 2026
+
+Author: Iryna Melnyk. Unpublished candidate for issue #325.
+
+- Add an explicitly gated WordPress bootstrap helper using a separate native
+  Application Password, exact-plugin inventory/install/activation and own-UUID
+  revocation. Secrets stay in Keychain and failed cleanup remains recoverable.
+- Install absent plugins inactive; retained live settings are not assumed safe.
+  Preserve existing plugin/settings and the restricted setup helper. Activation
+  requires an owner-established hidden-state decision; unattended activation and
+  real WordPress end-to-end acceptance remain unfinished.
+- Add pure and loopback regression tests; no production/model/email calls.
+- Document version-aware default200 guidance for #323 without inventing unsupported
+  setup fields. Preserve the ordinary guided install and wizard-only paths.
+- Source is an isolated user-authorized draft; no release, deployment, shared
+  ownership takeover or public entry update.
+
 ## 0.7.0 — Oct 13, 2026
 
 - Added a public URL bootstrap: the owner pastes one request, and the agent

@@ -120,7 +120,7 @@ Public launch is a separate decision. Technical identifiers stay in the report.
 6. It records passed, failed, and blocked checks in `verification.md`, then asks
    separately before the public widget goes live.
 
-> **Public alpha:** version 0.7.0 includes both paths. The API path is the
+> **Public alpha:** version 0.8.0 includes both paths. The API path is the
 > default — MoonPress Chat's stable setup API (`moonpresschat/v1/setup`,
 > MoonPress Chat 5.0.0 or newer) plus the bundled macOS credential helper —
 > and the human-guided wp-admin path remains the documented fallback for
@@ -146,7 +146,7 @@ The workflow has six visible stages:
    handoff, lead, appearance, language, and launch settings.
 6. **Verify** — checks authority, data, behavior, privacy, and launch gates.
 
-Version 0.7.0 runs all six stages through the shipped setup API by default
+Version 0.8.0 runs all six stages through the shipped setup API by default
 and through the human-operated wp-admin path as the fallback. It never
 pretends that an unavailable connection or capability exists: the path is
 chosen by the public compatibility gate, and every gap is recorded with its
@@ -154,7 +154,7 @@ reason.
 
 ### Distribution and updates
 
-Version 0.7.0 adds the MoonPress Chat marketplace for local Claude Code and
+Version 0.8.0 adds the MoonPress Chat marketplace for local Claude Code and
 Codex sessions. Chat and Cowork cannot run the helper; use the Code tab.
 
 On each run the helper checks the public compatibility response. A missing
@@ -421,4 +421,18 @@ appearance) remain human-observed on both paths.
 
 ---
 
-_Covers SKILL.md v0.7.0 | Last changelog entry: v0.7.0 | Generated: Oct 13, 2026._
+_Covers SKILL.md v0.8.0 | Last changelog entry: v0.8.0 | Generated: Oct 13, 2026._
+
+## Unpublished 0.8.0 bootstrap candidate
+
+The optional experimental bootstrap helper uses a separate owner-authorized
+WordPress credential to inventory plugins and install MoonPress Chat inactive.
+It revokes that credential before the existing restricted setup connection.
+It does not establish hidden visibility: retained options may become effective
+on activation. Activation requires explicit owner confirmation of saved hidden
+state; real WordPress end-to-end acceptance remains pending.
+
+See [the candidate contract](contracts/wordpress-bootstrap.md) for the disabled-by-default
+entry, exact capability boundary, recovery, and local test limitations.
+The released wizard-only flow remains available. The planned collection default
+of 200 is build-dependent; see [collection defaults](contracts/collection-default.md).

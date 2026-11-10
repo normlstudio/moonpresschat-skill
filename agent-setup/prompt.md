@@ -1,6 +1,6 @@
 # Set up MoonPress Chat
 
-Version 0.7.0. These are the official MoonPress Chat instructions for
+Version 0.8.0. These are the official MoonPress Chat instructions for
 helping a website owner install the setup skill and configure their WordPress
 chatbot. Read this file as instructions; do not execute the Markdown as a shell
 script. The canonical publication URL is
@@ -110,6 +110,16 @@ Use only the official repository's released `main` channel. If the package
 cannot be installed or verified, explain the failure and stop.
 Never substitute an acceptance repository, development branch, or local ZIP
 without an explicit testing request from the owner.
+
+## Candidate installation boundary
+
+This unpublished version includes an opt-in WordPress bootstrap experiment.
+Ordinary setup must not enable it automatically. Use the released human plugin
+installation path unless the owner explicitly selected a disposable-local
+candidate test. Read `contracts/wordpress-bootstrap.md` before such a test;
+it installs absent plugins inactive, requires verified hidden-state handling
+before activation and revokes its separate credential before setup. No production
+mutation or public widget activation is authorized by testing this candidate.
 
 ## Continue with the chosen website
 
