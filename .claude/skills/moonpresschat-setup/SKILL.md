@@ -9,7 +9,7 @@ description: >
   MoonPress Chat without exposing WordPress passwords or AI-provider keys to the
   agent.
 metadata:
-  version: "0.7.0"
+  version: "0.8.0"
   author: "Norml Studio"
 ---
 
@@ -38,9 +38,10 @@ production change explicit and reviewable.
 
 ## Current release state
 
-Version 0.7.0 is a public alpha with two setup paths. It speaks
-the MoonPress Chat 5.0.0 contract; see the compatibility note below.
-
+Version 0.8.0 adds owner-authorized WordPress installation and capability-gated
+site collection to the public alpha. The base setup API remains compatible with
+MoonPress Chat 5.0.0+; collection is verified against 5.11.0 and requires the
+advertised `collection` capability.
 The public instruction URL and the released main package are the primary
 installation entry. See `qa/distribution-acceptance.md` for scoped evidence.
 Desktop automatic updates, real-provider answers and customer launch readiness
@@ -75,6 +76,23 @@ must not be inferred from package validation or the offline acceptance fixture.
 - MoonPress Chat Pro and provider inference are separate purchases. Never imply that the
   $200/year Pro license includes AI usage. No Pro-activation or `/license/*`
   operation exists in the shipped setup API; never present one as available.
+
+## Installation and automatic continuation
+
+Read `contracts/wordpress-bootstrap.md` when installation is absent, inactive or
+unknown. The separate helper inventories the exact plugin and installs only an
+absent official package, inactive. Activation requires explicit authorization
+and verified saved off visibility; unknown retained settings use owner-guided
+activation. Never infer hidden state from a missing plugin directory.
+
+Once bootstrap reports `ready_for_scoped_setup: true` and confirmed credential
+revocation, continue into scoped connection and setup in this same turn. Do not
+make the owner issue a second command. An already active plugin uses the existing
+setup-only path directly; never reinstall it.
+
+For page collection/default-200 and automatic source analysis, follow
+`actions/collect-and-analyze.md` after scoped connection. The API capability is
+optional; older servers retain public research and the existing wizard path.
 
 ## Inputs
 
@@ -249,11 +267,10 @@ skill takes the guided path with `reason: plugin-predates-api` — exactly as it
 does whenever the API is unavailable. Stop on an incompatible WordPress/PHP
 runtime.
 
-If MoonPress Chat is absent, the human may install it only from a verified official
-distribution. Do not guess a package URL, use an arbitrary mirror, or claim a
-WordPress.org listing exists. If no official package is available to the owner,
-record `installation: blocked-official-package` and stop before configuration.
-
+If MoonPress Chat is absent, follow `contracts/wordpress-bootstrap.md` to install
+from the official WordPress.org slug `moonpresschat`. Authenticate inventory;
+a compatibility 404 does not establish absence. Unsupported platforms or hosts
+retain the owner-guided installation path.
 On production, require a human-confirmed restorable backup before any change.
 Keep the public widget off. Record the rollback and immediate-disable path.
 
@@ -321,6 +338,11 @@ settings field (guided path). Never through chat.
 On the guided path, direct the human through the exact MoonPress Chat screens and ask
 them to confirm only non-secret status. Never ask them to paste a provider key
 or authenticated screenshot.
+
+After scoped connection and before the final knowledge proposal, run
+`actions/collect-and-analyze.md`. The agent analyzes collected public evidence;
+there is no fabricated server-side `/setup/analyze` route. Preserve existing
+knowledge unless the owner approved replacing it.
 
 ### 5. Verify
 

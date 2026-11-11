@@ -116,7 +116,9 @@ name.
 | Business facts / knowledge prose | `knowledge` | `fields` — keys `intro`, `business`, `facts`, `faq`, `boundaries`, `privacy`, `extra_rules`, `hard_rules` |
 | Service/topic areas | `knowledge` | `areas` — list of `{key, label, topic_name, topic_sub, icon, chip}`; keys `area_1`–`area_9` |
 | FAQ / question bank | `knowledge` | `bank` — `{"area_N": [{"question", "answer"}]}`; keys must refer to an included or already configured area |
-| Conversation templates (welcome) | `templates` | `greet` |
+| Widget greeting — small opener | `templates` | `greeting_line1` |
+| Widget greeting — main question | `templates` | `greeting_line2` |
+| Greeting when AI is unreachable | `templates` | `greet_fallback` |
 | Accent color | `appearance` | `accent` |
 | Header background / text tone | `appearance` | `header_bg`, `header_text` |
 | Header image / logo | `appearance` | `header_image`, `logo` |
@@ -133,6 +135,11 @@ tables above applies unchanged to the matching envelope key. When the
 `knowledge` envelope; prefer folding it in over hand-building the knowledge
 section.
 
+The three greeting keys above were checked against the official MoonPress Chat
+5.10.0 registry. `greet` is not a valid key. The two header lines and the offline
+fallback have different purposes; do not map one welcome string to all three
+or overwrite other templates. Validate the intended fields before apply.
+
 ## Every plan row
 
 For each field above, `configuration-plan.md` must record:
@@ -145,3 +152,10 @@ For each field above, `configuration-plan.md` must record:
 - personal/regulated-data classification;
 - verification method;
 - rollback value or action.
+
+## Optional collection section
+
+On servers advertising `collection`, include `configuration.collection` only
+for approved changes: positive integer `max_pages`, same-site XML `sitemap_url`,
+and language-code array `languages`. Preserve omitted values and small saved
+limits. See `collection-default.md`; never send `analysis_max_pages` in settings.

@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.8.0 — November 10, 2026
+
+Author: Iryna Melnyk. Unpublished candidate for issue #325.
+
+- Correct the greeting contract against official MoonPress Chat 5.10.0:
+  replace unsupported `templates.greet` with distinct `greeting_line1`,
+  `greeting_line2`, and `greet_fallback` mappings. Preserve other templates.
+
+- Add an explicitly gated WordPress bootstrap helper using a separate native
+  Application Password, exact-plugin inventory/install/activation and own-UUID
+  revocation. Secrets stay in Keychain and failed cleanup remains recoverable.
+- Install absent plugins inactive; retained live settings are not assumed safe.
+  Preserve existing plugin/settings and the restricted setup helper. Activation
+  requires an owner-established hidden-state decision; unattended activation and
+  real WordPress end-to-end acceptance remain unfinished.
+- Add pure and loopback regression tests; no production/model/email calls.
+- Document version-aware default200 guidance for #323 without inventing unsupported
+  setup fields. Preserve the ordinary guided install and wizard-only paths.
+- Source is an isolated user-authorized draft; no release, deployment, shared
+  ownership takeover or public entry update.
+
 ## 0.7.0 — Oct 13, 2026
 
 - Added a public URL bootstrap: the owner pastes one request, and the agent
@@ -205,3 +226,11 @@
 - Marked WordPress writes honestly blocked until the stable public Quip Bot setup API
   and OS-native connection helper are released.
 - Kept the free Quip Bot setup independent from a quip.bot account or paid license.
+
+## 0.8.0 completion — November 11, 2026
+
+Author: Iryna Melnyk. Enable owner-authorized bounded WordPress bootstrap, preserve
+explicit activation/hidden-state checks, and continue scoped setup in the same
+agent turn. Add capability-gated bounded collection helper, source analysis
+workflow and5.11.0 collection contract; preserve smaller saved limits and the
+older wizard path. Clarify single-snapshot rollback and native consent boundaries.

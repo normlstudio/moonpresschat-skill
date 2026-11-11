@@ -1,6 +1,6 @@
 # MoonPress Chat setup
 
-0.7.0 public alpha. Start with the instruction URL below; see the [scoped checks](.claude/skills/moonpresschat-setup/qa/distribution-acceptance.md).
+0.8.0 public alpha. Start with the instruction URL below; see the [scoped checks](.claude/skills/moonpresschat-setup/qa/distribution-acceptance.md).
 
 `moonpresschat-setup` safely installs, researches, configures, and verifies
 [MoonPress Chat](https://moonpresschat.com) on WordPress without exposing a
@@ -101,7 +101,7 @@ Read the [human guide](.claude/skills/moonpresschat-setup/readme.md),
 - The free core and AI-provider usage are separate: the site owner pays the
   selected provider directly.
 
-Version 0.7.0 is a public alpha built for MoonPress Chat 5.0.0 or newer (skill
+Version 0.8.0 is a public alpha built for MoonPress Chat 5.0.0 or newer (skill
 0.4.0 pairs with plugin 4.8.0 and older, which speak a different REST
 namespace; mismatched pairs fall back to the guided path). The helper
 currently stores credentials only in macOS Keychain; Windows and Linux use the
@@ -110,3 +110,20 @@ guided path.
 ## License
 
 [MIT](LICENSE) © Norml Studio.
+
+## WordPress installation and site collection
+
+The macOS helper inventories the selected site and installs only an absent
+MoonPress Chat plugin from WordPress.org. It installs inactive; activation requires
+explicit authority and a verified off state. Unknown retained visibility uses an
+owner-guided activation check. The broad installation credential is revoked
+before the agent continues through the existing scoped setup API.
+
+On plugin 5.11.0+, the optional collection capability supports bounded page
+collection and sitemap indexing. The agent analyzes source evidence, prepares
+knowledge, asks only unresolved questions, and applies one reviewed proposal.
+Saved small page limits are preserved. Older servers keep public research and
+wizard-only setup. No MoonPress account/license is required for the free path.
+
+See [installation](.claude/skills/moonpresschat-setup/contracts/wordpress-bootstrap.md)
+and [collection and analysis](.claude/skills/moonpresschat-setup/actions/collect-and-analyze.md).
