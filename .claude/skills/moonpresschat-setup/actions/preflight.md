@@ -52,14 +52,12 @@ GET <origin>/?rest_route=/moonpresschat/v1/setup/compatibility   # pretty-permal
 It reports `plugin_slug` (`moonpresschat`), `plugin_version`,
 `available`/`unavailable_reason`, `schema_versions`, `capabilities`,
 `site_url`, `rest_url`, and the connection policy — record them and decide the
-path per `actions/connect.md`. Ask the human only for what the payload cannot
-answer: whether **MoonPress Chat** appears under **Plugins → Installed
-Plugins** and which version, when the endpoint is unreachable (absent,
-inactive, or older than 5.0.0 — those releases register only the pre-5.0.0
-namespace `quipbot/v1`, so the URLs above answer 404), and the WordPress and
-PHP versions from **Tools → Site Health → Info**.
+path per `actions/connect.md`. When compatibility is unavailable, follow `contracts/wordpress-bootstrap.md`
+for authenticated inventory before deciding whether installation is absent.
+On unsupported platforms/hosts ask the owner for non-secret plugin/runtime state;
+a 404 alone never authorizes installation or replacement.
 
-Version 0.7.0 of this skill verifies the guided screen guidance against
+Version 0.8.0 of this skill verifies the guided screen guidance against
 MoonPress Chat 3.11.0 and the API contract against MoonPress Chat 5.0.0 (contract
 unchanged through 5.3.1); the API path requires 5.0.0 or newer. MoonPress Chat 5.0.0 renamed the plugin and
 every internal identifier; 4.8.0 and older (released as QuipBot) register only
@@ -81,6 +79,15 @@ WordPress 6.2 and PHP 7.4.
   `compatibility: blocked-guide-drift`.
 
 Never request an authenticated screenshot.
+
+## Automatic installation path
+
+Read `../contracts/wordpress-bootstrap.md` on supported macOS. Reuse the owner's
+site and authority. Authenticate inventory; do not infer absence from a 404.
+Install only an absent official plugin inactive. Unknown saved visibility blocks
+automatic activation. After authorized activation and confirmed credential
+revocation, continue scoped setup and `collect-and-analyze.md` in the same turn.
+The human installation path remains available for unsupported cases.
 
 ## Human installation path
 

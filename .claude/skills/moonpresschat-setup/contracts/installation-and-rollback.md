@@ -1,8 +1,14 @@
 # Installation, environment, and rollback
 
-This is the cold-start safety contract. Installation and activation are
-human-operated on both paths; the API path adds an automated rollback for
-applied configuration (see "Automated rollback" below).
+This is the cold-start safety contract. On supported macOS, authorized plugin
+installation uses the bounded WordPress helper. Native browser consent remains
+owner-operated. Unknown saved visibility requires owner-guided activation and
+an off-state check before automatic setup continues. Configuration rollback
+never uninstalls the plugin or removes client data.
+
+Read `wordpress-bootstrap.md` for exact operations and credential cleanup.
+Existing active plugins go directly to scoped setup; existing inactive plugins
+are not reinstalled. Other platforms/hosts retain the human sequence below.
 
 ## Verified distribution only
 
@@ -16,8 +22,8 @@ An acceptable MoonPress Chat package comes from one of these surfaces:
 
 The agent must verify the hostname and product identity from public information
 available at the time. Never substitute a third-party mirror, search-result
-attachment, unofficial fork, or guessed GitHub URL. As of this skill release,
-WordPress.org availability is not assumed.
+attachment, unofficial fork, or guessed GitHub URL. The official WordPress.org slug is `moonpresschat`; verify its current listing
+and exact plugin identity before installation.
 
 If the owner has no verified package, stop with:
 
@@ -27,6 +33,13 @@ installation: blocked-official-package
 
 This is a complete and safe outcome; a missing distribution is not permission
 to improvise.
+
+## Installation routing
+
+On supported macOS, use `contracts/wordpress-bootstrap.md` first. After successful
+activation and confirmed installation-credential cleanup, continue scoped setup
+in the same turn. Use the sequence below for unsupported hosts/platforms or an
+owner-declined helper. Existing active plugins go directly to scoped setup.
 
 ## Human installation sequence
 
