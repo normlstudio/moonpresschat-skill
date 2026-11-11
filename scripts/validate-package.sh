@@ -19,6 +19,8 @@ required=(
   "$skill_dir/changelog.md"
   "$skill_dir/helper/moonpresschat-setup-helper.mjs"
   "$skill_dir/helper/wordpress-bootstrap.mjs"
+  "$skill_dir/helper/collect-site.mjs"
+  "$skill_dir/actions/collect-and-analyze.md"
   "$skill_dir/contracts/wordpress-bootstrap.md"
   "$skill_dir/contracts/collection-default.md"
   "$skill_dir/qa/verification-checklist.md"
@@ -33,6 +35,7 @@ node "$repo_root/scripts/version.mjs" check
 
 node --check "$skill_dir/helper/moonpresschat-setup-helper.mjs"
 node --check "$skill_dir/helper/wordpress-bootstrap.mjs"
+node --check "$skill_dir/helper/collect-site.mjs"
 node --input-type=module - "$repo_root" <<'JS'
 import { readFileSync, existsSync } from 'node:fs';
 const root = process.argv[2];

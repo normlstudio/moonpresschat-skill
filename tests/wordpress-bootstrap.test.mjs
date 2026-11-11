@@ -175,10 +175,10 @@ test('real loopback authorization stores before returning, exact callback protec
   const body = await r.text(); assert.doesNotMatch(body, /fixture/); assert.match(body, /replaceState/);
 });
 
-test('bootstrap CLI remains explicitly experimental and has no default public mutation', () => {
+test('bootstrap CLI rejects missing target before authorization', () => {
   const helper = fileURLToPath(new URL('../.claude/skills/moonpresschat-setup/helper/wordpress-bootstrap.mjs', import.meta.url));
-  const result = spawnSync(process.execPath, [helper, 'bootstrap', site, '--install'], { env: { ...process.env, MOONPRESSCHAT_BOOTSTRAP_EXPERIMENTAL: '' }, encoding: 'utf8' });
-  assert.notEqual(result.status, 0); assert.match(result.stderr, /experimental-bootstrap-disabled|credential-backend-unsupported/);
+  const result = spawnSync(process.execPath, [helper, 'bootstrap'], { encoding: 'utf8' });
+  assert.notEqual(result.status, 0); assert.match(result.stderr, /usage-inspect-or-bootstrap-or-cleanup-site/);
 });
 
 test('credential read failure after authorization retains recoverable state and reports cleanup pending', async () => {

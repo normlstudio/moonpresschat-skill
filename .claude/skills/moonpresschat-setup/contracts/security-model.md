@@ -70,9 +70,9 @@ stream, share, or screenshot the authenticated session.
 - Redact emails unless they are necessary for the approved configuration.
 - Never include raw headers, cookies, reset links, secrets, or tokens.
 
-## Experimental WordPress installation credential
+## WordPress installation credential
 
-The separately gated `wordpress-bootstrap.md` candidate uses a distinct
+The `wordpress-bootstrap.md` installation helper uses a distinct
 Application Password and Keychain service for exact plugin inventory/install/
 activation and self-revocation. Core grants the approving user's capabilities;
 client-side route restrictions are not server-enforced scope or expiry. The

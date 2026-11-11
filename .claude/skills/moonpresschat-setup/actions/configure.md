@@ -38,6 +38,12 @@ row per screen.
 Requires `connection: api` from `actions/connect.md`. Fingerprints come from
 the server, never from local hashing.
 
+### Source collection
+
+After scoped connection, follow `actions/collect-and-analyze.md` to collect and
+analyze site evidence before composing knowledge. Collection does not itself
+produce model-generated business settings or complete wizard UI flags.
+
 ### Interview stage (capability-gated)
 
 Run this first when the compatibility payload advertises the `interview`
@@ -165,3 +171,7 @@ the provider selection, re-run `POST /setup/provider/test`.
 
 If the human cannot access a named screen or label, record the exact mismatch
 and stop that section. Do not improvise with internal routes, SSH, or SQL.
+
+Each apply replaces the single rollback snapshot. Prefer one reviewed envelope
+for collection and knowledge changes; do not promise one rollback restores the
+entire history of multiple applies. Keep the owner backup/reset checkpoint.

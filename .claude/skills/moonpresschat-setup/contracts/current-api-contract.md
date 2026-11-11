@@ -52,6 +52,14 @@ contract. The setup credential cannot reach them: authentication fails with
 | `application.id` / `application.name` | `c8d4bd65-7694-4c34-b8cd-4d54b44b389e` (unchanged) / `"MoonPress Chat setup"` |
 | `connection` | `{ max_lifetime, idle_timeout, revoked_on_go_live }` — see "Connection lifetime" |
 
+## Collection extension (plugin 5.11.0)
+
+The optional `collection` capability adds GET /setup/collection, POST
+/setup/collection/collect and POST /setup/collection/index. The configuration
+envelope also accepts `collection: {max_pages, sitemap_url, languages}` only
+when that capability is advertised. See `collection-default.md` for validation,
+state and rollback semantics. Base capability negotiation remains unchanged.
+
 ## Endpoints
 
 | Method | Path | Authentication | Purpose |

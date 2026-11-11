@@ -1,6 +1,6 @@
 # MoonPress Chat setup
 
-0.8.0 release candidate. Start with the instruction URL below; see the [scoped checks](.claude/skills/moonpresschat-setup/qa/distribution-acceptance.md).
+0.8.0 public alpha. Start with the instruction URL below; see the [scoped checks](.claude/skills/moonpresschat-setup/qa/distribution-acceptance.md).
 
 `moonpresschat-setup` safely installs, researches, configures, and verifies
 [MoonPress Chat](https://moonpresschat.com) on WordPress without exposing a
@@ -111,10 +111,19 @@ guided path.
 
 [MIT](LICENSE) © Norml Studio.
 
-## Unpublished bootstrap candidate
+## WordPress installation and site collection
 
-This draft adds a disabled-by-default WordPress installation experiment. Read
-[the bootstrap contract](.claude/skills/moonpresschat-setup/contracts/wordpress-bootstrap.md).
-It installs absent plugins inactive and does not prove hidden state or automate
-unsafe activation. Existing released setup remains the default. No new version
-is published by this source change; independent WordPress acceptance remains.
+The macOS helper inventories the selected site and installs only an absent
+MoonPress Chat plugin from WordPress.org. It installs inactive; activation requires
+explicit authority and a verified off state. Unknown retained visibility uses an
+owner-guided activation check. The broad installation credential is revoked
+before the agent continues through the existing scoped setup API.
+
+On plugin 5.11.0+, the optional collection capability supports bounded page
+collection and sitemap indexing. The agent analyzes source evidence, prepares
+knowledge, asks only unresolved questions, and applies one reviewed proposal.
+Saved small page limits are preserved. Older servers keep public research and
+wizard-only setup. No MoonPress account/license is required for the free path.
+
+See [installation](.claude/skills/moonpresschat-setup/contracts/wordpress-bootstrap.md)
+and [collection and analysis](.claude/skills/moonpresschat-setup/actions/collect-and-analyze.md).

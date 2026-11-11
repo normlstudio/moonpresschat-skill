@@ -154,7 +154,7 @@ reason.
 
 ### Distribution and updates
 
-Version 0.8.0 adds the MoonPress Chat marketplace for local Claude Code and
+The existing MoonPress Chat marketplace supports for local Claude Code and
 Codex sessions. Chat and Cowork cannot run the helper; use the Code tab.
 
 On each run the helper checks the public compatibility response. A missing
@@ -421,18 +421,17 @@ appearance) remain human-observed on both paths.
 
 ---
 
-_Covers SKILL.md v0.8.0 | Last changelog entry: v0.8.0 | Generated: Oct 13, 2026._
+_Covers SKILL.md v0.8.0 | Last changelog entry: v0.8.0 | Generated: Nov 11, 2026._
 
-## Unpublished 0.8.0 bootstrap candidate
+## Installation and collection in 0.8.0
 
-The optional experimental bootstrap helper uses a separate owner-authorized
-WordPress credential to inventory plugins and install MoonPress Chat inactive.
-It revokes that credential before the existing restricted setup connection.
-It does not establish hidden visibility: retained options may become effective
-on activation. Activation requires explicit owner confirmation of saved hidden
-state; real WordPress end-to-end acceptance remains pending.
+The macOS bootstrap helper can install the absent official plugin, inactive.
+Existing plugins are preserved; activation requires explicit authority and
+verified hidden state. Unknown retained visibility uses owner-guided activation.
+After credential cleanup the agent continues scoped setup in the same turn.
 
-See [the candidate contract](contracts/wordpress-bootstrap.md) for the disabled-by-default
-entry, exact capability boundary, recovery, and local test limitations.
-The released wizard-only flow remains available. The planned collection default
-of 200 is build-dependent; see [collection defaults](contracts/collection-default.md).
+On servers advertising collection (verified with 5.11.0), collect-site.mjs resumes
+bounded page collection and optionally refreshes the sitemap index. The agent
+analyzes this evidence into sourced knowledge and a reviewed proposal. Smaller
+saved limits remain intact; old servers use public research. The helper does
+not make paid model calls, advance native wizard UI flags or turn the widget on.

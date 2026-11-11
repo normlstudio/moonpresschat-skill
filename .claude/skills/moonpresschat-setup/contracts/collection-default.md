@@ -1,23 +1,31 @@
-# Page collection default and setup boundary
+# Collection configuration — plugin 5.11.0
 
-The agreed new plugin collection default is **200**, with explicit smaller test
-values preserved. It is not a paid limit or the model's context-window size.
+Negotiate `collection` in GET /setup/compatibility. Keep it optional: base setup
+still works on older compatible plugins through public research. Do not infer
+capabilities from a version string alone.
 
-Do not assume that a `5.10.0` version string proves this change. The tested
-plugin candidate `094345e` contains the default-200 wizard/backend change, but
-it is not integrated into the published plugin release. The candidate also
-has a separate sitemap navigation index budget per language. These are
-separate controls.
+GET /setup/collection returns the effective max_pages, selected languages and
+index state. New collections default to 200. Preserve an existing smaller limit;
+200 is neither a paid limit nor a model context-window size.
 
-The released setup API configuration envelope does **not** expose
-`analysis_max_pages`, sitemap URL or language-selection fields. Never put them
-in `/setup/validate` or `/setup/apply`, call internal `/admin/*` routes through
-the setup credential, or silently widen that credential's scope.
+The optional envelope section `configuration.collection` supports max_pages
+(positive integer), sitemap_url (same origin/protocol/port XML URL; empty disables)
+and languages (language codes; empty array includes all). Omit unchanged fields.
+Use normal validate → owner approval → apply; never write arbitrary WP options.
+A missing capability forbids this section and all collection endpoints.
 
-Record the installed build and observed control. Preserve a saved lower value.
-Use the supported human-guided wizard for page-limit decisions until the API
-advertises an explicit reviewed capability for them. Research may organize
-URL/title/short-description evidence without pretending it persisted a plugin
-index. Verify important contact, privacy, reviews and product URLs separately.
-An older/default-30 install stays recorded as such; do not claim both collection
-paths implement 200 merely because this skill documents the target.
+POST /setup/collection/collect accepts {} to start and {"resume":true} to resume.
+It writes a temporary analysis draft, not live knowledge, and makes no model call.
+The start request may include an explicit positive-integer exclude list; resume
+preserves the draft's exclusions. Never mix changed exclusions with resume.
+
+POST /setup/collection/index accepts {}. A configured sitemap is required.
+HTTP200 is not success by itself: inspect index.error, pending and actual rows.
+Pending/error/empty results are not a completed index. Verify contact/privacy
+and other important links, including canonical URLs and their source pages.
+
+Each apply replaces the server's one rollback snapshot. A collection apply
+followed by a knowledge apply cannot be undone by one rollback to the start of
+setup. Prefer one reviewed envelope; record each apply/rollback boundary and
+keep the owner's full backup/reset checkpoint. Temporary collection drafts are
+not restored by setup rollback. See actions/collect-and-analyze.md.

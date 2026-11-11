@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Experimental bootstrap candidate. No provider, license, setup or general WP writes. */
+/** Owner-authorized WordPress bootstrap. No provider, license or general settings writes. */
 import { createServer } from 'node:http';
 import { randomBytes, createHash, timingSafeEqual } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
@@ -231,9 +231,6 @@ async function main() {
   if (!['inspect', 'bootstrap', 'cleanup'].includes(command) || !rawSite || flags.some((x) => !['--install', '--activate-owner-confirmed'].includes(x)) || (command !== 'bootstrap' && flags.length)) throw cleanError('usage-inspect-or-bootstrap-or-cleanup-site');
   if (process.platform !== 'darwin') throw cleanError('credential-backend-unsupported');
   const site = normalizeSite(rawSite);
-  // Not enabled by the released public flow until independent WordPress acceptance.
-  // Cleanup remains available without the gate so a disabled experiment is recoverable.
-  if (command !== 'cleanup' && process.env.MOONPRESSCHAT_BOOTSTRAP_EXPERIMENTAL !== '1') throw cleanError('experimental-bootstrap-disabled');
   const store = localStore(site);
   if (command === 'cleanup') {
     const record = store.read();

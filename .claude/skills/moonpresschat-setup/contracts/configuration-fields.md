@@ -152,3 +152,10 @@ For each field above, `configuration-plan.md` must record:
 - personal/regulated-data classification;
 - verification method;
 - rollback value or action.
+
+## Optional collection section
+
+On servers advertising `collection`, include `configuration.collection` only
+for approved changes: positive integer `max_pages`, same-site XML `sitemap_url`,
+and language-code array `languages`. Preserve omitted values and small saved
+limits. See `collection-default.md`; never send `analysis_max_pages` in settings.

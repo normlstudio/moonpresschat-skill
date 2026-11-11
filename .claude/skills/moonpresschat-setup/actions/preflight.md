@@ -52,12 +52,10 @@ GET <origin>/?rest_route=/moonpresschat/v1/setup/compatibility   # pretty-permal
 It reports `plugin_slug` (`moonpresschat`), `plugin_version`,
 `available`/`unavailable_reason`, `schema_versions`, `capabilities`,
 `site_url`, `rest_url`, and the connection policy — record them and decide the
-path per `actions/connect.md`. Ask the human only for what the payload cannot
-answer: whether **MoonPress Chat** appears under **Plugins → Installed
-Plugins** and which version, when the endpoint is unreachable (absent,
-inactive, or older than 5.0.0 — those releases register only the pre-5.0.0
-namespace `quipbot/v1`, so the URLs above answer 404), and the WordPress and
-PHP versions from **Tools → Site Health → Info**.
+path per `actions/connect.md`. When compatibility is unavailable, follow `contracts/wordpress-bootstrap.md`
+for authenticated inventory before deciding whether installation is absent.
+On unsupported platforms/hosts ask the owner for non-secret plugin/runtime state;
+a 404 alone never authorizes installation or replacement.
 
 Version 0.8.0 of this skill verifies the guided screen guidance against
 MoonPress Chat 3.11.0 and the API contract against MoonPress Chat 5.0.0 (contract
@@ -82,19 +80,14 @@ WordPress 6.2 and PHP 7.4.
 
 Never request an authenticated screenshot.
 
-## Experimental bootstrap branch
+## Automatic installation path
 
-For an explicitly requested candidate test, read
-`../contracts/wordpress-bootstrap.md`. Reuse the owner's site and decisions;
-never infer an installation from a compatibility 404. The gated helper may
-inventory and install an absent plugin inactive. Unknown saved visibility blocks
-automatic activation. After safe activation and confirmed bootstrap revocation,
-continue with the existing scoped setup connection and interview.
-
-This is not the default released path and is not production-accepted. The
-ordinary flow below remains supported. For page-limit choices also read
-`../contracts/collection-default.md`; preserve existing low limits and do not
-invent setup API fields.
+Read `../contracts/wordpress-bootstrap.md` on supported macOS. Reuse the owner's
+site and authority. Authenticate inventory; do not infer absence from a 404.
+Install only an absent official plugin inactive. Unknown saved visibility blocks
+automatic activation. After authorized activation and confirmed credential
+revocation, continue scoped setup and `collect-and-analyze.md` in the same turn.
+The human installation path remains available for unsupported cases.
 
 ## Human installation path
 

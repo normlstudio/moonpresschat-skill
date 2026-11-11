@@ -4,7 +4,7 @@
   "repo": "moonpresschat-skill",
   "audience": "WordPress site owners and developers",
   "actsOn": "MoonPress Chat setup",
-  "badge": "unpublished candidate",
+  "badge": "public alpha",
   "pitch": "Safely install, research, plan, connect, configure, and verify MoonPress Chat without exposing credentials to the agent.",
   "pitchMark": "without exposing credentials",
   "problem": [
@@ -50,8 +50,8 @@
   "install": "Fetch and execute the appropriate instructions to set up MoonPress Chat from https://moonpresschat.com/agent-setup/prompt.md",
   "installNote": "Paste this into your local coding agent; it asks for your website and installs the skill. Chat/Cowork direct you to local Code first.",
   "callout": {
-    "label": "Unpublished candidate",
-    "text": "Version 0.8.0 adds a disabled-by-default experimental WordPress bootstrap. It installs absent plugins inactive and revokes its separate credential before existing restricted setup. Activation can restore retained visibility; real WordPress end-to-end acceptance is pending. The released wizard-only path remains available."
+    "label": "Owner-authorized setup",
+    "text": "Version 0.8.0 installs absent official plugins inactive and continues scoped setup after authorized activation and credential cleanup. Collection uses the optional plugin 5.11.0 API. Native consent and verified off visibility remain required."
   },
   "capabilities": {
     "label": "What works in 0.8.0",
@@ -115,8 +115,8 @@
   "limits": {
     "label": "Safety boundaries",
     "items": [
-      "No WordPress passwords, Application Passwords, provider keys, or tokens in chat \u2014 the helper holds the temporary credential in the macOS Keychain.",
-      "No browser automation, SSH, XML-RPC, direct database writes, or internal admin routes; API calls stay inside moonpresschat/v1/setup.",
+      "No WordPress passwords, Application Passwords, provider keys, or tokens in chat — the helper holds the temporary credential in the macOS Keychain.",
+      "No browser automation, SSH, XML-RPC or direct database writes. Installation uses a separate short-lived-in-use WordPress credential; configuration stays inside the scoped setup API.",
       "No arbitrary plugin package, no production change without backup and explicit approval, and go-live is a separate approval that revokes the connection."
     ]
   },
@@ -150,12 +150,16 @@
         "role": "Non-secret setup artifact formats"
       },
       {
+        "path": "helper/collect-site.mjs",
+        "role": "Bounded collection through the existing scoped credential helper"
+      },
+      {
         "path": "qa/verification-checklist.md",
         "role": "Prelaunch and postlaunch release gate"
       }
     ]
   },
   "covers": "0.8.0",
-  "generated": "Oct 13, 2026",
+  "generated": "Nov 11, 2026",
   "hasHumanMd": true
 }
